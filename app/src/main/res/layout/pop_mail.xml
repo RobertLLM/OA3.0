@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="350px"
+        android:layout_height="wrap_content"
+        android:background="#555555"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/box_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30px"
+            android:gravity="center"
+            android:text="收件箱"
+            android:textColor="@color/white"
+            android:textSize="55px">
+
+        </TextView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5px"
+            android:background="#757575" />
+
+        <TextView
+            android:id="@+id/box_sent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30px"
+            android:gravity="center"
+            android:text="发件箱"
+            android:textColor="@color/white"
+            android:textSize="55px">
+
+        </TextView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5px"
+            android:background="#757575" />
+
+        <TextView
+            android:id="@+id/box_drafts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30px"
+            android:gravity="center"
+            android:text="草稿箱"
+            android:textColor="@color/white"
+            android:textSize="55px">
+
+        </TextView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5px"
+            android:background="#757575" />
+
+        <TextView
+            android:id="@+id/box_trash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30px"
+            android:gravity="center"
+            android:text="已删除"
+            android:textColor="@color/white"
+            android:textSize="55px">
+
+        </TextView>
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
