@@ -11,8 +11,9 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.invonate.ygoa.Chat.ChatActivity;
 import cn.invonate.ygoa.R;
-import cn.invonate.ygoa.main.work.MailActivity;
+import cn.invonate.ygoa.main.work.mail.MailActivity;
 
 /**
  * Created by liyangyang on 2017/10/22.
@@ -40,6 +41,7 @@ public class WorkFragment extends Fragment {
         Intent intent = null;
         switch (view.getId()) {
             case R.id.layout_notice:
+                intent = new Intent(getActivity(), ChatActivity.class);
                 break;
             case R.id.layout_allow:
                 break;

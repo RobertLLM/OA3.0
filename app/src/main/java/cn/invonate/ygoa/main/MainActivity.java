@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        fragments = new Fragment[]{new MessageFragment(), new WorkFragment(), new ConnectFragment(), new MineFragment()};
+        fragments = new Fragment[]{new MessageFragment(), new WorkFragment(), new ContactsFragment(), new MineFragment()};
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content, fragments[0])
                 .add(R.id.content, fragments[1])

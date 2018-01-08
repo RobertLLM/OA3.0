@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.invonate.ygoa">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:name=".YGApplication"
@@ -13,7 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="design_width"
             android:value="1080" />
@@ -27,21 +28,27 @@
         <activity
             android:name="me.iwf.photopicker.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
-        <activity android:name=".main.MainActivity">
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.work.MailActivity" />
+        <activity android:name=".main.MainActivity" />
+        <activity android:name=".main.work.mail.MailActivity" />
         <activity android:name=".main.work.mail.MailDetailActivity" />
         <activity
             android:name=".main.work.mail.SendMailActivity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".main.work.mail.FileActivity" />
-        <activity android:name=".main.BytePicActivity"/>
+        <activity android:name=".main.BytePicActivity" />
+        <activity android:name=".Chat.ChatActivity" />
+        <activity android:name=".Contacts.DepartmentActivity" />
+        <activity
+            android:name=".Contacts.ContactsActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".Contacts.ContactsDetailActivity"></activity>
     </application>
 
 </manifest>

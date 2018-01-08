@@ -10,7 +10,11 @@ import com.zhy.autolayout.AutoLayoutActivity;
  * Created by liyangyang on 2017/10/20.
  */
 
-public class BaseActivity extends AutoLayoutActivity {
+public class BaseActivity extends AutoLayoutActivity  {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     protected void goActivity(Class clz) {
         Intent intent = new Intent(this, clz);
@@ -35,5 +39,4 @@ public class BaseActivity extends AutoLayoutActivity {
         intent.putExtras(bundle);
         startActivity(intent);
     }
-
 }
