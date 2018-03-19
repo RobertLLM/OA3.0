@@ -29,4 +29,8 @@
         <item name="android:wallpaperIntraCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
+    <style name="SpnStyle">
+        <item name="android:colorControlNormal">#000000</item>
+    </style>
+
 </resources>

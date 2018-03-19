@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <cn.invonate.ygoa.View.HackyViewPager
+    <cn.invonate.ygoa3.View.HackyViewPager
         android:id="@+id/page_pic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#000000">
 
-    </cn.invonate.ygoa.View.HackyViewPager>
+    </cn.invonate.ygoa3.View.HackyViewPager>
 </LinearLayout>

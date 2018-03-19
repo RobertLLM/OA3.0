@@ -20,13 +20,13 @@
         android:layout_height="180px"
         android:orientation="horizontal">
 
-        <cn.invonate.ygoa.View.CircleImageView
+        <cn.invonate.ygoa3.View.CircleImageView
+            android:id="@+id/head_img"
             android:layout_width="120px"
             android:layout_height="120px"
             android:layout_gravity="center"
             android:layout_marginStart="40px"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/pic_head"/>
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/name"

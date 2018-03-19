@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/layout"
+
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f6fbff"
+        android:padding="20px"
+        android:text="label"
+        android:textColor="@color/colorPrimary"
+        android:textSize="50px">
+
+    </TextView>
+
+    <Spinner
+        android:id="@+id/select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="20px"
+        android:spinnerMode="dropdown"
+        android:theme="@style/SpnStyle">
+
+    </Spinner>
+
+</LinearLayout>

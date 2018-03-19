@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YGOA</string>
+    <string name="app_name">永钢办公V3</string>
 
 
     <!-- 上拉加载，下拉刷新 -->
@@ -256,4 +256,5 @@
     <string name="Move_into_the_blacklist_new">移入到黑名单</string>
     <string name="Change_the_group_name">改变群名称</string>
     <string name="The_dissolution_of_chatting_new">解散群聊</string>
+
 </resources>

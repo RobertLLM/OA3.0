@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f6fbff"
+        android:padding="20px"
+        android:text="审批意见"
+        android:textColor="@color/colorPrimary"
+        android:textSize="50px" />
+
+
+    <EditText
+        android:id="@+id/suggestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20px"
+        android:background="@drawable/back_detail_input"
+        android:padding="30px" />
+
+</LinearLayout>

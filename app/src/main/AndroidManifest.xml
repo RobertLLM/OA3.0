@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.invonate.ygoa">
+    package="cn.invonate.ygoa3">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".YGApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
@@ -28,27 +30,92 @@
         <activity
             android:name="me.iwf.photopicker.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".login.LoginActivity">
+        <activity
+            android:name=".login.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.work.mail.MailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.work.mail.MailDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.work.mail.SendMailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".main.work.mail.FileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.BytePicActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Chat.ChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Contacts.DepartmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Contacts.ContactsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
+        <activity
+            android:name=".Contacts.ContactsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.ForgetPassActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Contacts.SearchContactsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Task.TaskListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Task.TaskDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".Task.TaskApprovedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Contacts.Select.SelectDepartmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Contacts.Select.SelectContactsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WebView.WebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Task.TaskStartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Task.TaskCopyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".login.ChangePassActivity" />
+        <activity android:name=".login.PropertyActivity" />
+        <activity android:name=".login.PropertyDetailActivity" />
+        <activity android:name=".login.WageActivity" />
+        <activity android:name=".login.SalaryActivity" />
+        <activity android:name=".login.WelfareActivity" />
+        <activity android:name=".login.FundActivity" />
+        <activity android:name=".Contacts.SelectLocalContactsActivity" />
+        <activity android:name=".login.InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.MainActivity" />
-        <activity android:name=".main.work.mail.MailActivity" />
-        <activity android:name=".main.work.mail.MailDetailActivity" />
-        <activity
-            android:name=".main.work.mail.SendMailActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".main.work.mail.FileActivity" />
-        <activity android:name=".main.BytePicActivity" />
-        <activity android:name=".Chat.ChatActivity" />
-        <activity android:name=".Contacts.DepartmentActivity" />
-        <activity
-            android:name=".Contacts.ContactsActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".Contacts.ContactsDetailActivity"></activity>
+        <activity android:name=".main.BasePicActivity" />
+        <activity android:name=".main.VideoActivity"></activity>
     </application>
 
 </manifest>

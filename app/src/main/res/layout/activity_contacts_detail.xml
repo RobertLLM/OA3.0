@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="cn.invonate.ygoa.Contacts.ContactsDetailActivity">
+    tools:context="cn.invonate.ygoa3.Contacts.ContactsDetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,48 +39,46 @@
         android:layout_height="1px"
         android:background="#E1E1E1" />
 
-    <cn.invonate.ygoa.View.CircleImageView
+    <FrameLayout
         android:layout_width="280px"
         android:layout_height="280px"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="80px"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/pic_head" />
+        android:layout_marginTop="80px">
+
+        <cn.invonate.ygoa3.View.CircleImageView
+            android:id="@+id/head_img"
+            android:layout_width="280px"
+            android:layout_height="280px"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/head_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="李"
+            android:background="@drawable/back_cy_text"
+            android:textColor="#000000"
+            android:textSize="100px"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+
 
     <LinearLayout
+        android:id="@+id/layout_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40px"
         android:gravity="center"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/layout_tel"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="120px"
-                android:layout_height="120px"
-                android:src="@mipmap/contacts_tel" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20px"
-                android:text="呼叫"
-                android:textColor="@color/colorPrimary"
-                android:textSize="50px" />
-        </LinearLayout>
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/layout_message"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="80px"
-            android:layout_marginStart="80px"
             android:orientation="vertical">
 
             <ImageView
@@ -99,7 +97,31 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layout_mail"
+            android:id="@+id/layout_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="80px"
+            android:layout_marginStart="90px"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:src="@mipmap/contacts_friend" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20px"
+                android:text="好友"
+                android:textColor="@color/colorPrimary"
+                android:textSize="50px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_add"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -107,16 +129,18 @@
             <ImageView
                 android:layout_width="120px"
                 android:layout_height="120px"
-                android:src="@mipmap/contacts_mail" />
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/contacts_add" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20px"
-                android:text="邮件"
+                android:text="联系人"
                 android:textColor="@color/colorPrimary"
                 android:textSize="50px" />
+
         </LinearLayout>
 
     </LinearLayout>
@@ -125,26 +149,26 @@
         android:layout_width="match_parent"
         android:layout_height="120px"
         android:layout_marginTop="40px"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
             android:layout_marginStart="30px"
+            android:text="姓名："
             android:textColor="@color/black"
-            android:text="姓名："/>
+            android:textSize="50px" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
-            android:layout_marginStart="30px"
             android:layout_marginEnd="30px"
+            android:layout_marginStart="30px"
             android:singleLine="true"
-            android:textColor="#666666"/>
+            android:textColor="#666666"
+            android:textSize="50px" />
 
     </LinearLayout>
 
@@ -157,26 +181,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120px"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
             android:layout_marginStart="30px"
+            android:text="工号："
             android:textColor="@color/black"
-            android:text="工号："/>
+            android:textSize="50px" />
 
         <TextView
             android:id="@+id/num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
-            android:layout_marginStart="30px"
             android:layout_marginEnd="30px"
+            android:layout_marginStart="30px"
             android:singleLine="true"
-            android:textColor="#666666"/>
+            android:textColor="#666666"
+            android:textSize="50px" />
 
     </LinearLayout>
 
@@ -189,26 +213,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120px"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
             android:layout_marginStart="30px"
+            android:text="性别："
             android:textColor="@color/black"
-            android:text="性别："/>
+            android:textSize="50px" />
 
         <TextView
             android:id="@+id/sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
-            android:layout_marginStart="30px"
             android:layout_marginEnd="30px"
+            android:layout_marginStart="30px"
             android:singleLine="true"
-            android:textColor="#666666"/>
+            android:textColor="#666666"
+            android:textSize="50px" />
 
     </LinearLayout>
 
@@ -221,26 +245,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120px"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
             android:layout_marginStart="30px"
+            android:text="部门："
             android:textColor="@color/black"
-            android:text="部门："/>
+            android:textSize="50px" />
 
         <TextView
             android:id="@+id/depart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
-            android:layout_marginStart="30px"
             android:layout_marginEnd="30px"
+            android:layout_marginStart="30px"
             android:singleLine="true"
-            android:textColor="#666666"/>
+            android:textColor="#666666"
+            android:textSize="50px" />
 
     </LinearLayout>
 
@@ -253,26 +277,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120px"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
             android:layout_marginStart="30px"
+            android:text="手机："
             android:textColor="@color/black"
-            android:text="手机："/>
+            android:textSize="50px" />
 
         <TextView
             android:id="@+id/phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
-            android:layout_marginStart="30px"
             android:layout_marginEnd="30px"
+            android:layout_marginStart="30px"
             android:singleLine="true"
-            android:textColor="#666666"/>
+            android:textColor="@color/colorPrimary"
+            android:textSize="50px" />
 
     </LinearLayout>
 
@@ -285,26 +309,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120px"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
             android:layout_marginStart="30px"
+            android:text="座机："
             android:textColor="@color/black"
-            android:text="座机："/>
+            android:textSize="50px" />
 
         <TextView
             android:id="@+id/tel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
-            android:layout_marginStart="30px"
             android:layout_marginEnd="30px"
+            android:layout_marginStart="30px"
             android:singleLine="true"
-            android:textColor="#666666"/>
+            android:textColor="@color/colorPrimary"
+            android:textSize="50px" />
 
     </LinearLayout>
 
@@ -317,26 +341,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120px"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
             android:layout_marginStart="30px"
+            android:text="邮件："
             android:textColor="@color/black"
-            android:text="邮件："/>
+            android:textSize="50px" />
 
         <TextView
             android:id="@+id/mail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50px"
-            android:layout_marginStart="30px"
             android:layout_marginEnd="30px"
+            android:layout_marginStart="30px"
             android:singleLine="true"
-            android:textColor="#666666"/>
+            android:textColor="@color/colorPrimary"
+            android:textSize="50px" />
 
     </LinearLayout>
 

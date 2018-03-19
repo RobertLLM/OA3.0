@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="match_parent"
+        android:layout_height="80px"
+        android:background="#f6fbff"
+        android:gravity="center_vertical"
+        android:paddingStart="20px"
+        android:text="类别"
+        android:textColor="@color/colorPrimary"
+        android:textSize="50px"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15px"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="50px"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:text="标题" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="40px"
+                android:textColor="#9d9d9d"
+                android:layout_marginStart="20px"
+                android:text="2018-01-15" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/depart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#a4a4a4"
+        android:textSize="50px"
+        android:padding="15px"
+        android:text="部门"/>
+
+    <TextView
+        android:id="@+id/config"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#f06950"
+        android:textSize="45px"
+        android:padding="15px"
+        android:text="结果"/>
+
+</LinearLayout>

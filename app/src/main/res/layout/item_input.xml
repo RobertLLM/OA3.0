@@ -6,24 +6,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60px"
-        android:layout_margin="20px"
+        android:layout_marginTop="20px"
+        android:layout_marginStart="20px"
+        android:layout_marginBottom="20px"
         android:background="#EEEEEE"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginEnd="50px">
 
         <ImageView
             android:layout_width="60px"
             android:layout_height="60px"
             android:src="@drawable/search_bar_icon_normal" />
 
-        <cn.invonate.ygoa.Util.pingyin.ClearEditText
+        <cn.invonate.ygoa3.Util.pingyin.ClearEditText
             android:id="@+id/filter_edit"
             android:layout_width="match_parent"
             android:layout_height="80px"
             android:background="@null"
             android:hint="请输入姓名或者工号搜索"
             android:singleLine="true"
-            android:textSize="40px" />
+            android:textSize="40px"
+            />
     </LinearLayout>
 
 </LinearLayout>

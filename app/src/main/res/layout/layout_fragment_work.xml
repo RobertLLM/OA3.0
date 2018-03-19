@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150px"
+        android:layout_height="120px"
         android:background="@color/white">
 
         <TextView
@@ -20,358 +20,662 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20px"
-        android:text="日常应用"
-        android:textColor="@color/black"
-        android:textSize="45px" />
-
-    <LinearLayout
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/layout_notice"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/back_mine_line">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="100px"
-                android:layout_marginTop="100px"
-                android:orientation="vertical">
+                android:layout_margin="15px"
+                android:text="流程管理"
+                android:textColor="#666666"
+                android:textSize="40px" />
 
-                <ImageView
-                    android:layout_width="150px"
-                    android:layout_height="150px"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/work_notice" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20px"
-                    android:text="公告"
-                    android:textColor="@color/black"
-                    android:textSize="40px" />
+                <RelativeLayout
+                    android:id="@+id/layout_process"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_add_process" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="15px"
+                            android:text="待办流程"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/task_sum"
+                        android:layout_width="60px"
+                        android:layout_height="60px"
+                        android:background="@mipmap/cycle"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28px"
+                        android:text="1"
+                        android:inputType="number"
+                        android:visibility="gone"
+                        android:textStyle="bold"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="65px"
+                        android:layout_marginTop="8px"/>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_process_added"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_process" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="15px"
+                            android:text="已发起流程"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_process_down"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_added_process" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="15px"
+                            android:text="已审批流程"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_process_copy"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_down_process" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="15px"
+                            android:text="抄送流程"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15px"
+                android:text="日常应用"
+                android:textColor="#666666"
+                android:textSize="40px" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/layout_mail"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_mail" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="20px"
+                            android:text="邮件管理"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/mail_sum"
+                        android:layout_width="60px"
+                        android:layout_height="60px"
+                        android:background="@mipmap/cycle"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28px"
+                        android:text="1"
+                        android:textStyle="bold"
+                        android:inputType="number"
+                        android:visibility="gone"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="60px"
+                        android:layout_marginTop="10px"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_work"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_work" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="20px"
+                            android:text="我的工作"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_allow"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_allow" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="20px"
+                            android:text="日常审批"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_finance"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_finance" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="20px"
+                            android:text="财务审批"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
 
 
             </LinearLayout>
 
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/layout_allow"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/back_mine_line">
-
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="100px"
-                android:layout_marginTop="100px"
-                android:orientation="vertical">
+                android:background="@color/white"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="150px"
-                    android:layout_height="150px"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/work_allow" />
+                <RelativeLayout
+                    android:id="@+id/layout_union"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20px"
-                    android:text="审批"
-                    android:textColor="@color/black"
-                    android:textSize="40px" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
 
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_union" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="20px"
+                            android:text="工会审批"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_recruit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_recruit" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="20px"
+                            android:text="人事招聘"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+
+                </RelativeLayout>
 
             </LinearLayout>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/layout_mession"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/back_mine_line">
-
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="100px"
-                android:layout_marginTop="100px"
-                android:orientation="vertical">
+                android:layout_margin="15px"
+                android:text="公共频道"
+                android:textColor="#666666"
+                android:textSize="40px" />
 
-                <ImageView
-                    android:layout_width="150px"
-                    android:layout_height="150px"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/work_mession" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20px"
-                    android:text="任务"
-                    android:textColor="@color/black"
-                    android:textSize="40px" />
+                <RelativeLayout
+                    android:id="@+id/layout_news"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_news" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="20px"
+                            android:text="新闻动态"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_notice"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_notice" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="20px"
+                            android:text="通知公告"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+
+                </RelativeLayout>
 
             </LinearLayout>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/layout_mail"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/back_mine_line">
-
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="100px"
-                android:layout_marginTop="100px"
-                android:orientation="vertical">
+                android:layout_margin="15px"
+                android:text="其他应用"
+                android:textColor="#666666"
+                android:textSize="40px" />
 
-                <ImageView
-                    android:layout_width="150px"
-                    android:layout_height="150px"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/work_mail" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20px"
-                    android:text="邮件"
-                    android:textColor="@color/black"
-                    android:textSize="40px" />
+                <RelativeLayout
+                    android:id="@+id/layout_meting"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_metting" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="20px"
+                            android:text="会议管理"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layout_meal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_mine_line">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="100px"
+                        android:layout_marginTop="40px"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120px"
+                            android:layout_height="120px"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/work_meal" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="20px"
+                            android:text="在线点餐"
+                            android:textColor="@color/black"
+                            android:textSize="40px" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                </RelativeLayout>
 
             </LinearLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:id="@+id/layout_report"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/back_mine_line">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="100px"
-                android:layout_marginTop="100px"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="150px"
-                    android:layout_height="150px"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/work_report" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20px"
-                    android:text="工作汇报"
-                    android:textColor="@color/black"
-                    android:textSize="40px" />
-
-
-            </LinearLayout>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/layout_space"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/back_mine_line">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="100px"
-                android:layout_marginTop="100px"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="150px"
-                    android:layout_height="150px"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/work_space" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20px"
-                    android:text="永钢网盘"
-                    android:textColor="@color/black"
-                    android:textSize="40px" />
-
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20px"
-        android:text="其他应用"
-        android:textColor="@color/black"
-        android:textSize="45px" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:id="@+id/layout_study"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/back_mine_line">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="100px"
-                android:layout_marginTop="100px"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="150px"
-                    android:layout_height="150px"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/work_study" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20px"
-                    android:text="在线学习"
-                    android:textColor="@color/black"
-                    android:textSize="40px" />
-
-
-            </LinearLayout>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/layout_meeting"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/back_mine_line">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="100px"
-                android:layout_marginTop="100px"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="150px"
-                    android:layout_height="150px"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/work_metting" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20px"
-                    android:text="会议"
-                    android:textColor="@color/black"
-                    android:textSize="40px" />
-
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 
 </LinearLayout>

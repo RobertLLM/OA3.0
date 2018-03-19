@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context="cn.invonate.ygoa.Contacts.DepartmentActivity">
+    tools:context="cn.invonate.ygoa3.Contacts.DepartmentActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="120px"
         android:background="#F9F9F9"
@@ -23,23 +23,24 @@
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:paddingEnd="120px"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="50px" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#E1E1E1" />
 
-    <cn.invonate.ygoa.View.LYYPullToRefreshListView
+    <cn.invonate.ygoa3.View.LYYPullToRefreshListView
         android:id="@+id/list_connect"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

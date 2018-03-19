@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="120px"
-        android:background="#F9F9F9"
-        android:orientation="vertical">
+        android:background="#F9F9F9">
+
+        <cn.carbs.android.segmentcontrolview.library.SegmentControlView
+            android:id="@+id/tab_contacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:scv_BackgroundNormalColor="@color/white"
+            app:scv_BackgroundSelectedColor="@color/colorPrimary"
+            app:scv_FrameColor="@color/colorPrimary"
+            app:scv_FrameCornerRadius="6dp"
+            app:scv_FrameWidth="1dp"
+            app:scv_Gradient="true"
+            app:scv_SegmentPaddingVertical="5dp"
+            app:scv_TextNormalColor="@color/colorPrimary"
+            app:scv_TextSelectedColor="@color/white" />
 
         <TextView
+            android:id="@+id/import_in"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20px"
             android:gravity="center"
-            android:text="通讯录"
-            android:textColor="@color/black"
-            android:textSize="50px" />
+            android:text="导入"
+            android:textColor="#000000"
+            android:textSize="50px"
+            android:visibility="gone" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
@@ -27,51 +45,11 @@
         android:background="#818181" />
 
     <LinearLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
-        android:layout_height="60px"
-        android:layout_margin="20px"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="1" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#EEEEEE"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="60px"
-                android:layout_height="60px"
-                android:src="@drawable/search_bar_icon_normal" />
-
-            <cn.invonate.ygoa.Util.pingyin.ClearEditText
-                android:id="@+id/filter_edit"
-                android:layout_width="match_parent"
-                android:layout_height="80px"
-                android:background="@null"
-                android:gravity="center_vertical"
-                android:hint="请输入姓名或者工号搜索"
-                android:singleLine="true"
-                android:textSize="40px" />
-        </LinearLayout>
-
-
-
-        <Button
-            android:layout_width="100px"
-            android:layout_height="wrap_content"
-            android:text="取消"
-            android:textColor="@color/white"
-            android:textSize="35px"
-            android:layout_marginStart="20px"
-            android:background="@drawable/btn_login"/>
-    </LinearLayout>
-
-    <cn.invonate.ygoa.View.LYYPullToRefreshListView
-        android:id="@+id/list_connect"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>

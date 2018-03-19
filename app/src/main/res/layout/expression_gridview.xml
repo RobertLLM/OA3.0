@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <cn.invonate.ygoa.Chat.view.ExpandGridView
+    <cn.invonate.ygoa3.Chat.view.ExpandGridView
         android:id="@+id/gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
