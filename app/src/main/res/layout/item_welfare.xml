@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30px">
+
+    <TextView
+        android:id="@+id/welfare_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="蔬菜"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:textSize="50px" />
+
+    <TextView
+        android:id="@+id/end_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="蔬菜"
+        android:layout_marginTop="10px"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:textSize="45px" />
+
+</LinearLayout>

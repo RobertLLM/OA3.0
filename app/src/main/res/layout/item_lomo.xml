@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30px">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <cn.invonate.ygoa3.View.CircleImageView
+            android:id="@+id/head"
+            android:layout_width="150px"
+            android:layout_height="150px" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20px"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="李阳洋"
+                android:textColor="@color/black"
+                android:textSize="45px" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:text="2018-3-13 13:01"
+                android:textColor="@color/black"
+                android:textSize="45px" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10px"
+        android:layout_marginTop="10px"
+        android:text="123456"
+        android:textColor="@color/black"
+        android:textSize="45px" />
+
+    <LinearLayout
+        android:id="@+id/layout_imgs1"
+        android:layout_width="match_parent"
+        android:layout_height="230px"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/news_pic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/img_play"
+                android:layout_width="60px"
+                android:layout_height="60px"
+                android:layout_gravity="center"
+                android:src="@mipmap/paly" />
+
+        </FrameLayout>
+
+
+        <ImageView
+            android:id="@+id/news_pic2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop" />
+
+
+        <ImageView
+            android:id="@+id/news_pic3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerCrop" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_imgs2"
+        android:layout_width="match_parent"
+        android:layout_height="230px"
+        android:layout_marginBottom="20px"
+        android:layout_marginTop="20px"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/news_pic4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+
+        <ImageView
+            android:id="@+id/news_pic5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop" />
+
+
+        <ImageView
+            android:id="@+id/news_pic6"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerCrop" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_imgs3"
+        android:layout_width="match_parent"
+        android:layout_height="230px"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/news_pic7"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerCrop" />
+
+
+        <ImageView
+            android:id="@+id/news_pic8"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop" />
+
+
+        <ImageView
+            android:id="@+id/news_pic9"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerCrop" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_zan"
+                android:layout_width="80px"
+                android:layout_height="80px"
+                android:padding="15px"
+                android:src="@mipmap/heat0" />
+
+            <TextView
+                android:id="@+id/sum_zan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:inputType="number"
+                android:text="1"
+                android:textColor="@color/black"
+                android:textSize="40px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_content"
+                android:layout_width="80px"
+                android:layout_height="80px"
+                android:padding="15px"
+                android:src="@mipmap/content" />
+
+            <TextView
+                android:id="@+id/sum_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:inputType="number"
+                android:text="1"
+                android:textColor="@color/black"
+                android:textSize="40px" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
