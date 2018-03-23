@@ -5,65 +5,147 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/type"
+        android:id="@+id/lb"
         android:layout_width="match_parent"
-        android:layout_height="80px"
-        android:background="#f6fbff"
-        android:gravity="center_vertical"
-        android:paddingStart="20px"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="15px"
+        android:paddingEnd="30px"
+        android:paddingStart="30px"
+        android:paddingTop="15px"
         android:text="类别"
-        android:textColor="@color/colorPrimary"
-        android:textSize="50px"/>
+        android:textColor="@color/white"
+        android:textSize="50px" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:paddingBottom="15px"
+        android:paddingEnd="30px"
+        android:paddingStart="30px"
+        android:paddingTop="10px">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/depart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15px"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:text="部门"
+            android:textColor="@color/black"
+            android:textSize="40px" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="50px"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:text="标题" />
+        <TextView
+            android:id="@+id/jinji"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:background="@mipmap/cycle_jinji"
+            android:gravity="center"
+            android:text="!"
+            android:textColor="@color/white"
+            android:textSize="40px"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="40px"
-                android:textColor="#9d9d9d"
-                android:layout_marginStart="20px"
-                android:text="2018-01-15" />
+    </LinearLayout>
 
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="15px"
+        android:paddingEnd="30px"
+        android:paddingStart="30px"
+        android:paddingTop="10px">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="标题"
+            android:textColor="@color/black"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/lxdbh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="35px" />
+
+        <ImageView
+            android:id="@+id/file"
+            android:layout_width="40px"
+            android:layout_height="40px"
+            android:layout_gravity="center"
+            android:src="@mipmap/file" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="15px"
+        android:paddingEnd="30px"
+        android:paddingStart="30px"
+        android:paddingTop="10px">
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="李阳洋"
+            android:textColor="@color/black"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/re"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back_re"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:padding="5px"
+            android:text="重审"
+            android:textColor="@color/white"
+            android:textSize="35px"
+            android:layout_marginEnd="10px"/>
+
+        <TextView
+            android:id="@+id/xt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/back_xt"
+            android:gravity="center"
+            android:padding="5px"
+            android:text="协同"
+            android:textColor="@color/white"
+            android:textSize="35px" />
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/depart"
+        android:id="@+id/zhaiyao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#a4a4a4"
-        android:textSize="50px"
-        android:padding="15px"
-        android:text="部门"/>
+        android:layout_weight="1"
+        android:paddingBottom="15px"
+        android:paddingEnd="30px"
+        android:paddingStart="30px"
+        android:paddingTop="10px"
+        android:singleLine="true"
+        android:text="666"
+        android:textColor="@color/black"
+        android:textSize="40px" />
 
-    <TextView
-        android:id="@+id/config"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#f06950"
-        android:textSize="45px"
-        android:padding="15px"
-        android:text="结果"/>
 
 </LinearLayout>

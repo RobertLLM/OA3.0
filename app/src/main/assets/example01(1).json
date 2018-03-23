@@ -1,0 +1,142 @@
+{
+  "title": "费用报销单",
+  "inputs": [
+    {
+      "value": "ces",
+      "label": "费用事由",
+      "type": "label",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "value": "详细说明",
+      "label": "详细说明",
+      "type": "label",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "type": "accordion",
+      "value": [
+        {
+          "content": {
+            "分摊部门": "供销事业部销售处扬州办事处",
+            "发生时间": "2017-02-03",
+            "费用名称": "广告费--产品试用费",
+            "税前金额": 10,
+            "税金": 0,
+            "汇款方式": "电汇/现汇",
+            "金额": "10.00",
+            "已付": 0,
+            "附外来凭证": "0",
+            "备注": null
+          },
+          "header": "供销事业部销售处扬州办事处 :10.00"
+        },
+        {
+          "content": {
+            "已付": 0,
+            "附外来凭证": "0",
+            "备注": null
+          },
+          "header": "供销事业部销售处扬州办事处 :10.00"
+        }
+      ],
+      "label": "费用明细",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "name": "text",
+      "label": "经办人",
+      "type": "text",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "value": "10.00",
+      "label": "本次支付",
+      "type": "label",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "name": "字段名",
+      "label": "选人",
+      "type": "picker",
+      "limitCount": "1",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "value": "1",
+      "label": "收款单位",
+      "type": "label",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "value": "沈浩2017-02-10",
+      "label": "经办人",
+      "type": "label",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "name": "workflowType",
+      "value": "13",
+      "type": "hidden",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "name": "businessId",
+      "value": "9988D5B1-7A4F-4873-9A3C-03C4435534F6",
+      "type": "hidden",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "value": "测试1234",
+      "type": "hidden",
+      "areaCode": "0_A_详情"
+    },
+    {
+      "value": [
+        "未付金额：1000",
+        "",
+        "已付金额：11111",
+        "合计：1000000"
+      ],
+      "color": [
+        "5ABE98",
+        "",
+        "F4511E",
+        "#333333"
+      ],
+      "type": "fourSingle",
+      "areaCode": "1_A_付款信息"
+    },
+    {
+      "value": [
+        "第二次付款",
+        "已付",
+        "金额：11111",
+        "HK:8000000"
+      ],
+      "color": [
+        "#333333",
+        "5ABE98",
+        "#333333",
+        "#A9A9A9"
+      ],
+      "type": "fourSingle",
+      "areaCode": "1_A_付款信息"
+    },
+    {
+      "type": "attachment",
+      "label": "安监局费用2017.excel",
+      "size": "1024kb",
+      "url": "/ygoa/xxxxxx",
+      "areaCode": "2_B_发票"
+    },
+    {
+      "type": "attachment",
+      "label": "安监局费用2017.doc",
+      "size": "1024kb",
+      "url": "/ygoa/xxxxxx",
+      "areaCode": "3_B_合同"
+    }
+  ],
+  "success": "0"
+}

@@ -5,7 +5,16 @@ package cn.invonate.ygoa3.Entry;
  */
 
 public class Task {
-    int success;
+    private int success;
+    private String msg;
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 
     public int getSuccess() {
         return success;

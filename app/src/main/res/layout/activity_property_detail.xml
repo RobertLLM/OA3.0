@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.invonate.ygoa3.login.PropertyDetailActivity">
+    tools:context="cn.invonate.ygoa3.login.Property.PropertyDetailActivity">
 
 
     <RelativeLayout

@@ -22,7 +22,8 @@ import cn.invonate.ygoa3.WebView.WebViewActivity;
 import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
 import cn.invonate.ygoa3.login.FundActivity;
-import cn.invonate.ygoa3.login.PropertyActivity;
+import cn.invonate.ygoa3.login.group.GroupActivity;
+import cn.invonate.ygoa3.login.Property.PropertyActivity;
 import cn.invonate.ygoa3.login.SettingActivity;
 import cn.invonate.ygoa3.login.WageActivity;
 
@@ -71,7 +72,7 @@ public class MineFragment extends Fragment {
                         + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=8");
                 break;
             case R.id.layout_group:
-                intent = new Intent(getActivity(), WebViewActivity.class);
+                intent = new Intent(getActivity(), GroupActivity.class);
                 intent.putExtra("name", "群组");
                 intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
                         + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=9");

@@ -72,7 +72,7 @@ public class TaskListActivity extends BaseActivity {
             @Override
             public void onNext(final Mission data) {
                 Log.i("getMyTask", data.toString());
-                if (data.getSuccess()==0){
+                if (data.getSuccess() == 0) {
                     listTask.setAdapter(new TaskAdapter(data.getData(), TaskListActivity.this));
                     listTask.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -82,7 +82,7 @@ public class TaskListActivity extends BaseActivity {
                             bundle.putString("taskId", data.getData().get(position - 1).getId());
                             bundle.putString("workflowType", data.getData().get(position - 1).getWorkflowType());
                             bundle.putBoolean("need_layout", true);
-                            bundle.putBoolean("isXt", data.getData().get(position - 1).isXt());
+                            bundle.putString("isXt", data.getData().get(position - 1).getIsXt());
                             stepActivity(bundle, TaskDetailActivity.class);
                         }
                     });
@@ -92,6 +92,6 @@ public class TaskListActivity extends BaseActivity {
                 }
             }
         };
-        HttpUtil.getInstance(this,false).getTask(subscriber, app.getUser().getSessionId());
+        HttpUtil.getInstance(this, false).getTask(subscriber, app.getUser().getSessionId());
     }
 }

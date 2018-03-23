@@ -61,5 +61,6 @@ dependencies {
     compile 'cn.carbs.android:SegmentControlView:1.0.0'
     compile project(path: ':lazyviewpagerlibrary')
     compile 'com.github.luckyandyzhang:MentionEditText:1.0.0'
-    compile 'com.baoyz.swipemenulistview:library:1.3.0'
+    compile project(path: ':SlidingMenulibrary')
+    compile project(path: ':SwipMenuListViewlibrary')
 }

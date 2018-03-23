@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,6 +27,12 @@ public class MemberAdapter extends BaseAdapter implements Filterable {
     private LayoutInflater inflater;
     private Filter mFilter;
     //private ArrayList<Contacts> mUnfilteredData;
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public List<Contacts> getData() {
         return data;
@@ -56,7 +63,7 @@ public class MemberAdapter extends BaseAdapter implements Filterable {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_member, parent, false);
@@ -67,6 +74,13 @@ public class MemberAdapter extends BaseAdapter implements Filterable {
         }
         holder.name.setText(data.get(position).getUser_name());
         holder.depart.setText(data.get(position).getDepartment_name());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null)
+                    listener.onItemClick(position);
+            }
+        });
         return convertView;
     }
 
@@ -79,6 +93,8 @@ public class MemberAdapter extends BaseAdapter implements Filterable {
     }
 
     static class ViewHolder {
+        @BindView(R.id.itemView)
+        LinearLayout itemView;
         @BindView(R.id.name)
         TextView name;
         @BindView(R.id.depart)
@@ -87,6 +103,10 @@ public class MemberAdapter extends BaseAdapter implements Filterable {
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 
     private class ArrayFilter extends Filter {
@@ -100,21 +120,7 @@ public class MemberAdapter extends BaseAdapter implements Filterable {
                 results.values = list;
                 results.count = list.size();
             } else {
-
-
                 ArrayList<Contacts> newValues = data;
-
-//                for (int i = 0; i < count; i++) {
-//                    Contacts pc = unfilteredValues.get(i);
-//                    if (pc != null) {
-//                        if (pc.getUser_name() != null && pc.getUser_name().contains(prefixString)) {
-//                            newValues.add(pc);
-//                        } else if (pc.getUser_code() != null && pc.getUser_code().contains(prefixString)) {
-//                            newValues.add(pc);
-//                        }
-//                    }
-//                }
-
                 results.values = newValues;
                 results.count = newValues.size();
             }

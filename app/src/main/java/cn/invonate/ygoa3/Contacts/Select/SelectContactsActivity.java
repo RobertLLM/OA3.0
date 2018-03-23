@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -112,7 +111,6 @@ public class SelectContactsActivity extends BaseActivity {
                 btnComplete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(SelectContactsActivity.this, "11111", Toast.LENGTH_SHORT).show();
                         ArrayList<Contacts> select = new ArrayList<>();
                         for (Contacts c : list_contacts) {
                             if (c.isIs_select()) {
@@ -190,7 +188,6 @@ public class SelectContactsActivity extends BaseActivity {
      */
     private void filterData(String filterStr, List<Contacts> data) {
         List<Contacts> filterDateList = new ArrayList<>();
-
         if (TextUtils.isEmpty(filterStr)) {
             filterDateList = data;
         } else {

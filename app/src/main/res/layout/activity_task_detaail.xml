@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="cn.invonate.ygoa3.Task.TaskDetailActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="cn.invonate.ygoa3.Task.TaskDetailActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,30 +19,120 @@
             android:layout_width="120px"
             android:layout_height="120px"
             android:padding="30px"
-            android:src="@mipmap/pic_back"/>
+            android:src="@mipmap/pic_back" />
 
-        <cn.carbs.android.segmentcontrolview.library.SegmentControlView
-            android:id="@+id/task_tab"
+        <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:scv_FrameCornerRadius="6dp"
-            app:scv_FrameWidth="1dp"
-            app:scv_Gradient="true"
-            app:scv_TextNormalColor="@color/colorPrimary"
-            app:scv_FrameColor="@color/colorPrimary"
-            app:scv_BackgroundNormalColor="@color/white"
-            app:scv_TextSelectedColor="@color/white"
-            app:scv_BackgroundSelectedColor="@color/colorPrimary"
-            app:scv_SegmentPaddingVertical="5dp"/>
+            android:textColor="@color/black"
+            android:textSize="50px" />
 
+        <TextView
+            android:id="@+id/layout_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20px"
+            android:text="更多"
+            android:textColor="@color/black"
+            android:textSize="50px" />
 
     </RelativeLayout>
+
+    <cn.invonate.ygoa3.View.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/white"
+        app:lyySelectedTabTextColor="@color/colorPrimary"
+        app:lyySelectedTabTextSize="50px"
+        app:lyyTabTextColor="@color/black"
+        app:lyyTabTextSize="50px"
+        app:pstsDividerColor="#00000000"
+        app:pstsDividerPadding="0dp"
+        app:pstsIndicatorColor="@color/colorPrimary"
+        app:pstsIndicatorHeight="2dp" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager_task"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="#E1E1E1" />
+
+
+    <LinearLayout
+        android:id="@+id/layout_need"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:layout_width="45px"
+                android:layout_height="45px"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="35px"
+                android:src="@mipmap/bi" />
+
+            <ImageView
+                android:id="@+id/copy"
+                android:layout_width="60px"
+                android:layout_height="60px"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20px"
+                android:src="@mipmap/task_copy" />
+
+            <EditText
+                android:id="@+id/msg"
+                android:layout_width="wrap_content"
+                android:layout_height="80px"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="15px"
+                android:layout_marginEnd="20px"
+                android:layout_marginStart="20px"
+                android:layout_marginTop="15px"
+                android:layout_toLeftOf="@+id/copy"
+                android:background="@drawable/back_edit"
+                android:hint="填写审批意见"
+                android:paddingStart="65px"
+                android:textSize="35px" />
+
+            <TextView
+                android:id="@+id/task_sum"
+                android:layout_width="50px"
+                android:layout_height="50px"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8px"
+                android:background="@mipmap/cycle"
+                android:gravity="center"
+                android:inputType="number"
+                android:text="99"
+                android:textColor="#FFFFFF"
+                android:textSize="28px"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
 
 </LinearLayout>

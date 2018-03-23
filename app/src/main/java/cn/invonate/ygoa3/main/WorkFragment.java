@@ -268,7 +268,9 @@ public class WorkFragment extends Fragment {
 
                     store.close();
                 } catch (Exception e) {
-                    refresh.onRefreshComplete();
+                    if (refresh != null) {
+                        refresh.onRefreshComplete();
+                    }
                     e.printStackTrace();
                 }
             }

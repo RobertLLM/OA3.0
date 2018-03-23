@@ -2,6 +2,7 @@ package cn.invonate.ygoa3.Entry;
 
 import com.alibaba.fastjson.JSON;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class TaskDetail {
     private String title;
     private int success;
-    private List<Input> inputs;
+    private ArrayList<Input> inputs;
     private List<Button> buttons;
 
     public String getTitle() {
@@ -32,11 +33,11 @@ public class TaskDetail {
         this.success = success;
     }
 
-    public List<Input> getInputs() {
+    public ArrayList<Input> getInputs() {
         return inputs;
     }
 
-    public void setInputs(List<Input> inputs) {
+    public void setInputs(ArrayList<Input> inputs) {
         this.inputs = inputs;
     }
 
@@ -53,15 +54,22 @@ public class TaskDetail {
         return JSON.toJSONString(this);
     }
 
-    public static class Input {
+    public static class Input implements Serializable {
         private String name;
-        private String value;
-        private String label;
-        private String type;
+        private String value;//
+        private String label;//
+        private String type; //
         private boolean required;
-        private boolean readonly;
+        private String readonly;
+        private String areaCode;
         private List<Option> options;
         private String textFormat;
+        private int index;
+        private String f_type;
+        private String f_name;
+        private List<String> color;
+        private String size;
+        private String url;
 
         public Input() {
 
@@ -115,12 +123,20 @@ public class TaskDetail {
             this.required = required;
         }
 
-        public boolean isReadonly() {
+        public String isReadonly() {
             return readonly;
         }
 
-        public void setReadonly(boolean readonly) {
+        public void setReadonly(String readonly) {
             this.readonly = readonly;
+        }
+
+        public String getAreaCode() {
+            return areaCode;
+        }
+
+        public void setAreaCode(String areaCode) {
+            this.areaCode = areaCode;
         }
 
         public List<Option> getOptions() {
@@ -137,6 +153,54 @@ public class TaskDetail {
 
         public void setTextFormat(String textFormat) {
             this.textFormat = textFormat;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        public String getF_type() {
+            return f_type;
+        }
+
+        public void setF_type(String f_type) {
+            this.f_type = f_type;
+        }
+
+        public String getF_name() {
+            return f_name;
+        }
+
+        public void setF_name(String f_name) {
+            this.f_name = f_name;
+        }
+
+        public List<String> getColor() {
+            return color;
+        }
+
+        public void setColor(List<String> color) {
+            this.color = color;
+        }
+
+        public String getSize() {
+            return size;
+        }
+
+        public void setSize(String size) {
+            this.size = size;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
         }
     }
 
@@ -225,6 +289,9 @@ public class TaskDetail {
         private Map<String, String> content;
         private List<MapEntry> maps;
 
+        private String deltext;
+        private String delurl;
+
         public String getHeader() {
             return header;
         }
@@ -254,6 +321,22 @@ public class TaskDetail {
             for (String key : content.keySet()) {
                 maps.add(new MapEntry(key, content.get(key)));
             }
+        }
+
+        public String getDeltext() {
+            return deltext;
+        }
+
+        public void setDeltext(String deltext) {
+            this.deltext = deltext;
+        }
+
+        public String getDelurl() {
+            return delurl;
+        }
+
+        public void setDelurl(String delurl) {
+            this.delurl = delurl;
         }
 
         public class MapEntry {

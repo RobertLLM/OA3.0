@@ -1,5 +1,7 @@
 package cn.invonate.ygoa3.Entry;
 
+import com.alibaba.fastjson.JSON;
+
 import java.io.Serializable;
 
 /**
@@ -7,6 +9,7 @@ import java.io.Serializable;
  */
 
 public class Contacts implements Serializable {
+    private String id_;
     private String user_name;
     private String company_name;
     private String office_phone;
@@ -20,6 +23,14 @@ public class Contacts implements Serializable {
     private String sortLetters;  //显示数据拼音的首字母
 
     private boolean is_select;
+
+    public String getId_() {
+        return id_;
+    }
+
+    public void setId_(String id_) {
+        this.id_ = id_;
+    }
 
     public String getUser_name() {
         return user_name;
@@ -119,6 +130,6 @@ public class Contacts implements Serializable {
 
     @Override
     public String toString() {
-        return this.getUser_name() + "<" + this.getUser_code() + ">";
+        return JSON.toJSONString(this);
     }
 }

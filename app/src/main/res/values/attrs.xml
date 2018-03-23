@@ -7,8 +7,26 @@
     </declare-styleable>
 
     <declare-styleable name="NodeProgressView">
-        <attr name="width" format="dimension"/>
-        <attr name="nodeRadius" format="dimension"/>
+        <attr name="width" format="dimension" />
+        <attr name="nodeRadius" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="PagerSlidingTabStrip">
+        <attr name="pstsIndicatorColor" format="color" />
+        <attr name="pstsUnderlineColor" format="color" />
+        <attr name="pstsDividerColor" format="color" />
+        <attr name="pstsIndicatorHeight" format="dimension" />
+        <attr name="pstsUnderlineHeight" format="dimension" />
+        <attr name="pstsDividerPadding" format="dimension" />
+        <attr name="pstsTabPaddingLeftRight" format="dimension" />
+        <attr name="pstsScrollOffset" format="dimension" />
+        <attr name="pstsTabBackground" format="reference" />
+        <attr name="pstsShouldExpand" format="boolean" />
+        <attr name="pstsTextAllCaps" format="boolean" />
+        <attr name="lyyTabTextSize" format="dimension" />
+        <attr name="lyyTabTextColor" format="color" />
+        <attr name="lyySelectedTabTextSize" format="dimension" />
+        <attr name="lyySelectedTabTextColor" format="color" />
     </declare-styleable>
 
 </resources>

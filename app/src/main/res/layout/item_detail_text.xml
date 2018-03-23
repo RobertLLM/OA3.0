@@ -2,38 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingStart="30px"
+    android:paddingTop="20px">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f6fbff">
+        android:paddingEnd="30px"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/label"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20px"
+            android:layout_weight="7.5"
+            android:gravity="center_vertical|left"
             android:text="label"
-            android:textColor="@color/colorPrimary"
-            android:textSize="50px" />
+            android:textColor="@color/black"
+            android:textSize="45px" />
 
-        <TextView
-            android:id="@+id/required"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="*"
-            android:textColor="#FF0000"
-            android:visibility="gone" />
+            android:layout_margin="20px"
+            android:layout_weight="2.5"
+            android:background="@drawable/back_detail_input"
+            android:padding="30px" />
 
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20px"
-        android:background="@drawable/back_detail_input"
-        android:padding="30px" />
 
 </LinearLayout>

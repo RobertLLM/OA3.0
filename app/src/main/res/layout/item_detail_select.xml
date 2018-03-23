@@ -3,30 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/layout"
-
+    android:paddingStart="30px"
+    android:paddingTop="20px"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/label"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f6fbff"
-        android:padding="20px"
-        android:text="label"
-        android:textColor="@color/colorPrimary"
-        android:textSize="50px">
+        android:paddingEnd="30px"
+        android:orientation="horizontal">
 
-    </TextView>
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="7.5"
+            android:gravity="center_vertical|left"
+            android:text="label"
+            android:textColor="@color/black"
+            android:textSize="45px" />
 
-    <Spinner
-        android:id="@+id/select"
+        <Spinner
+            android:id="@+id/select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|left"
+            android:padding="20px"
+            android:layout_weight="2.5"
+            android:spinnerMode="dropdown"
+            android:theme="@style/SpnStyle"/>
+
+    </LinearLayout>
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="20px"
-        android:spinnerMode="dropdown"
-        android:theme="@style/SpnStyle">
-
-    </Spinner>
+        android:layout_height="1dp"
+        android:layout_marginTop="20px"
+        android:background="#E1E1E1" />
 
 </LinearLayout>

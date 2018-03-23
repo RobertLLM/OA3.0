@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/OA.iml" filepath="$PROJECT_DIR$/OA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SlidingMenulibrary/SlidingMenulibrary.iml" filepath="$PROJECT_DIR$/SlidingMenulibrary/SlidingMenulibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SwipMenuListViewlibrary/SwipMenuListViewlibrary.iml" filepath="$PROJECT_DIR$/SwipMenuListViewlibrary/SwipMenuListViewlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/autolayout/autolayout.iml" filepath="$PROJECT_DIR$/autolayout/autolayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/ios_dialog/ios_dialog.iml" filepath="$PROJECT_DIR$/ios_dialog/ios_dialog.iml" />

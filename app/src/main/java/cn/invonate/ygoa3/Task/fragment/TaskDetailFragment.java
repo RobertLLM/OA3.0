@@ -20,13 +20,14 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 import com.yonggang.liyangyang.lazyviewpagerlibrary.LazyFragmentPagerAdapter;
 
 import java.util.ArrayList;
@@ -37,7 +38,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import cn.invonate.ygoa3.Contacts.Select.SelectDepartmentActivity;
 import cn.invonate.ygoa3.Entry.Contacts;
 import cn.invonate.ygoa3.Entry.Task;
 import cn.invonate.ygoa3.Entry.TaskDetail;
@@ -46,8 +46,6 @@ import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
 import cn.invonate.ygoa3.httpUtil.ProgressSubscriber;
 import cn.invonate.ygoa3.httpUtil.SubscriberOnNextListener;
-import io.github.luckyandyzhang.mentionedittext.MentionEditText;
-import rx.Subscriber;
 
 /**
  * Created by liyangyang on 2018/1/15.
@@ -60,314 +58,52 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
     Unbinder unbinder;
 
     private YGApplication app;
-    private String businessId;
-    private String taskId;
-    private String workflowType;
 
-    private TaskDetail detail;
+    private static String img[] = {"bmp", "jpg", "jpeg", "png", "tiff", "gif", "pcx", "tga", "exif", "fpx", "svg", "psd",
+            "cdr", "pcd", "dxf", "ufo", "eps", "ai", "raw", "wmf"};
+
+    private List<TaskDetail.Input> inputs;
 
     private TaskDetailAdapter adapter;
 
     private StringBuilder copy = new StringBuilder();
     private StringBuilder coordination = new StringBuilder();
 
-    private boolean need_layout;//是否需要审批意见、抄送等
-    private boolean isXt;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        businessId = getArguments().getString("businessId");
-        taskId = getArguments().getString("taskId");
-        workflowType = getArguments().getString("workflowType");
-        need_layout = getArguments().getBoolean("need_layout");
-        isXt = getArguments().getBoolean("isXt");
+        inputs = (List<TaskDetail.Input>) getArguments().getSerializable("inputs");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_task_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_task_detail1, container, false);
         app = (YGApplication) getActivity().getApplication();
-        getTaskDetail();
-        String s = null;
-//        if (Math.random() < 0.5) {
-        s = "{\n" +
-                "    \"title\": \"费用报销单\",\n" +
-                "    \"inputs\": [\n" +
-                "               {\n" +
-                "               \"value\": \"ces\",\n" +
-                "               \"label\": \"费用事由\",\n" +
-                "               \"type\": \"label\"\n" +
-                "               },\n" +
-                "               {\n" +
-                "               \"value\": \"详细说明\",\n" +
-                "               \"label\": \"详细说明\",\n" +
-                "               \"type\": \"label\"\n" +
-                "               },\n" +
-                "               {\n" +
-                "               \"type\": \"accordion\",\n" +
-                "               \"value\": [\n" +
-                "                          {\n" +
-                "                          \"content\": {\n" +
-                "                                      \"分摊部门\" : \"供销事业部销售处扬州办事处\",\n" +
-                "                                      \"发生时间\" : \"2017-02-03\",\n" +
-                "                                      \"费用名称\" : \"广告费--产品试用费\",\n" +
-                "                                      \"税前金额\" : 10,\n" +
-                "                                      \"税金\" : 0,\n" +
-                "                                      \"汇款方式\": \"电汇/现汇\",\n" +
-                "                                      \"金额\": \"10.00\",\n" +
-                "                                      \"已付\": 0,\n" +
-                "                                      \"附外来凭证\": \"0\",\n" +
-                "                                      \"备注\": null\n" +
-                "                          },\n" +
-                "                          \"header\": \"供销事业部销售处扬州办事处 :10.00\"\n" +
-                "                          },\n" +
-                "                          {\n" +
-                "                          \"content\": {\n" +
-                "                          \"已付\": 0,\n" +
-                "                          \"附外来凭证\": \"0\",\n" +
-                "                          \"备注\": null\n" +
-                "                          },\n" +
-                "                          \"header\": \"供销事业部销售处扬州办事处 :10.00\"\n" +
-                "                          }\n" +
-                "                          ],\n" +
-                "               \"label\": \"费用明细\"\n" +
-                "               },\n" +
-                "               {\n" +
-                "               \"value\": [\n" +
-                "                          {\n" +
-                "                          \"content\": {\n" +
-                "                          \"附外来凭证\": \"0\",\n" +
-                "                          \"备注\": null\n" +
-                "                          },\n" +
-                "                          \"header\": \"供销事业部销售处扬州办事处 :10.00\"\n" +
-                "                          },\n" +
-                "                          {\n" +
-                "                          \"content\": {\n" +
-                "                          \"已付\": 0,\n" +
-                "                          \"附外来凭证\": \"0\",\n" +
-                "                          \"备注\": null\n" +
-                "                          },\n" +
-                "                          \"header\": \"供销事业部销售处扬州办事处 :10.00\"\n" +
-                "                          }\n" +
-                "                          ],\n" +
-                "               \"label\": \"费用明细\",\n" +
-                "               \"type\": \"accordion\"\n" +
-                "               },\n" +
-                "               {\n" +
-                "               \"value\": \"10.00\",\n" +
-                "               \"label\": \"本次支付\",\n" +
-                "               \"type\": \"label\"\n" +
-                "               },\n" +
-                "               {\n" +
-                "               \"name\": \"text\",\n" +
-                "               \"label\": \"经办人\",\n" +
-                "               \"type\": \"text\",\n" +
-                "               \"readOnly\":false\n" +
-                "               },\n" +
-                "               {\n" +
-                "               \"value\": \"1\",\n" +
-                "               \"label\": \"收款单位\",\n" +
-                "               \"type\": \"label\"\n" +
-                "               },\n" +
-                "               {\n" +
-                "               \"value\": \"沈浩2017-02-10\",\n" +
-                "               \"label\": \"经办人\",\n" +
-                "               \"type\": \"label\"\n" +
-                "               },\n" +
-                "               {\n" +
-                "               \"name\": \"workflowType\",\n" +
-                "               \"value\": \"13\",\n" +
-                "               \"type\": \"hidden\"\n" +
-                "               },\n" +
-                "               {\n" +
-                "               \"name\": \"businessId\",\n" +
-                "               \"value\": \"9988D5B1-7A4F-4873-9A3C-03C4435534F6\",\n" +
-                "               \"type\": \"hidden\"\n" +
-                "               },\n" +
-                "               {\n" +
-                "               \"name\": \"taskId\",\n" +
-                "               \"value\": \"5730055\",\n" +
-                "               \"type\": \"hidden\"\n" +
-                "               }\n" +
-                "               ],\n" +
-                "    \"success\": \"0\"\n" +
-                "}\n";
-//        } else {
-//        s = "{\n" +
-//                "    \"title\": \"汇款申请单\",\n" +
-//                "    \"inputs\": [\n" +
-//                "        {\n" +
-//                "            \"name\": \"remitApply.sysDept.deptName\",\n" +
-//                "            \"value\": \"恒创软件数据中心\",\n" +
-//                "            \"label\": \"申请部门\",\n" +
-//                "            \"type\": \"text\",\n" +
-//                "            \"readonly\": true\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"name\": \"remitApply.sysDept.deptId\",\n" +
-//                "            \"value\": \"8a8a83e04c736b47014c7799e7de25bc\",\n" +
-//                "            \"type\": \"hidden\"\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"name\": \"remitApply.tbrq\",\n" +
-//                "            \"value\": \"2017-03-20\",\n" +
-//                "            \"label\": \"填报日期\",\n" +
-//                "            \"type\": \"date\"\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"name\": \"remitApply.htbh\",\n" +
-//                "            \"label\": \"合同编号\",\n" +
-//                "            \"type\": \"text\"\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"textFormat\": \"number\",\n" +
-//                "            \"name\": \"remitApply.ykje\",\n" +
-//                "            \"label\": \"用款金额(元)\",\n" +
-//                "            \"required\": true,\n" +
-//                "            \"type\": \"text\"\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"name\": \"remitApply.fykm\",\n" +
-//                "            \"label\": \"用款用途\",\n" +
-//                "            \"required\": true,\n" +
-//                "            \"type\": \"text\"\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"name\": \"remitApply.ykzt\",\n" +
-//                "            \"label\": \"用款状态\",\n" +
-//                "            \"type\": \"select\",\n" +
-//                "            \"options\": [\n" +
-//                "                {\n" +
-//                "                    \"value\": \"0\",\n" +
-//                "                    \"label\": \"一般\"\n" +
-//                "                },\n" +
-//                "                {\n" +
-//                "                    \"selected\": true,\n" +
-//                "                    \"value\": \"1\",\n" +
-//                "                    \"label\": \"特急\"\n" +
-//                "                }\n" +
-//                "            ]\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"name\": \"remitApply.ykfs\",\n" +
-//                "            \"label\": \"用款方式\",\n" +
-//                "            \"type\": \"select\",\n" +
-//                "            \"options\": [\n" +
-//                "                {\n" +
-//                "                    \"value\": \"0\",\n" +
-//                "                    \"label\": \"承兑\"\n" +
-//                "                },\n" +
-//                "                {\n" +
-//                "                    \"selected\": true,\n" +
-//                "                    \"value\": \"1\",\n" +
-//                "                    \"label\": \"现汇\"\n" +
-//                "                },\n" +
-//                "                {\n" +
-//                "                    \"value\": \"2\",\n" +
-//                "                    \"label\": \"现金\"\n" +
-//                "                }\n" +
-//                "            ]\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"name\": \"remitApply.skdw\",\n" +
-//                "            \"label\": \"收款单位\",\n" +
-//                "            \"required\": true,\n" +
-//                "            \"type\": \"text\"\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"name\": \"remitApply.ykdw\",\n" +
-//                "            \"label\": \"用款单位\",\n" +
-//                "            \"required\": true,\n" +
-//                "            \"type\": \"text\"\n" +
-//                "        },\n" +
-//                "        {\n" +
-//                "            \"name\": \"remitApply.isYs\",\n" +
-//                "            \"label\": \"是否预付款\",\n" +
-//                "            \"required\": true,\n" +
-//                "            \"type\": \"select\",\n" +
-//                "            \"options\": [\n" +
-//                "                {\n" +
-//                "                    \"selected\": true,\n" +
-//                "                    \"value\": null,\n" +
-//                "                    \"label\": \"-----\"\n" +
-//                "                },\n" +
-//                "                {\n" +
-//                "                    \"value\": \"0\",\n" +
-//                "                    \"label\": \"否\"\n" +
-//                "                },\n" +
-//                "                {\n" +
-//                "                    \"value\": \"1\",\n" +
-//                "                    \"label\": \"是\"\n" +
-//                "                }\n" +
-//                "            ]\n" +
-//                "        }\n" +
-//                "    ],\n" +
-//                "    \"buttons\": [\n" +
-//                "        {\n" +
-//                "            \"name\": \"buttonUrl\",\n" +
-//                "            \"label\": \"保  存\",\n" +
-//                "            \"url\": \"/ydpt/addHkspd!saveHkspd.do\",\n" +
-//                "            \"value\":\"\"\n" +
-//                "        }\n" +
-//                "    ],\n" +
-//                "    \"success\": \"0\"\n" +
-//                "}\n";
-//        }
         unbinder = ButterKnife.bind(this, view);
+        listInput.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new TaskDetailAdapter(inputs, getActivity());
+        listInput.setAdapter(adapter);
         return view;
     }
 
     /**
-     * 获取流程详情
+     * 单条驳回
+     *
+     * @param url
      */
-    private void getTaskDetail() {
-        Subscriber subscriber = new Subscriber<String>() {
+    private void singlePost(String url) {
+        SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<Task>() {
             @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.i("error", e.toString());
-                Toast.makeText(app, e.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNext(String data) {
-                Log.i("getTaskDetail ", data);
-                detail = JSON.parseObject(data, TaskDetail.class);
-                Log.i("data", detail.toString());
-                if (need_layout) {
-                    if (isXt) {
-                        detail.getInputs().add(new TaskDetail.Input("cmnt", "", "审批意见", "approval", true));
-                    } else {
-                        detail.getInputs().add(new TaskDetail.Input("cmnt", "", "审批意见", "approval", false));
-                        detail.getInputs().add(new TaskDetail.Input("ccr", "", "抄送人员", "copy", false));
-                        detail.getInputs().add(new TaskDetail.Input("clr", "", "协同人员", "teamwork", false));
-                    }
-                }
-                if (isXt) {
-                    List<TaskDetail.Button> buttons = new ArrayList<>();
-                    buttons.add(new TaskDetail.Button("", "确定", "/ygoa/ydpt/approveAllXt.action", "true"));
-                    detail.setButtons(buttons);
+            public void onNext(Task data) {
+                if (data.getSuccess() == 0) {
+                    getActivity().finish();
                 } else {
-                    if (detail.getButtons() == null) {
-                        List<TaskDetail.Button> buttons = new ArrayList<>();
-                        buttons.add(new TaskDetail.Button("approveResult", "同意", "/ygoa/ydpt/processTask.action", "true"));
-                        buttons.add(new TaskDetail.Button("approveResult", "驳回", "/ygoa/ydpt/processTask.action", "false"));
-                        buttons.add(new TaskDetail.Button("", "协同", "/ygoa/ydpt/loadJumpToXt.action", ""));
-                        detail.setButtons(buttons);
-                    }
+                    Toast.makeText(app, "", Toast.LENGTH_SHORT).show();
                 }
-                listInput.setLayoutManager(new LinearLayoutManager(getActivity()));
-                adapter = new TaskDetailAdapter(detail, getActivity());
-                listInput.setAdapter(adapter);
             }
         };
-        HttpUtil.getInstance(getActivity(), false).getTaskDetail(subscriber, app.getUser().getSessionId(), businessId, taskId, workflowType);
+        HttpUtil.getInstance(getActivity(), false).singlePost(new ProgressSubscriber(onNextListener, getActivity(), "请求中"), url);
     }
 
     @Override
@@ -384,19 +120,14 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
         public static final int SELECT = 5;
         public static final int ACCORDION = 6;
         public static final int FILE = 7;
-        public static final int BUTTON = 8;
-        public static final int APPROVAL = 9; // 审批意见
-        public static final int COPY = 10; // 抄送
-        public static final int TEAMWORK = 11; // 协同
+        public static final int FOUR_SINGLE = 8;
 
-        private TaskDetail detail;
+        private List<TaskDetail.Input> data;
         private LayoutInflater inflater;
 
-
-        public TaskDetailAdapter(TaskDetail detail, Context context) {
-            this.detail = detail;
+        public TaskDetailAdapter(List<TaskDetail.Input> data, Context context) {
+            this.data = data;
             this.inflater = LayoutInflater.from(context);
-
         }
 
         @Override
@@ -414,14 +145,11 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                     return new ViewHolder(inflater.inflate(R.layout.item_detail_select, parent, false));
                 case ACCORDION:
                     return new ViewHolder(inflater.inflate(R.layout.item_detail_accordion, parent, false));
-                case APPROVAL:
-                    return new ViewHolder(inflater.inflate(R.layout.item_detail_layout, parent, false));
-                case COPY:
-                    return new ViewHolder(inflater.inflate(R.layout.item_detail_copy, parent, false));
-                case TEAMWORK:
-                    return new ViewHolder(inflater.inflate(R.layout.item_detail_copy, parent, false));
-                case BUTTON:
-                    return new ViewHolder(inflater.inflate(R.layout.item_detail_button, parent, false));
+                case FOUR_SINGLE:
+                    return new ViewHolder(inflater.inflate(R.layout.item_detail_four, parent, false));
+                case FILE:
+                    return new ViewHolder(inflater.inflate(R.layout.item_detail_file, parent, false));
+
             }
             return null;
         }
@@ -430,24 +158,19 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
         public void onBindViewHolder(final TaskDetailAdapter.ViewHolder holder, final int position) {
             switch (getItemViewType(position)) {
                 case LABEL:
-                    holder.label.setText(detail.getInputs().get(position).getLabel());
-                    holder.value.setText(detail.getInputs().get(position).getValue());
+                    holder.label.setText(data.get(position).getLabel());
+                    holder.value.setText(data.get(position).getValue());
                     break;
                 case TEXT:
-                    holder.label.setText(detail.getInputs().get(position).getLabel());
-                    holder.text.setText(detail.getInputs().get(position).getValue() == null ? "" : detail.getInputs().get(position).getValue());
-                    if (detail.getInputs().get(position).isReadonly()) {
+                    holder.label.setText(data.get(position).getLabel());
+                    holder.text.setText(data.get(position).getValue() == null ? "" : data.get(position).getValue());
+                    if (data.get(position).isReadonly() != null) {
                         holder.text.setFocusable(false);
                         holder.text.setFocusableInTouchMode(false);
                     } else {
                         holder.text.setFocusableInTouchMode(true);
                         holder.text.setFocusable(true);
                         holder.text.requestFocus();
-                    }
-                    if (detail.getInputs().get(position).isRequired()) {
-                        holder.required.setVisibility(View.VISIBLE);
-                    } else {
-                        holder.required.setVisibility(View.GONE);
                     }
 
                     holder.text.addTextChangedListener(new TextWatcher() {
@@ -458,7 +181,7 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            detail.getInputs().get(position).setValue(holder.text.getText().toString().trim());
+                            data.get(position).setValue(holder.text.getText().toString().trim());
                         }
 
                         @Override
@@ -468,23 +191,23 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                     });
                     break;
                 case DATE:
-                    holder.label.setText(detail.getInputs().get(position).getLabel());
-                    holder.value.setText(detail.getInputs().get(position).getValue());
+                    holder.label.setText(data.get(position).getLabel());
+                    holder.value.setText(data.get(position).getValue());
                     break;
                 case SELECT:
 
-                    holder.label.setText(detail.getInputs().get(position).getLabel());
-                    holder.select.setAdapter(new SpinnerAdapter(detail.getInputs().get(position).getOptions(), inflater));
-                    for (int i = 0; i < detail.getInputs().get(position).getOptions().size(); i++) {
-                        if (detail.getInputs().get(position).getOptions().get(i).isSelected()) {
+                    holder.label.setText(data.get(position).getLabel());
+                    holder.select.setAdapter(new SpinnerAdapter(data.get(position).getOptions(), inflater));
+                    for (int i = 0; i < data.get(position).getOptions().size(); i++) {
+                        if (data.get(position).getOptions().get(i).isSelected()) {
                             holder.select.setSelection(i);
-                            detail.getInputs().get(position).setValue(detail.getInputs().get(position).getOptions().get(i).getValue());
+                            data.get(position).setValue(data.get(position).getOptions().get(i).getValue());
                         }
                     }
                     holder.select.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int index, long id) {
-                            detail.getInputs().get(position).setValue(detail.getInputs().get(position).getOptions().get(index).getValue());
+                            data.get(position).setValue(data.get(position).getOptions().get(index).getValue());
                         }
 
                         @Override
@@ -493,12 +216,12 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                     });
                     break;
                 case ACCORDION:
-                    List<TaskDetail.Accordion> values = JSON.parseArray(detail.getInputs().get(position).getValue(), TaskDetail.Accordion.class);
+                    List<TaskDetail.Accordion> values = JSON.parseArray(data.get(position).getValue(), TaskDetail.Accordion.class);
                     for (TaskDetail.Accordion bean : values) {
                         bean.initMaps();
                     }
                     Log.i("values", JSON.toJSONString(values));
-                    holder.label.setText(detail.getInputs().get(position).getLabel());
+                    holder.label.setText(data.get(position).getLabel());
                     holder.list_accordion.setAdapter(new AccordionAdapter(values, inflater));
                     setListViewHeightBasedOnChildren(holder.list_accordion);
                     holder.list_accordion.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
@@ -515,118 +238,134 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                     });
 
                     break;
-
-                case APPROVAL:
-                    holder.label.setText(detail.getInputs().get(position).getLabel());
-                    holder.suggestion.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                case FOUR_SINGLE:
+                    List<String> value = JSON.parseArray(data.get(position).getValue(), String.class);
+                    holder.text1.setText(value.get(0));
+                    holder.text2.setText(value.get(1));
+                    holder.text3.setText(value.get(2));
+                    holder.text4.setText(value.get(3));
+                    String color1 = data.get(position).getColor().get(0);
+                    if ("".equals(color1)) {
+                        holder.text1.setTextColor(Color.parseColor("#000000"));
+                    } else {
+                        if (color1.startsWith("#")) {
+                            holder.text1.setTextColor(Color.parseColor(color1));
+                        } else {
+                            holder.text1.setTextColor(Color.parseColor("#" + color1));
                         }
+                    }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            detail.getInputs().get(position).setValue(holder.suggestion.getText().toString().trim());
+                    String color2 = data.get(position).getColor().get(1);
+                    if ("".equals(color2)) {
+                        holder.text2.setTextColor(Color.parseColor("#000000"));
+                    } else {
+                        if (color2.startsWith("#")) {
+                            holder.text2.setTextColor(Color.parseColor(color2));
+                        } else {
+                            holder.text2.setTextColor(Color.parseColor("#" + color2));
                         }
+                    }
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
+                    String color3 = data.get(position).getColor().get(2);
+                    if ("".equals(color3)) {
+                        holder.text3.setTextColor(Color.parseColor("#000000"));
+                    } else {
+                        if (color3.startsWith("#")) {
+                            holder.text3.setTextColor(Color.parseColor(color3));
+                        } else {
+                            holder.text3.setTextColor(Color.parseColor("#" + color3));
                         }
-                    });
+                    }
+
+                    String color4 = data.get(position).getColor().get(3);
+                    if ("".equals(color4)) {
+                        holder.text4.setTextColor(Color.parseColor("#000000"));
+                    } else {
+                        if (color4.startsWith("#")) {
+                            holder.text4.setTextColor(Color.parseColor(color4));
+                        } else {
+                            holder.text4.setTextColor(Color.parseColor("#" + color4));
+                        }
+                    }
                     break;
-                case COPY:
-                    holder.label.setText(detail.getInputs().get(position).getLabel());
-                    holder.edit.setText(copy);
-                    holder.add.setOnClickListener(new View.OnClickListener() {
+                case FILE:
+                    holder.name.setText(data.get(position).getLabel());
+                    holder.size.setText(data.get(position).getSize());
+                    holder.layout_file.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), SelectDepartmentActivity.class);
-                            startActivityForResult(intent, 0x321);
-                        }
-                    });
-                    holder.edit.setMentionTextColor(R.color.colorPrimary); //optional, set highlight color of mention string
-                    holder.edit.setPattern("[\\u4e00-\\u9fa5\\w\\-]+[<]\\w+[>]"); //optional, set regularExpression
-                    holder.edit.setOnMentionInputListener(new MentionEditText.OnMentionInputListener() {
-                        @Override
-                        public void onMentionCharacterInput() {
-                            //call when '@' character is inserted into EditText
-                        }
-                    });
-                    break;
 
-                case TEAMWORK:
-                    holder.label.setText(detail.getInputs().get(position).getLabel());
-                    holder.edit.setText(coordination);
-                    holder.add.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), SelectDepartmentActivity.class);
-                            startActivityForResult(intent, 0x123);
-                        }
-                    });
-                    holder.edit.setMentionTextColor(R.color.colorPrimary); //optional, set highlight color of mention string
-                    holder.edit.setPattern("@[\\u4e00-\\u9fa5\\w\\-]+.*,$"); //optional, set regularExpression
-                    holder.edit.setOnMentionInputListener(new MentionEditText.OnMentionInputListener() {
-                        @Override
-                        public void onMentionCharacterInput() {
-                            //call when '@' character is inserted into EditText
-                        }
-                    });
-                    break;
+                            if (is_img(data.get(position).getLabel())) {
 
-                case BUTTON:
-                    final int index;
-                    index = position - detail.getInputs().size();
-                    holder.btn.setText(detail.getButtons().get(index).getLabel());
-                    holder.btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            processTask(detail.getButtons().get(index).getUrl(),
-                                    detail.getButtons().get(index).getName(),
-                                    detail.getButtons().get(index).getValue());
+                            } else {
+
+                            }
                         }
                     });
+
                     break;
             }
+        }
+
+        /**
+         * 判断后缀是否图片
+         *
+         * @param name
+         * @return
+         */
+        private boolean is_img(String name) {
+            String[] names = name.split(".");
+            if (names.length > 1) {
+                for (String img : img) {
+                    if (names[1].equals(img)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         @Override
         public int getItemCount() {
-            return detail.getInputs().size() + detail.getButtons().size();
+            return data.size();
         }
 
         @Override
         public int getItemViewType(int position) {
-            if (position < detail.getInputs().size()) {// 属于input中
-                switch (detail.getInputs().get(position).getType()) {
-                    case "label":
-                        return LABEL;
-                    case "text":
-                        return TEXT;
-                    case "hidden":
-                        return HIDDEN;
-                    case "date":
-                        return DATE;
-                    case "select":
-                        return SELECT;
-                    case "accordion":
-                        return ACCORDION;
-                    case "approval":
-                        return APPROVAL;
-                    case "copy":
-                        return COPY;
-                    case "teamwork":
-                        return TEAMWORK;
-                }
-            } else {
-                return BUTTON;
+            switch (data.get(position).getType()) {
+                case "label":
+                    return LABEL;
+                case "text":
+                    return TEXT;
+                case "hidden":
+                    return HIDDEN;
+                case "date":
+                    return DATE;
+                case "select":
+                    return SELECT;
+                case "accordion":
+                    return ACCORDION;
+                case "fourSingle":
+                    return FOUR_SINGLE;
+                //附件
+                case "fujian":
+                case "wjpsfujian":
+                case "spfujian":
+                case "ifbreport":
+                case "ifbdownload":
+                case "ifbdownloadFromDisk":
+                case "jzcwdownload":
+                case "cwcwdownload":
+                case "sbazgsdownload":
+                case "ifbdownloadHtDisk":
+                case "attachment":
+                    return FILE;
             }
-
             return super.getItemViewType(position);
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
+
             /**
              * label
              */
@@ -643,9 +382,6 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
             @Nullable
             @BindView(R.id.text)
             EditText text;
-            @Nullable
-            @BindView(R.id.required)
-            TextView required;
 
             /**
              * select
@@ -663,37 +399,44 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
             ExpandableListView list_accordion;
 
             /**
-             * APPROVAL
+             * foursingle
              */
             @Nullable
-            @BindView(R.id.suggestion)
-            EditText suggestion;
+            @BindView(R.id.text1)
+            TextView text1;
+
+            @Nullable
+            @BindView(R.id.text2)
+            TextView text2;
+
+            @Nullable
+            @BindView(R.id.text3)
+            TextView text3;
+
+            @Nullable
+            @BindView(R.id.text4)
+            TextView text4;
+
 
             /**
-             * copy teamwork
-             */
-
-            @Nullable
-            @BindView(R.id.edit)
-            MentionEditText edit;
-
-            @Nullable
-            @BindView(R.id.add)
-            ImageView add;
-
-            /**
-             * button
+             * file
              */
             @Nullable
-            @BindView(R.id.btn)
-            Button btn;
+            @BindView(R.id.layout_file)
+            LinearLayout layout_file;
+
+            @Nullable
+            @BindView(R.id.name)
+            TextView name;
+
+            @Nullable
+            @BindView(R.id.size)
+            TextView size;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
             }
-
-
         }
 
         class AccordionAdapter extends BaseExpandableListAdapter {
@@ -743,14 +486,51 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
             }
 
             @Override
-            public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
                 if (convertView == null) {
                     convertView = inflater.inflate(R.layout.item_detail_accordion_group, null);
                 }
                 convertView.setTag(R.layout.item_detail_accordion_group, groupPosition);
                 convertView.setTag(R.layout.item_detail_accordion_child, -1);
-                TextView value = convertView.findViewById(R.id.value);
+                final TextView value = convertView.findViewById(R.id.value);
+                Button btn = convertView.findViewById(R.id.btn);
+                btn.setFocusable(false);
+                btn.setClickable(true);
+                if (data.get(groupPosition).getDelurl() == null) {
+                    btn.setVisibility(View.GONE);
+                } else {
+                    btn.setVisibility(View.VISIBLE);
+                }
+                btn.setText(data.get(groupPosition).getDeltext());
                 value.setText(data.get(groupPosition).getHeader());
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String url = data.get(groupPosition).getDelurl();
+                        if (url.contains("comment=")) {
+                            AlertDialog dialog = new AlertDialog(getActivity()).builder();
+                            View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_input_message, null);
+                            final EditText input = view.findViewById(R.id.input);
+                            dialog.setView(view)
+                                    .setTitle("请输入理由")
+                                    .setNegativeButton("取消", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                        }
+                                    }).setPositiveButton("确定", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (input.getText().toString().length() != 0) {
+                                        singlePost(data.get(groupPosition).getDelurl() + input.getText().toString());
+                                    }
+                                }
+                            }).show();
+                        } else {
+                            singlePost(url);
+                        }
+                    }
+                });
                 return convertView;
             }
 
@@ -785,7 +565,6 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
             //获取ListView对应的Adapter
             ListAdapter listAdapter = listView.getAdapter();
             if (listAdapter == null) {
-                // pre-condition
                 return;
             }
             int totalHeight = 0;
@@ -851,6 +630,75 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
         }
     }
 
+
+    private void setListViewHeightBasedOnChildren(ExpandableListView listView) {
+        //获取ListView对应的Adapter
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+        int totalHeight = 0;
+        for (int i = 0, len = listAdapter.getCount(); i < len; i++) {   //listAdapter.getCount()返回数据项的数目
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);  //计算子项View 的宽高
+            totalHeight += listItem.getMeasuredHeight();  //统计所有子项的总高度
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        //listView.getDividerHeight()获取子项间分隔符占用的高度
+        //params.height最后得到整个ListView完整显示需要的高度
+        listView.setLayoutParams(params);
+    }
+
+    class SpinnerAdapter extends BaseAdapter {
+
+        private List<TaskDetail.Option> data;
+        private LayoutInflater inflater;
+
+        public SpinnerAdapter(List<TaskDetail.Option> data, LayoutInflater inflater) {
+            this.data = data;
+            this.inflater = inflater;
+        }
+
+        @Override
+        public int getCount() {
+            return data.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return data.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder = null;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_detail_select_text, null);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            holder.text.setText(data.get(position).getLabel());
+            return convertView;
+        }
+
+        class ViewHolder {
+            @BindView(R.id.text)
+            TextView text;
+
+            ViewHolder(View view) {
+                ButterKnife.bind(this, view);
+            }
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i("SelectDepartment", requestCode + "------" + resultCode);
@@ -875,95 +723,50 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
     }
 
     /**
-     * 同意和拒绝
+     * @param people
+     * @return
      */
-    private void processTask(String url, String name, String value) {
-        if (!name.equals("")) {// 同意和拒绝
-            Map<String, String> params = new HashMap<>();
-            params.put("name", name);
-            params.put("value", value);
-            for (TaskDetail.Input i : detail.getInputs()) {
-                if (i.isRequired() && i.getValue() == null) {
-                    Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                switch (i.getType()) {
-                    case "text":
-                        if (i.isRequired()) {
-                            params.put(i.getName(), i.getValue());
-                        }
-                        break;
-                    case "hidden":
-                        params.put(i.getName(), i.getValue());
-                        break;
-                    case "date":
-                        params.put(i.getName(), i.getValue());
-                        break;
-                    case "select":
-                        params.put(i.getName(), i.getValue());
-                        break;
-                    case "copy":
-                        params.put(i.getName(), copy.toString());
-                        break;
-                    case "teamwork":
-                        params.put(i.getName(), coordination.toString());
-                        break;
-                }
+    public String init(String people) {
+        StringBuilder sb = new StringBuilder();
+        for (String name : people.split(",")) {
+            if (name.length() != 0) {
+                sb.append(name.substring(name.indexOf("<") + 1, name.indexOf(">")));
+                sb.append(",");
             }
-            Log.i("params", JSON.toJSONString(params));
-            SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<Task>() {
-
-                @Override
-                public void onNext(Task data) {
-                    Log.i("processTask", data.toString());
-                    if (data.getSuccess() == 0) {
-                        getActivity().finish();
-                    }
-                }
-            };
-            HttpUtil.getInstance(getActivity(), false).processTask(new ProgressSubscriber(onNextListener, getActivity(), ""), url, params);
-        } else {// 协同
-            Map<String, String> params = new HashMap<>();
-            for (TaskDetail.Input i : detail.getInputs()) {
-                if (i.isRequired() && i.getValue() == null) {
-                    Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                switch (i.getType()) {
-                    case "text":
-                        if (i.isRequired()) {
-                            params.put(i.getName(), i.getValue());
-                        }
-                        break;
-                    case "hidden":
-                        params.put(i.getName(), i.getValue());
-                        break;
-                    case "date":
-                        params.put(i.getName(), i.getValue());
-                        break;
-                    case "select":
-                        params.put(i.getName(), i.getValue());
-                        break;
-                    case "copy":
-                        params.put(i.getName(), copy.toString());
-                        break;
-                    case "teamwork":
-                        params.put(i.getName(), coordination.toString());
-                        break;
-                }
-            }
-            SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<Task>() {
-
-                @Override
-                public void onNext(Task data) {
-                    Log.i("processTask", data.toString());
-                    if (data.getSuccess() == 0) {
-                        getActivity().finish();
-                    }
-                }
-            };
-            HttpUtil.getInstance(getActivity(), false).processTask(new ProgressSubscriber(onNextListener, getActivity(), ""), url, params);
         }
+        return sb.toString();
+    }
+
+    /**
+     * 获取信息
+     *
+     * @return
+     */
+    public Map<String, String> getMessage() {
+        Map<String, String> params = new HashMap<>();
+        for (TaskDetail.Input i : inputs) {
+            if (i.isRequired() && i.getValue() == null) {
+                Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                return null;
+            }
+            switch (i.getType()) {
+                case "text":
+                    if (i.isRequired()) {
+                        params.put(i.getName(), i.getValue());
+                    }
+                    break;
+                case "hidden":
+                    params.put(i.getName(), i.getValue());
+                    break;
+                case "date":
+                    params.put(i.getName(), i.getValue());
+                    break;
+                case "select":
+                    params.put(i.getName(), i.getValue());
+                    break;
+            }
+        }
+        return params;
     }
 
 

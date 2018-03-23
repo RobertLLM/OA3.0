@@ -18,6 +18,7 @@ import cn.invonate.ygoa3.Entry.InitPassMessage;
 import cn.invonate.ygoa3.Entry.Lomo;
 import cn.invonate.ygoa3.Entry.Member;
 import cn.invonate.ygoa3.Entry.Mission;
+import cn.invonate.ygoa3.Entry.PersonGroup;
 import cn.invonate.ygoa3.Entry.Property;
 import cn.invonate.ygoa3.Entry.Salary;
 import cn.invonate.ygoa3.Entry.Task;
@@ -210,6 +211,26 @@ public interface HttpService {
     @FormUrlEncoded
     Observable<String> delete_contacts(
             @Field("jsonData") String jsonData
+    );
+
+    // 获取个人群组
+    @POST("/ygoa/ydpt/queryPersonGroup.action")
+    @FormUrlEncoded
+    Observable<PersonGroup> getGroup(
+            @Field("sessionId") String sessionId
+    );
+
+    // 新增群组
+    @POST("/ygoa/ydpt/savePersonGroup.action")
+    @FormUrlEncoded
+    Observable<String> savePersonGroup(
+            @Field("jsonData") String jsonData
+    );
+
+    // 单条驳回
+    @GET
+    Observable<Task> singlePost(
+            @Url String url
     );
 
 }

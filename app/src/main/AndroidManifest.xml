@@ -85,6 +85,10 @@
             android:name=".Contacts.Select.SelectDepartmentActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Contacts.Select.SelectDepartment2Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
+        <activity
             android:name=".Contacts.Select.SelectContactsActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -100,8 +104,8 @@
             android:name=".login.SettingActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".login.ChangePassActivity" />
-        <activity android:name=".login.PropertyActivity" />
-        <activity android:name=".login.PropertyDetailActivity" />
+        <activity android:name=".login.Property.PropertyActivity" />
+        <activity android:name=".login.Property.PropertyDetailActivity" />
         <activity android:name=".login.WageActivity" />
         <activity android:name=".login.SalaryActivity" />
         <activity android:name=".login.WelfareActivity" />
@@ -115,7 +119,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".main.BasePicActivity" />
-        <activity android:name=".main.VideoActivity"></activity>
+        <activity android:name=".main.VideoActivity" />
+        <activity android:name=".login.group.GroupActivity" />
+        <activity android:name=".login.group.AddGroupActivity" />
+        <activity android:name=".login.group.GroupDetailActivity"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package cn.invonate.ygoa3.login;
+package cn.invonate.ygoa3.login.Property;
 
 import android.os.Bundle;
 import android.util.Log;

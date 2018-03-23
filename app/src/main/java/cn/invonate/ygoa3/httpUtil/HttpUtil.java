@@ -40,7 +40,7 @@ public class HttpUtil {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .client(getOkHttpClient(context,isSaveCookie))
+                .client(getOkHttpClient(context, isSaveCookie))
                 .addConverterFactory(FastJsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
@@ -49,12 +49,12 @@ public class HttpUtil {
 
     private OkHttpClient getOkHttpClient(Context context, boolean isSaveCookie) {
         //日志显示级别
-        HttpLoggingInterceptor.Level level= HttpLoggingInterceptor.Level.BASIC;
+        HttpLoggingInterceptor.Level level = HttpLoggingInterceptor.Level.BASIC;
         //新建log拦截器
-        HttpLoggingInterceptor loggingInterceptor=new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                Log.d("lyy","OkHttp====Message:"+message);
+                Log.d("lyy", "OkHttp====Message:" + message);
             }
         });
         loggingInterceptor.setLevel(level);
@@ -404,13 +404,46 @@ public class HttpUtil {
 
 
     /**
-     *
+     * 删除常用联系人
      *
      * @param subscriber
      * @param jsonData
      */
     public void delete_contacts(Subscriber subscriber, String jsonData) {
         Observable observable = httpService.delete_contacts(jsonData);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 获取群组
+     *
+     * @param subscriber
+     * @param sessionId
+     */
+    public void getGroup(Subscriber subscriber, String sessionId) {
+        Observable observable = httpService.getGroup(sessionId);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 新增群组
+     *
+     * @param subscriber
+     * @param jsonData
+     */
+    public void savePersonGroup(Subscriber subscriber, String jsonData) {
+        Observable observable = httpService.savePersonGroup(jsonData);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 单条驳回
+     *
+     * @param subscriber
+     * @param url
+     */
+    public void singlePost(Subscriber subscriber, String url) {
+        Observable observable = httpService.singlePost(url);
         toSubscribe(observable, subscriber);
     }
 }
