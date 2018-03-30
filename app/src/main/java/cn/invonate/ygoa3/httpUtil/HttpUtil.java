@@ -27,7 +27,7 @@ public class HttpUtil {
     //private static final String BASE_URL = "http://192.168.2.1/";
     //public static final String BASE_URL = "http://192.168.3.97:8080";
     // public static final String BASE_URL = "http://192.168.1.6";
-//    public static final String BASE_URL = "http://192.168.1.101:8080";
+//    public static final String BASE_URL = "http://192.168.202.145:8080";
     public static final String BASE_URL = "http://ygoa.yong-gang.cn";
     //public static final String BASE_URL = "http://172.23.134.14:8080";
     public static final String URL_FILE = "http://ygoa.yong-gang.cn/ygoa/upload/";
@@ -446,4 +446,44 @@ public class HttpUtil {
         Observable observable = httpService.singlePost(url);
         toSubscribe(observable, subscriber);
     }
+
+    /**
+     * 获取我的应用列表
+     *
+     * @param subscriber
+     */
+    public void get_application(Subscriber subscriber) {
+        Observable observable = httpService.get_application();
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 会议未确认数
+     *
+     * @param subscriber
+     */
+    public void queryPersonMeet(Subscriber subscriber) {
+        Observable observable = httpService.queryPersonMeet();
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 任务未确认数
+     *
+     * @param subscriber
+     */
+    public void queryPersonTask(Subscriber subscriber) {
+        Observable observable = httpService.queryPersonTask();
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * @param subscriber
+     * @param assignee
+     */
+    public void push(Subscriber subscriber, String str, String assignee) {
+        Observable observable = httpService.push(str, assignee);
+        toSubscribe(observable, subscriber);
+    }
+
 }

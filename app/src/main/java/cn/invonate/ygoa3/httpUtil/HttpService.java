@@ -18,9 +18,11 @@ import cn.invonate.ygoa3.Entry.InitPassMessage;
 import cn.invonate.ygoa3.Entry.Lomo;
 import cn.invonate.ygoa3.Entry.Member;
 import cn.invonate.ygoa3.Entry.Mission;
+import cn.invonate.ygoa3.Entry.MyApplicationList;
 import cn.invonate.ygoa3.Entry.PersonGroup;
 import cn.invonate.ygoa3.Entry.Property;
 import cn.invonate.ygoa3.Entry.Salary;
+import cn.invonate.ygoa3.Entry.Sum;
 import cn.invonate.ygoa3.Entry.Task;
 import cn.invonate.ygoa3.Entry.TaskCopy;
 import cn.invonate.ygoa3.Entry.TaskLine;
@@ -232,5 +234,29 @@ public interface HttpService {
     Observable<Task> singlePost(
             @Url String url
     );
+
+    // 获取我的应用
+    @GET("/ygoa/html/user/queryPhoneMenu.action")
+    Observable<List<MyApplicationList>> get_application();
+
+
+    // 会议未确认数
+    @GET("/ygoa/ydpt/queryPersonMeet.action")
+    Observable<Sum> queryPersonMeet();
+
+
+    // 任务未确认数
+    @GET("/ygoa/ydpt/queryPersonTask.action")
+    Observable<Sum> queryPersonTask();
+
+    // 推送
+    @POST("/ygoa/auroraPush/setJPush.action")
+    @FormUrlEncoded
+    Observable<String> push(
+            @Field("str") String str,
+            @Field("assignee") String assignee);
+
+    //
+
 
 }

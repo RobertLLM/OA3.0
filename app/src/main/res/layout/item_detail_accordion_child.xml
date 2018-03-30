@@ -22,8 +22,8 @@
             android:gravity="center"
             android:padding="20px"
             android:text="key"
-            android:textColor="#949dad"
-            android:textSize="45px" />
+            android:textColor="@color/black"
+            android:textSize="50px" />
 
 
         <TextView
@@ -35,7 +35,7 @@
             android:gravity="center"
             android:padding="20px"
             android:text="value"
-            android:textColor="#949dad"
+            android:textColor="@color/black"
             android:textSize="45px" />
 
 

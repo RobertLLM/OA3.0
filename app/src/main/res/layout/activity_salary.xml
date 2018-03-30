@@ -40,12 +40,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="20px">
+        android:padding="30px">
 
         <Button
             android:id="@+id/btn_pre"
             android:layout_width="match_parent"
-            android:layout_height="80px"
+            android:layout_height="120px"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:background="@drawable/btn_login"
@@ -57,7 +57,7 @@
         <Button
             android:id="@+id/btn_next"
             android:layout_width="match_parent"
-            android:layout_height="80px"
+            android:layout_height="120px"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="15px"
             android:layout_weight="1"

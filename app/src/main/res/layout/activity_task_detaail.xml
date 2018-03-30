@@ -97,7 +97,7 @@
 
             <EditText
                 android:id="@+id/msg"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="80px"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="15px"

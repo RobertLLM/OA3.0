@@ -12,10 +12,10 @@
         android:layout_marginStart="50px"
         android:layout_weight="1"
         android:background="@color/white"
-        android:padding="20px"
+        android:padding="30px"
         android:text="value"
-        android:textColor="#949dad"
-        android:textSize="45px">
+        android:textColor="@color/black"
+        android:textSize="50px">
 
     </TextView>
 

@@ -1,17 +1,24 @@
 package cn.invonate.ygoa3.main.work.mail;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
@@ -26,6 +33,8 @@ import butterknife.OnClick;
 import cn.invonate.ygoa3.Adapter.MemberAdapter;
 import cn.invonate.ygoa3.Adapter.PhotoAdapter;
 import cn.invonate.ygoa3.BaseActivity;
+import cn.invonate.ygoa3.Contacts.Select.SelectDepartmentActivity;
+import cn.invonate.ygoa3.Entry.Contacts;
 import cn.invonate.ygoa3.Entry.FileEntry;
 import cn.invonate.ygoa3.Entry.Mail;
 import cn.invonate.ygoa3.Entry.Member;
@@ -40,10 +49,10 @@ import rx.Subscriber;
 
 public class SendMailActivity extends BaseActivity {
 
-    @BindView(R.id.to)
-    AutoCompleteTextView edit_to;
-    @BindView(R.id.address)
-    AutoCompleteTextView edit_address;
+    @BindView(R.id.list_to)
+    RecyclerView list_to;
+    @BindView(R.id.list_copy)
+    RecyclerView list_copy;
     @BindView(R.id.subject)
     EditText edit_subject;
     @BindView(R.id.content)
@@ -58,8 +67,15 @@ public class SendMailActivity extends BaseActivity {
     ProgressDialog dialog;
 
     private Mail mail;
+    private int index;
 
     private YGApplication app;
+
+    List<Contacts> list_contacts = new ArrayList<>();
+    List<Contacts> list_copys = new ArrayList<>();
+
+    private SendMailAdapter input_adapter;
+    private SendMailAdapter2 input_adapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,19 +86,35 @@ public class SendMailActivity extends BaseActivity {
         dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
         dialog.setTitle("发送中");
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            int index = bundle.getInt("mail");
-            mail = MailHolder.mail_model.get(index);
-            re_send(mail);
-            // 赋初值
-            setInit();
-        }
+
         adapter = new PhotoAdapter(photoPaths, this);
         listFile.setLayoutManager(new LinearLayoutManager(this));
         listFile.setAdapter(adapter);
-        edit_to.addTextChangedListener(new TextWatch(edit_to));
-        edit_address.addTextChangedListener(new TextWatch(edit_address));
+        list_to.setLayoutManager(new GridLayoutManager(this, 4));
+        input_adapter = new SendMailAdapter(list_contacts, this);
+        list_to.setAdapter(input_adapter);
+
+        list_copy.setLayoutManager(new GridLayoutManager(this, 4));
+        input_adapter2 = new SendMailAdapter2(list_copys, this);
+        list_copy.setAdapter(input_adapter2);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            int mode = getIntent().getExtras().getInt("mode");
+            int index = bundle.getInt("mail");
+            mail = MailHolder.mail_model.get(index);
+            switch (mode) {
+                case 0:
+                    edit(mail);
+                    break;
+                case 1:
+                    re_send(mail);
+                    break;
+                case 2:
+                    replay(mail);
+                    break;
+            }
+        }
     }
 
     /**
@@ -91,27 +123,38 @@ public class SendMailActivity extends BaseActivity {
      * @param mail
      */
     private void re_send(Mail mail) {
-        //转化标题
-        mail.setSubject("转：" + mail.getSubject());
-        //转化内容
-        String content =
-                "\r\n" +
-                        "\r\n" +
-                        "\r\n" +
-                        "-----原始邮件-----" +
-                        "\r\n" +
-                        "发件人：" + mail.getFrom() +
-                        "\r\n" +
-                        "收件人：" + mail.getReceiver() +
-                        "\r\n" +
-                        "发送时间：" + mail.getSend_date() +
-                        "\r\n" +
-                        "主题：" + mail.getSubject() +
-                        "\r\n" +
-                        mail.getContent() +
-                        "\r\n";
-        mail.setContent(content);
+        setInit();
     }
+
+    /**
+     * 回复邮件
+     *
+     * @param mail
+     */
+    private void replay(Mail mail) {
+        //转化标题
+        String from = mail.getFrom();
+        if (from.contains("@")) {
+            String[] address = from.split("@");
+            if (address.length > 1) {
+                list_contacts.add(new Contacts(mail.getPersonal(), address[0]));
+                if (input_adapter != null) {
+                    input_adapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
+
+    /**
+     * 编辑
+     *
+     * @param mail
+     */
+    private void edit(Mail mail) {
+        //设置收件人
+        setInit();
+    }
+
 
     private void setInit() {
         edit_subject.setText(mail.getSubject());
@@ -136,20 +179,29 @@ public class SendMailActivity extends BaseActivity {
                     public void onClick(View v) {
                         dialog.show();
                         List<String> to = new ArrayList<>();
-                        to.add(edit_to.getText().toString() + "@yong-gang.cn");
+//                        to.add(edit_to.getText().toString() + "@yong-gang.cn");
                         send_email(to, null, null, edit_subject.getText().toString().trim(), edit_content.getText().toString().trim(), true);
                     }
                 }).show();
                 break;
             case R.id.send:
-                dialog.show();
                 List<String> to = new ArrayList<>();
-                to.add(edit_to.getText().toString() + "@yong-gang.cn");
-                send_email(to, null, null, edit_subject.getText().toString().trim(), edit_content.getText().toString().trim(), false);
+                for (Contacts c : list_contacts) {
+                    to.add(c.getUser_code() + "@yong-gang.cn");
+                }
+                List<String> cc = new ArrayList<>();
+                for (Contacts c : list_copys) {
+                    cc.add(c.getUser_code() + "@yong-gang.cn");
+                }
+                send_email(to, cc, null, edit_subject.getText().toString().trim(), edit_content.getText().toString().trim(), false);
                 break;
             case R.id.to_add:
+                Intent intent = new Intent(SendMailActivity.this, SelectDepartmentActivity.class);
+                startActivityForResult(intent, 0x123);
                 break;
             case R.id.address_add:
+                Intent intent2 = new Intent(SendMailActivity.this, SelectDepartmentActivity.class);
+                startActivityForResult(intent2, 0x321);
                 break;
             case R.id.btn_camera:
                 ArrayList<String> paths = new ArrayList<>();
@@ -200,7 +252,42 @@ public class SendMailActivity extends BaseActivity {
                 photoPaths.addAll(photos);
             }
             adapter.notifyDataSetChanged();
+        } else if (requestCode == 0x123) {
+            if (data != null) {
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    List<Contacts> list = (List<Contacts>) bundle.getSerializable("list");
+                    for (Contacts c : list) {
+                        if (!check(list_contacts, c)) {
+                            list_contacts.add(c);
+                        }
+                    }
+                }
+            }
+            input_adapter.notifyDataSetChanged();
+        } else if (requestCode == 0x321) {
+            if (data != null) {
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    List<Contacts> list = (List<Contacts>) bundle.getSerializable("list");
+                    for (Contacts c : list) {
+                        if (!check(list_copys, c)) {
+                            list_copys.add(c);
+                        }
+                    }
+                }
+            }
+            input_adapter2.notifyDataSetChanged();
         }
+
+    }
+
+    private boolean check(List<Contacts> list, Contacts c) {
+        for (Contacts e : list) {
+            if (e.getUser_code().equals(c.getUser_code()))
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -225,6 +312,7 @@ public class SendMailActivity extends BaseActivity {
             Toast.makeText(this, "请输入正文", Toast.LENGTH_SHORT).show();
             return;
         }
+        dialog.show();
         if (mail != null) {
             body = body +
                     "\r\n" +
@@ -245,6 +333,7 @@ public class SendMailActivity extends BaseActivity {
                 }
 
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -299,6 +388,16 @@ public class SendMailActivity extends BaseActivity {
             if ("ok".equals(result)) {
                 Toast.makeText(getApplicationContext(), "发送成功",
                         Toast.LENGTH_SHORT).show();
+                String code = "";
+                for (Contacts c : list_contacts) {
+                    code += c.getUser_code() + ",";
+                }
+                for (Contacts c : list_copys) {
+                    code += c.getUser_code() + ",";
+                }
+                code = code.substring(0, code.length() - 1);//去除最后一个逗号
+                Log.i("code", code);
+                push("您有一封新的未读邮件", code);
                 finish();
             } else {
                 Toast.makeText(getApplicationContext(), "发送失败",
@@ -308,11 +407,33 @@ public class SendMailActivity extends BaseActivity {
         }
     }
 
+    private void push(String msg, String code) {
+        Subscriber subscriber = new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("error", e.toString());
+            }
+
+            @Override
+            public void onNext(String data) {
+                Log.i("push", data);
+            }
+        };
+        HttpUtil.getInstance(this, false).push(subscriber, msg, code);
+    }
+
     class TextWatch implements TextWatcher {
         public AutoCompleteTextView textView;
+        public List<Contacts> data;
 
-        public TextWatch(AutoCompleteTextView textView) {
+        public TextWatch(AutoCompleteTextView textView, List<Contacts> data) {
             this.textView = textView;
+            this.data = data;
         }
 
         @Override
@@ -322,7 +443,7 @@ public class SendMailActivity extends BaseActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            getPerson(textView.getText().toString(), textView);
+            getPerson(textView.getText().toString(), textView, data);
         }
 
         @Override
@@ -331,7 +452,7 @@ public class SendMailActivity extends BaseActivity {
         }
     }
 
-    private void getPerson(String keyword, final AutoCompleteTextView textView) {
+    private void getPerson(String keyword, final AutoCompleteTextView textView, final List<Contacts> list_data) {
         Subscriber subscriber = new Subscriber<Member>() {
             @Override
             public void onCompleted() {
@@ -344,14 +465,207 @@ public class SendMailActivity extends BaseActivity {
             }
 
             @Override
-            public void onNext(Member data) {
+            public void onNext(final Member data) {
                 Log.i("getPerson", data.toString());
                 MemberAdapter adapter = new MemberAdapter(data.getRows(), SendMailActivity.this);
+                adapter.setOnItemClickListener(new MemberAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        list_data.add(data.getRows().get(position));
+                        input_adapter.notifyDataSetChanged();
+                    }
+                });
                 textView.setAdapter(adapter);
             }
         };
 
         HttpUtil.getInstance(this, false).getMembers(subscriber, keyword, 1, 10000);
+    }
+
+
+    /**
+     * 联系人适配
+     */
+    class SendMailAdapter extends RecyclerView.Adapter<SendMailAdapter.ViewHolder> {
+        private static final int TYPE_NOMAL = 0;
+        private static final int TYPE_INOPUT = 1;
+
+        List<Contacts> data;
+        private Context context;
+
+        public SendMailAdapter(List<Contacts> data, Context context) {
+            this.data = data;
+            this.context = context;
+        }
+
+        @Override
+        public SendMailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            View view = null;
+            switch (viewType) {
+                case TYPE_NOMAL:
+                    view = LayoutInflater.from(context).inflate(R.layout.item_send_mail, parent, false);
+                    break;
+                case TYPE_INOPUT:
+                    view = LayoutInflater.from(context).inflate(R.layout.item_send_input, parent, false);
+                    break;
+
+            }
+            return new SendMailAdapter.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final SendMailAdapter.ViewHolder holder, int position) {
+            switch (getItemViewType(position)) {
+                case TYPE_NOMAL:
+                    holder.name.setText(data.get(position).getUser_name());
+                    break;
+                case TYPE_INOPUT:
+                    holder.address.setText("");
+                    holder.address.addTextChangedListener(new TextWatch(holder.address, list_contacts));
+                    holder.address.requestFocus();
+                    holder.address.setOnKeyListener(new View.OnKeyListener() {
+                        public boolean onKey(View v, int keyCode, KeyEvent event) {
+                            if (keyCode == KeyEvent.KEYCODE_DEL) {
+                                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                                    Log.d("keyCode", "6666666666666666666666666666666");
+                                    if (holder.address.getText().toString().trim().length() < 1) {
+                                        if (!data.isEmpty()) {
+                                            data.remove(data.size() - 1);
+                                            input_adapter.notifyDataSetChanged();
+                                        }
+                                        Log.d("keyCode", data.size() + "");
+                                    }
+                                }
+                            }
+                            return false;
+                        }
+                    });
+                    break;
+            }
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position == data.size()) {
+                return TYPE_INOPUT;
+            } else {
+                return TYPE_NOMAL;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return data.size() + 1;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            @Nullable
+            @BindView(R.id.name)
+            TextView name;
+
+            @Nullable
+            @BindView(R.id.address)
+            AutoCompleteTextView address;
+
+            ViewHolder(View view) {
+                super(view);
+                ButterKnife.bind(this, view);
+            }
+        }
+    }
+
+
+    /**
+     * 联系人适配
+     */
+    class SendMailAdapter2 extends RecyclerView.Adapter<SendMailAdapter2.ViewHolder> {
+        private static final int TYPE_NOMAL = 0;
+        private static final int TYPE_INOPUT = 1;
+
+        List<Contacts> data;
+        private Context context;
+
+        public SendMailAdapter2(List<Contacts> data, Context context) {
+            this.data = data;
+            this.context = context;
+        }
+
+        @Override
+        public SendMailAdapter2.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            View view = null;
+            switch (viewType) {
+                case TYPE_NOMAL:
+                    view = LayoutInflater.from(context).inflate(R.layout.item_send_mail, parent, false);
+                    break;
+                case TYPE_INOPUT:
+                    view = LayoutInflater.from(context).inflate(R.layout.item_send_input, parent, false);
+                    break;
+
+            }
+            return new SendMailAdapter2.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final SendMailAdapter2.ViewHolder holder, int position) {
+            switch (getItemViewType(position)) {
+                case TYPE_NOMAL:
+                    holder.name.setText(data.get(position).getUser_name());
+                    break;
+                case TYPE_INOPUT:
+                    holder.address.setText("");
+                    holder.address.addTextChangedListener(new TextWatch(holder.address, list_copys));
+                    holder.address.requestFocus();
+                    holder.address.setOnKeyListener(new View.OnKeyListener() {
+                        public boolean onKey(View v, int keyCode, KeyEvent event) {
+                            if (keyCode == KeyEvent.KEYCODE_DEL) {
+                                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                                    Log.d("keyCode", "6666666666666666666666666666666");
+                                    if (holder.address.getText().toString().trim().length() < 1) {
+                                        if (!data.isEmpty()) {
+                                            data.remove(data.size() - 1);
+                                            input_adapter2.notifyDataSetChanged();
+                                        }
+                                        Log.d("keyCode", data.size() + "");
+                                    }
+                                }
+                            }
+                            return false;
+                        }
+                    });
+                    break;
+            }
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position == data.size()) {
+                return TYPE_INOPUT;
+            } else {
+                return TYPE_NOMAL;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return data.size() + 1;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            @Nullable
+            @BindView(R.id.name)
+            TextView name;
+
+            @Nullable
+            @BindView(R.id.address)
+            AutoCompleteTextView address;
+
+            ViewHolder(View view) {
+                super(view);
+                ButterKnife.bind(this, view);
+            }
+        }
     }
 
 

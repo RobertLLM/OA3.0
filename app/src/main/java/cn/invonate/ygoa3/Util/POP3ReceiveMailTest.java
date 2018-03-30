@@ -56,11 +56,16 @@ public class POP3ReceiveMailTest {
             mail.setSubject(getSubject(msg));
             System.out.println("主题: " + mail.getSubject());
 
-            mail.setFrom(getFrom(msg));
-            System.out.println("发件人: " + mail.getFrom());
+            String[] from = getFrom(msg);
+            mail.setFrom(from[1]);
+            mail.setPersonal(from[0]);
+            System.out.println("发件人: " + mail.getPersonal() + mail.getFrom());
 
-            mail.setReceiver(getReceiveAddress(msg, null));
+            mail.setReceiver(getReceiveAddress(msg, Message.RecipientType.TO));
             System.out.println("收件人：" + mail.getReceiver());
+
+            mail.setCopy(getReceiveAddress(msg, Message.RecipientType.CC));
+            System.out.println("抄送人：" + mail.getReceiver());
 
             mail.setSend_date(getSentDate(msg));
             System.out.println("发送时间：" + mail.getSend_date());
@@ -85,9 +90,7 @@ public class POP3ReceiveMailTest {
             //System.out.println("邮件正文：" + (content.length() > 100 ? content.substring(0, 100) + "..." : content));
             System.out.println("------------------第" + msg.getMessageNumber() + "封邮件解析结束-------------------- ");
             System.out.println();
-            if (isContainerAttachment) {
-                //saveAttachment(msg, "c:\\mailtmp\\" + msg.getSubject() + "_"); //保存附件
-            }
+
             list_mail.add(mail);
         }
         return list_mail;
@@ -128,10 +131,6 @@ public class POP3ReceiveMailTest {
         }
     }
 
-//    public static String get(MimeMessage msg) throws UnsupportedEncodingException, MessagingException {
-//        return MimeUtility.decodeText()
-//    }
-
     /**
      * 获得邮件发件人
      *
@@ -140,8 +139,8 @@ public class POP3ReceiveMailTest {
      * @throws MessagingException
      * @throws UnsupportedEncodingException
      */
-    public static String getFrom(MimeMessage msg) throws MessagingException, UnsupportedEncodingException {
-        String from = "";
+    public static String[] getFrom(MimeMessage msg) throws MessagingException, UnsupportedEncodingException {
+        String[] from = new String[2];
         Address[] froms = msg.getFrom();
         for (int i = 0; i < froms.length; i++) {
             Log.i("address" + i, JSON.toJSONString(froms[i]));
@@ -155,8 +154,8 @@ public class POP3ReceiveMailTest {
         } else {
             person = "";
         }
-        from = person + "<" + address.getAddress() + ">";
-
+        from[0] = person;
+        from[1] = address.getAddress();
         return from;
     }
 
@@ -171,22 +170,20 @@ public class POP3ReceiveMailTest {
      * @return 收件人1 <邮件地址1>, 收件人2 <邮件地址2>, ...
      * @throws MessagingException
      */
-    public static String getReceiveAddress(MimeMessage msg, Message.RecipientType type) throws MessagingException {
-        StringBuffer receiveAddress = new StringBuffer();
+    public static ArrayList<String> getReceiveAddress(MimeMessage msg, Message.RecipientType type) throws MessagingException {
+        ArrayList<String> receiveAddresses = new ArrayList<>();
         Address[] addresss = null;
-        if (type == null) {
-            addresss = msg.getAllRecipients();
+        addresss = msg.getRecipients(type);
+
+        if (addresss == null || addresss.length < 1) {
+
         } else {
-            addresss = msg.getRecipients(type);
+            for (Address address : addresss) {
+                InternetAddress internetAddress = (InternetAddress) address;
+                receiveAddresses.add(internetAddress.toUnicodeString());
+            }
         }
-        if (addresss == null || addresss.length < 1)
-            throw new MessagingException("没有收件人!");
-        for (Address address : addresss) {
-            InternetAddress internetAddress = (InternetAddress) address;
-            receiveAddress.append(internetAddress.toUnicodeString()).append(",");
-        }
-        receiveAddress.deleteCharAt(receiveAddress.length() - 1); //删除最后一个逗号
-        return receiveAddress.toString();
+        return receiveAddresses;
     }
 
     /**

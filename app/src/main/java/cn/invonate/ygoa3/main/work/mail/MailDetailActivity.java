@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sun.mail.imap.protocol.FLAGS;
+import com.yonggang.liyangyang.ios_dialog.widget.ActionSheetDialog;
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 
 import java.util.ArrayList;
@@ -137,7 +138,7 @@ public class MailDetailActivity extends BaseActivity {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int mDensity = metrics.densityDpi;
-        Log.d("maomao", "densityDpi = " + mDensity);
+        Log.d("lyy", "densityDpi = " + mDensity);
         if (mDensity == 240) {
             webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
             webSettings.setTextSize(WebSettings.TextSize.LARGER);
@@ -168,14 +169,13 @@ public class MailDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mail_detail);
         ButterKnife.bind(this);
-        app= (YGApplication) getApplication();
+        app = (YGApplication) getApplication();
         dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
         position = getIntent().getExtras().getInt("position");
         mode = getIntent().getExtras().getInt("mode");
         listFiles.setLayoutManager(new LinearLayoutManager(this));
         setContent(position);
-        //get_single_mail(MailHolder.mails.get(position));
         check_index();
     }
 
@@ -204,7 +204,7 @@ public class MailDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.img_back, R.id.mail_next, R.id.mail_pre, R.id.img_collect, R.id.img_delete, R.id.img_resend, R.id.img_more})
+    @OnClick({R.id.img_back, R.id.mail_next, R.id.mail_pre, R.id.img_delete, R.id.img_resend, R.id.txt_info})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_back:
@@ -217,8 +217,6 @@ public class MailDetailActivity extends BaseActivity {
             case R.id.mail_pre:
                 setContent(--position);
                 check_index();
-                break;
-            case R.id.img_collect:
                 break;
             case R.id.img_delete:
                 AlertDialog dialog = new AlertDialog(this).builder();
@@ -233,13 +231,67 @@ public class MailDetailActivity extends BaseActivity {
                         }).setNegativeButton("取消", null).show();
                 break;
             case R.id.img_resend:
-                Bundle bundle = new Bundle();
-                bundle.putInt("mail", position);
-                stepActivity(bundle, SendMailActivity.class);
+                ActionSheetDialog dialog2 = new ActionSheetDialog(this).builder();
+                dialog2.setTitle("请选择操作");
+                switch (mode) {
+                    case MODE_INBOEX:
+                    case MODE_TRASH:
+                        dialog2.addSheetItem("回复", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                stepSend(2);
+                            }
+                        });
+                        dialog2.addSheetItem("转发", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                stepSend(1);
+                            }
+                        }).show();
+                        break;
+                    case MODE_SENT:
+                        dialog2.addSheetItem("编辑", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                stepSend(0);
+                            }
+                        }).show();
+                        dialog2.addSheetItem("转发", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                stepSend(1);
+                            }
+                        }).show();
+                        break;
+                    case MODE_DRAFT:
+                        dialog2.addSheetItem("编辑", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                stepSend(0);
+                            }
+                        }).show();
+                        break;
+                }
                 break;
-            case R.id.img_more:
+            case R.id.txt_info:
+                Bundle bundle = new Bundle();
+                ArrayList<String> receiver = MailHolder.mail_model.get(position).getReceiver();
+                ArrayList<String> copy = MailHolder.mail_model.get(position).getCopy();
+                bundle.putStringArrayList("receiver", receiver);
+                bundle.putStringArrayList("copy", copy);
+                stepActivity(bundle, ContactsListActivity.class);
                 break;
         }
+    }
+
+    /**
+     * @param mode 0:编辑 1:转发 2:回复
+     */
+    private void stepSend(int mode) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("mode", mode);
+        bundle.putInt("mail", position);
+        stepActivity(bundle, SendMailActivity.class);
     }
 
     private void setContent(final int index) {
@@ -269,7 +321,6 @@ public class MailDetailActivity extends BaseActivity {
         } else {
             contentHandler.sendEmptyMessage(DISMISS_DIALOG);
         }
-
     }
 
     /**
@@ -284,8 +335,8 @@ public class MailDetailActivity extends BaseActivity {
         ArrayList<FileEntry> files = new ArrayList<>();
         scContent.scrollTo(0, 0);
         txtSubject.setText("主题：" + mail.getSubject());
-        txtFrom.setText("发件人：" + mail.getFrom());
-        txtDate.setText("日期" + mail.getSend_date());
+        txtFrom.setText("发件人：" + mail.getPersonal());
+        txtDate.setText("日期：" + mail.getSend_date());
         webContent.setVisibility(View.VISIBLE);
         webContent.loadDataWithBaseURL(null, mail.getContent(), "text/html", "utf-8", null);
         webContent.setWebChromeClient(new WebChromeClient());

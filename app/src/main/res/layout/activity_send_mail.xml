@@ -61,20 +61,35 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150px"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
                 android:orientation="horizontal">
 
-                <AutoCompleteTextView
-                    android:id="@+id/to"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="20px"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:hint="收件人"
-                    android:completionThreshold="1"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30px"
+                    android:text="收件人"
+                    android:layout_marginEnd="10px"
                     android:textColor="@color/black"
                     android:textSize="45px" />
+
+                <!--<AutoCompleteTextView-->
+                <!--android:id="@+id/to"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginStart="20px"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@null"-->
+                <!--android:completionThreshold="1"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="45px" />-->
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_to"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:id="@+id/to_add"
@@ -94,20 +109,35 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150px"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
                 android:orientation="horizontal">
 
-                <AutoCompleteTextView
-                    android:id="@+id/address"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="20px"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:hint="抄送"
-                    android:completionThreshold="1"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30px"
+                    android:text="抄送人"
+                    android:layout_marginEnd="10px"
                     android:textColor="@color/black"
                     android:textSize="45px" />
+
+                <!--<AutoCompleteTextView-->
+                <!--android:id="@+id/to"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginStart="20px"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@null"-->
+                <!--android:completionThreshold="1"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="45px" />-->
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_copy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:id="@+id/address_add"
@@ -119,7 +149,6 @@
                     android:src="@mipmap/send_add" />
 
             </LinearLayout>
-
 
 
             <View

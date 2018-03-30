@@ -29,6 +29,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
 import cn.invonate.ygoa3.Entry.FileEntry;
@@ -161,10 +162,11 @@ public class Mails extends javax.mail.Authenticator {
      * @throws Exception
      */
     public void addAttachment(FileEntry file) throws Exception {
+        Log.i("FileEntry", file.getType());
         BodyPart messageBodyPart = new MimeBodyPart();
-        DataSource source = new ByteArrayDataSource(file.getIs(), file.getType());
+        DataSource source = new ByteArrayDataSource(file.getIs(), "application/"+file.getType());
         messageBodyPart.setDataHandler(new DataHandler(source));
-        messageBodyPart.setFileName(file.getName());
+        messageBodyPart.setFileName(MimeUtility.encodeText(file.getName()));
         _multipart.addBodyPart(messageBodyPart);
     }
 

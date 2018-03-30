@@ -90,7 +90,7 @@ public class MailAdapter extends BaseAdapter {
         } else {
             holder.select.setVisibility(View.GONE);
         }
-        holder.mail_sender.setText(data.get(position).getFrom());
+        holder.mail_sender.setText(data.get(position).getPersonal());
         holder.mail_time.setText(data.get(position).getSend_date());
         holder.mail_title.setText(data.get(position).getSubject());
         holder.select.setChecked(data.get(position).isIs_selected());

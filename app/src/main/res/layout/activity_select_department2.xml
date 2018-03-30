@@ -22,8 +22,8 @@
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:paddingEnd="120px"
             android:singleLine="true"
@@ -65,9 +65,10 @@
         android:id="@+id/ccl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
         android:completionThreshold="1"
         android:padding="20px"
+        android:hint="请输入姓名或者工号搜索"
+        android:background="#EEEEEE"
         android:textColor="@color/black"
         android:textSize="50px" />
 

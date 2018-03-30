@@ -87,7 +87,15 @@
         <activity
             android:name=".Contacts.Select.SelectDepartment2Activity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
+        <activity
+            android:name=".Contacts.Select.SelectDepartment3Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
+        <activity
+            android:name=".Contacts.Select.SelectDepartment4Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity
             android:name=".Contacts.Select.SelectContactsActivity"
             android:screenOrientation="portrait" />
@@ -122,7 +130,9 @@
         <activity android:name=".main.VideoActivity" />
         <activity android:name=".login.group.GroupActivity" />
         <activity android:name=".login.group.AddGroupActivity" />
-        <activity android:name=".login.group.GroupDetailActivity"></activity>
+        <activity android:name=".login.group.GroupDetailActivity" />
+        <activity android:name=".main.work.application.MyApplicationActivity" />
+        <activity android:name=".main.work.mail.ContactsListActivity"></activity>
     </application>
 
 </manifest>

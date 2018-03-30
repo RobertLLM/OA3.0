@@ -52,7 +52,6 @@
                     android:background="@drawable/back_mine_line">
 
 
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -83,17 +82,17 @@
                         android:id="@+id/task_sum"
                         android:layout_width="60px"
                         android:layout_height="60px"
-                        android:background="@mipmap/cycle"
-                        android:gravity="center"
-                        android:textColor="#FFFFFF"
-                        android:textSize="28px"
-                        android:text="1"
-                        android:inputType="number"
-                        android:visibility="gone"
-                        android:textStyle="bold"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="65px"
-                        android:layout_marginTop="8px"/>
+                        android:layout_marginTop="8px"
+                        android:background="@mipmap/cycle"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:text="1"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28px"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
 
                 </RelativeLayout>
@@ -253,17 +252,17 @@
                         android:id="@+id/mail_sum"
                         android:layout_width="60px"
                         android:layout_height="60px"
-                        android:background="@mipmap/cycle"
-                        android:gravity="center"
-                        android:textColor="#FFFFFF"
-                        android:textSize="28px"
-                        android:text="1"
-                        android:textStyle="bold"
-                        android:inputType="number"
-                        android:visibility="gone"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="60px"
-                        android:layout_marginTop="10px"/>
+                        android:layout_marginTop="10px"
+                        android:background="@mipmap/cycle"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:text="1"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28px"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -300,6 +299,21 @@
 
                     </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/mession_sum"
+                        android:layout_width="60px"
+                        android:layout_height="60px"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="65px"
+                        android:layout_marginTop="8px"
+                        android:background="@mipmap/cycle"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:text="1"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28px"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -329,7 +343,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="20px"
-                            android:text="日常审批"
+                            android:text="填报申请"
                             android:textColor="@color/black"
                             android:textSize="40px" />
 
@@ -339,7 +353,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/layout_finance"
+                    android:id="@+id/layout_meting"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -357,119 +371,42 @@
                             android:layout_width="120px"
                             android:layout_height="120px"
                             android:layout_gravity="center_horizontal"
-                            android:src="@mipmap/work_finance" />
+                            android:src="@mipmap/work_metting" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="20px"
-                            android:text="财务审批"
+                            android:text="会议管理"
                             android:textColor="@color/black"
                             android:textSize="40px" />
 
 
                     </LinearLayout>
 
-                </RelativeLayout>
+                    <TextView
+                        android:id="@+id/meet_sum"
+                        android:layout_width="60px"
+                        android:layout_height="60px"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="65px"
+                        android:layout_marginTop="8px"
+                        android:background="@mipmap/cycle"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:text="1"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28px"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
+
+                </RelativeLayout>
 
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:id="@+id/layout_union"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/back_mine_line">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginEnd="100px"
-                        android:layout_marginTop="40px"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="120px"
-                            android:layout_height="120px"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@mipmap/work_union" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="20px"
-                            android:text="工会审批"
-                            android:textColor="@color/black"
-                            android:textSize="40px" />
-
-
-                    </LinearLayout>
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/layout_recruit"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/back_mine_line">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginEnd="100px"
-                        android:layout_marginTop="40px"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="120px"
-                            android:layout_height="120px"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@mipmap/work_recruit" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="20px"
-                            android:text="人事招聘"
-                            android:textColor="@color/black"
-                            android:textSize="40px" />
-
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-
-                </RelativeLayout>
-
-            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -587,41 +524,6 @@
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-                <RelativeLayout
-                    android:id="@+id/layout_meting"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/back_mine_line">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginEnd="100px"
-                        android:layout_marginTop="40px"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="120px"
-                            android:layout_height="120px"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@mipmap/work_metting" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="20px"
-                            android:text="会议管理"
-                            android:textColor="@color/black"
-                            android:textSize="40px" />
-
-
-                    </LinearLayout>
-
-
-                </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/layout_meal"
@@ -655,6 +557,13 @@
 
 
                     </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                 </RelativeLayout>
 

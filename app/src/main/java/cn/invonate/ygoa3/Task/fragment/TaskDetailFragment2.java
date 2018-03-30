@@ -1,12 +1,15 @@
 package cn.invonate.ygoa3.Task.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -46,6 +49,9 @@ public class TaskDetailFragment2 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_task_detail2, container, false);
         unbinder = ButterKnife.bind(this, view);
         app = (YGApplication) getActivity().getApplication();
+        listInput.setLayoutManager(new LinearLayoutManager(getActivity()));
+        FileAdapter adapter = new FileAdapter(inputs, getActivity());
+        listInput.setAdapter(adapter);
         return view;
     }
 
@@ -86,4 +92,45 @@ public class TaskDetailFragment2 extends Fragment {
         }
         return params;
     }
+
+    class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
+
+        private List<TaskDetail.Input> data;
+        private Context context;
+
+        public FileAdapter(List<TaskDetail.Input> data, Context context) {
+            this.data = data;
+            this.context = context;
+        }
+
+        @Override
+        public FileAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(context).inflate(R.layout.item_task_file_single, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(FileAdapter.ViewHolder holder, int position) {
+            holder.name.setText(data.get(position).getLabel());
+            holder.size.setText(data.get(position).getSize());
+        }
+
+        @Override
+        public int getItemCount() {
+            return data.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.name)
+            TextView name;
+            @BindView(R.id.size)
+            TextView size;
+
+            ViewHolder(View view) {
+                super(view);
+                ButterKnife.bind(this, view);
+            }
+        }
+    }
+
 }

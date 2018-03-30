@@ -86,11 +86,11 @@ public class TaskUnCopyFragment extends Fragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
                             Bundle bundle = new Bundle();
-                            bundle.putString("businessId", data.getData().get(position - 1).getBusinessId());
-                            bundle.putString("taskId", data.getData().get(position - 1).getId());
-                            bundle.putString("workflowType", data.getData().get(position - 1).getWorkflowType());
+                            bundle.putString("businessId", list_data.get(position - 1).getBusinessId());
+                            bundle.putString("taskId", list_data.get(position - 1).getId());
+                            bundle.putString("workflowType", list_data.get(position - 1).getWorkflowType());
                             bundle.putBoolean("need_layout", false);
-                            bundle.putBoolean("isXt", data.getData().get(position - 1).isXt());
+                            bundle.putBoolean("isXt", list_data.get(position - 1).isXt());
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }

@@ -20,6 +20,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,7 +30,6 @@ import com.alibaba.fastjson.JSON;
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 import com.yonggang.liyangyang.lazyviewpagerlibrary.LazyFragmentPagerAdapter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +37,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.invonate.ygoa3.Contacts.Select.SelectDepartment4Activity;
 import cn.invonate.ygoa3.Entry.Contacts;
 import cn.invonate.ygoa3.Entry.Task;
 import cn.invonate.ygoa3.Entry.TaskDetail;
@@ -98,6 +99,7 @@ public class TaskDetailFragment1 extends Fragment implements LazyFragmentPagerAd
         public static final int ACCORDION = 6;
         public static final int FILE = 7;
         public static final int FOUR_SINGLE = 8;
+        public static final int PICKER = 9;
 
         private List<TaskDetail.Input> data;
         private LayoutInflater inflater;
@@ -124,6 +126,8 @@ public class TaskDetailFragment1 extends Fragment implements LazyFragmentPagerAd
                     return new ViewHolder(inflater.inflate(R.layout.item_detail_accordion, parent, false));
                 case FOUR_SINGLE:
                     return new ViewHolder(inflater.inflate(R.layout.item_detail_four, parent, false));
+                case PICKER:
+                    return new ViewHolder(inflater.inflate(R.layout.item_detail_picker, parent, false));
             }
             return null;
         }
@@ -261,6 +265,30 @@ public class TaskDetailFragment1 extends Fragment implements LazyFragmentPagerAd
                         }
                     }
                     break;
+
+                case PICKER:
+                    holder.label.setText(data.get(position).getLabel());
+                    holder.add.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), SelectDepartment4Activity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("index", position);
+                            bundle.putInt("limit", data.get(position).getLimitCount());
+                            intent.putExtras(bundle);
+                            startActivityForResult(intent, 0x888);
+                        }
+                    });
+
+                    String s = "";
+                    List<Contacts> list_picker = data.get(position).getPickValue();
+                    if (list_picker != null) {
+                        for (Contacts c : list_picker) {
+                            s = s + c.getUser_name() + ",";
+                        }
+                        holder.text_picker.setText(s);
+                    }
+                    break;
             }
         }
 
@@ -286,6 +314,8 @@ public class TaskDetailFragment1 extends Fragment implements LazyFragmentPagerAd
                     return ACCORDION;
                 case "fourSingle":
                     return FOUR_SINGLE;
+                case "picker":
+                    return PICKER;
 
             }
             return super.getItemViewType(position);
@@ -343,6 +373,15 @@ public class TaskDetailFragment1 extends Fragment implements LazyFragmentPagerAd
             @Nullable
             @BindView(R.id.text4)
             TextView text4;
+
+
+            @Nullable
+            @BindView(R.id.text_picker)
+            TextView text_picker;
+
+            @Nullable
+            @BindView(R.id.add)
+            ImageView add;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -563,25 +602,14 @@ public class TaskDetailFragment1 extends Fragment implements LazyFragmentPagerAd
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i("SelectDepartment", requestCode + "------" + resultCode);
         if (data != null) {
-            ArrayList<Contacts> select = (ArrayList<Contacts>) data.getSerializableExtra("list");
-            Log.i("select", JSON.toJSONString(select));
-            if (requestCode == 0x123) {
-                for (Contacts c : select) {
-                    coordination.append(c.getUser_name() + "<" + c.getUser_code() + ">");
-                    coordination.append(",");
-                }
-                adapter.notifyDataSetChanged();
-            } else if (requestCode == 0x321) {
-                for (Contacts c : select) {
-                    copy.append(c.getUser_name() + "<" + c.getUser_code() + ">");
-                    copy.append(",");
-                }
+            if (resultCode == 0x888) {
+                int index = data.getExtras().getInt("index");
+                inputs.get(index).setPickValue((List<Contacts>) data.getExtras().getSerializable("list"));
                 adapter.notifyDataSetChanged();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
     /**
      * 获取信息
@@ -591,25 +619,46 @@ public class TaskDetailFragment1 extends Fragment implements LazyFragmentPagerAd
     public Map<String, String> getMessage() {
         Map<String, String> params = new HashMap<>();
         for (TaskDetail.Input i : inputs) {
-            if (i.isRequired() && i.getValue() == null) {
-                Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                return null;
-            }
             switch (i.getType()) {
                 case "text":
-                    if (i.isRequired()) {
-                        params.put(i.getName(), i.getValue());
+                    if (i.isRequired() && i.getValue() == null) {
+                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                        return null;
                     }
+                    params.put(i.getName(), i.getValue());
                     break;
                 case "hidden":
+                    if (i.isRequired() && i.getValue() == null) {
+                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                        return null;
+                    }
                     params.put(i.getName(), i.getValue());
                     break;
                 case "date":
+                    if (i.isRequired() && i.getValue() == null) {
+                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                        return null;
+                    }
                     params.put(i.getName(), i.getValue());
                     break;
                 case "select":
+                    if (i.isRequired() && i.getValue() == null) {
+                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                        return null;
+                    }
                     params.put(i.getName(), i.getValue());
                     break;
+                case "picker":
+                    if (i.isRequired() && i.getPickValue() == null) {
+                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                        return null;
+                    }
+                    String s = "";
+                    List<Contacts> list_contacts = i.getPickValue();
+                    for (Contacts c : list_contacts) {
+                        s = s + c.getUser_code() + ",";
+                    }
+                    params.put(i.getName(), s);
             }
         }
         return params;

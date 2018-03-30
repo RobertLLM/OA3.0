@@ -70,6 +70,8 @@ public class TaskDetail {
         private List<String> color;
         private String size;
         private String url;
+        private List<Contacts> pickValue;
+        private int limitCount;
 
         public Input() {
 
@@ -201,6 +203,22 @@ public class TaskDetail {
 
         public void setUrl(String url) {
             this.url = url;
+        }
+
+        public List<Contacts> getPickValue() {
+            return pickValue;
+        }
+
+        public void setPickValue(List<Contacts> pickValue) {
+            this.pickValue = pickValue;
+        }
+
+        public int getLimitCount() {
+            return limitCount;
+        }
+
+        public void setLimitCount(int limitCount) {
+            this.limitCount = limitCount;
         }
     }
 

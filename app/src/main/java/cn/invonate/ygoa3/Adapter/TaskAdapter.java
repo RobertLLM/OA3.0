@@ -55,7 +55,7 @@ public class TaskAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.lb.setText(data.get(position).getLb());
-        if (position > 1 && data.get(position).getLb().equals(data.get(position - 1).getLb())) {
+        if (position > 0 && data.get(position).getLb().equals(data.get(position - 1).getLb())) {
             holder.lb.setVisibility(View.GONE);
         } else {
             holder.lb.setVisibility(View.VISIBLE);

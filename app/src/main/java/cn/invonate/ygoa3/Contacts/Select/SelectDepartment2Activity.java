@@ -1,18 +1,29 @@
 package cn.invonate.ygoa3.Contacts.Select;
 
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.alibaba.fastjson.JSON;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +39,9 @@ import cn.invonate.ygoa3.View.LYYPullToRefreshListView;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
 import rx.Subscriber;
 
+/**
+ * 用于抄送选人
+ */
 public class SelectDepartment2Activity extends BaseActivity {
 
     @BindView(R.id.name)
@@ -43,32 +57,132 @@ public class SelectDepartment2Activity extends BaseActivity {
 
     private DepartmentAdapter adapter;
 
+    private ArrayList<Contacts> list_contacts = new ArrayList<>();
+
+    public SlidingMenu menu;
+
+    private SwipeMenuListView list_contact;
+    private TextView layout_complete;
+
+    private MemberAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_department2);
         ButterKnife.bind(this);
-        if (getIntent().getExtras() == null) {
-            name.setText("通讯录");
-            getDepartment("0", "");
-        } else {
-            name.setText(getIntent().getExtras().getString("name"));
-            final List<Department> data = (List<Department>) getIntent().getExtras().getSerializable("list");
-            listConnect.setAdapter(new DepartmentAdapter(data, this));
-            listConnect.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    getDepartment(data.get(position - 1).getId_(), data.get(position - 1).getDepartment_name());
-                }
-            });
-        }
+        list_contacts = (ArrayList<Contacts>) getIntent().getExtras().getSerializable("list");
+        slidingmune();
+        taskSum.setText(list_contacts + "");
+        name.setText("通讯录");
+        getDepartment("0", "");
+
         act_ccl.addTextChangedListener(new TextWatch(act_ccl));
         copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                menu.toggle();
+            }
+        });
+        mAdapter = new MemberAdapter(list_contacts, this);
+        list_contact.setAdapter(mAdapter);
+
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+            @Override
+            public void create(SwipeMenu menu) {
+                // 创建“删除”项
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getApplicationContext());
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                deleteItem.setWidth(160);
+                deleteItem.setTitle("删除");
+                deleteItem.setTitleColor(Color.parseColor("#FFFFFF"));
+                deleteItem.setTitleSize(18);
+                // 将创建的菜单项添加进菜单中
+                menu.addMenuItem(deleteItem);
+            }
+        };
+
+
+        list_contact.setMenuCreator(creator);
+
+        list_contact.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        list_contacts.remove(position);
+                        mAdapter.notifyDataSetChanged();
+                        taskSum.setText(list_contacts.size() + "");
+                        break;
+                }
+                return true;
+            }
+        });
+
+        taskSum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int sum = Integer.parseInt(taskSum.getText().toString().trim());
+                if (sum == 0) {
+                    taskSum.setVisibility(View.GONE);
+                } else {
+                    taskSum.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
+
+        layout_complete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("list", list_contacts);
+                intent.putExtras(bundle);
+                setResult(0x321, intent);
+                finish();
+            }
+        });
+
+    }
+
+    /**
+     * 初始化menu
+     */
+    private void slidingmune() {
+        menu = new SlidingMenu(this);
+        menu.setSlidingEnabled(false);
+        menu.setMode(SlidingMenu.LEFT);
+        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+
+        int width = getWindowManager().getDefaultDisplay().getWidth();
+        menu.setBehindWidth(width);// 设置SlidingMenu菜单的宽度
+        menu.setFadeDegree(0.35f);
+        LayoutInflater.from(this).inflate(R.layout.menu_depart, null);
+        menu.setMenu(R.layout.menu_depart);
+        menu.setBehindCanvasTransformer(new SlidingMenu.CanvasTransformer() {
+            @Override
+            public void transformCanvas(Canvas canvas, float percentOpen) {
+                float scale = (float) (percentOpen * 0.25 + 0.75);
+                canvas.scale(scale, scale, canvas.getWidth() / 2,
+                        canvas.getHeight() / 2);
+            }
+        });
+        menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        layout_complete = findViewById(R.id.layout_complete);
+        list_contact = findViewById(R.id.list_contact);
     }
 
 
@@ -123,6 +237,15 @@ public class SelectDepartment2Activity extends BaseActivity {
         HttpUtil.getInstance(this, false).getDepartment(subscriber, id);
     }
 
+    private boolean check(Contacts contacts) {
+        for (Contacts c : list_contacts) {
+            if (c.getUser_code().equals(contacts.getUser_code())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @OnClick(R.id.pic_back)
     public void onViewClicked() {
         finish();
@@ -132,12 +255,18 @@ public class SelectDepartment2Activity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("SelectDepartment", requestCode + "------" + resultCode);
-        if (data != null) {
-            ArrayList<Contacts> select = (ArrayList<Contacts>) data.getSerializableExtra("list");
-            Intent intent = getIntent();
-            intent.putExtras(data.getExtras());
-            setResult(0x321, intent);
-            finish();
+        if (requestCode == 0x123) {
+            if (data != null) {
+                ArrayList<Contacts> select = (ArrayList<Contacts>) data.getExtras().getSerializable("list");
+                Log.i("select", JSON.toJSONString(select));
+                for (Contacts c : select) {
+                    if (!check(c)) {
+                        list_contacts.add(c);
+                    }
+                }
+                taskSum.setText(list_contacts.size() + "");
+                mAdapter.notifyDataSetChanged();
+            }
         }
 
     }
@@ -187,29 +316,25 @@ public class SelectDepartment2Activity extends BaseActivity {
             @Override
             public void onNext(final Member data) {
                 Log.i("getPerson", data.toString());
-                MemberAdapter adapter = new MemberAdapter(data.getRows(), SelectDepartment2Activity.this);
+                final MemberAdapter adapter = new MemberAdapter(data.getRows(), SelectDepartment2Activity.this);
                 textView.setAdapter(adapter);
                 adapter.setOnItemClickListener(new MemberAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
-//                        Toast.makeText(SelectDepartment2Activity.this, position + "", Toast.LENGTH_SHORT).show();
-//                        String old_text = textView.getText().toString();
-//
-//                        if (!old_text.endsWith(",")) {
-//                            if (old_text.contains(",")) {
-//                                old_text = old_text.substring(0, old_text.lastIndexOf(",") + 1);
-//                            } else {
-//                                old_text = "";
-//                            }
-//                        }
-//                        textView.setText(old_text);
-//                        textView.setText(textView.getText().toString().trim() + data.getRows().get(position).getUser_name() + ",");
-//                        textView.setSelection(textView.getText().length());
+                        Contacts contacts = data.getRows().get(position);
+                        if (check(contacts)) {
+                            Toast.makeText(SelectDepartment2Activity.this, "该人员已添加", Toast.LENGTH_SHORT).show();
+                        } else {
+                            list_contacts.add(contacts);
+                            mAdapter.notifyDataSetChanged();
+                            taskSum.setText(list_contacts.size() + "");
+                            textView.setText("");
+                            Toast.makeText(SelectDepartment2Activity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
         };
-
         HttpUtil.getInstance(this, false).getMembers(subscriber, keyword, 1, 10000);
     }
 

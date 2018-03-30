@@ -77,7 +77,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
 
     private String folderName = "INBOX";// 默认收件箱
 
-    private int mode = -1;
+    private int mode = 0;
 
     private YGApplication app;
 
@@ -182,6 +182,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
         });
         dialog = new ProgressDialog(this);
         dialog.setTitle("删除中");
+        getMails(0);
     }
 
     @Override
@@ -190,12 +191,6 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
         MailHolder.folder = null;
         MailHolder.mails = null;
         super.onDestroy();
-    }
-
-    @Override
-    protected void onResume() {
-        getMails(0);
-        super.onResume();
     }
 
     @OnClick({R.id.img_back, R.id.mail_add, R.id.mail_search, R.id.mail_box_name, R.id.layout_all, R.id.layout_none})

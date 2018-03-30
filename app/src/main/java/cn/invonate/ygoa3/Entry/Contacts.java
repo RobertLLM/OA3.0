@@ -22,6 +22,15 @@ public class Contacts implements Serializable {
     private String name_first_spell;
     private String sortLetters;  //显示数据拼音的首字母
 
+    public Contacts() {
+
+    }
+
+    public Contacts(String user_name, String user_code) {
+        this.user_name = user_name;
+        this.user_code = user_code;
+    }
+
     private boolean is_select;
 
     public String getId_() {

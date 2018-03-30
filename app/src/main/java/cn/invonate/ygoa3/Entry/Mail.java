@@ -13,7 +13,9 @@ public class Mail implements Serializable {
     private String messageID; // 邮件id
     private String subject;//主题
     private String from;//发件人
-    private String receiver;//收件人
+    private String personal;//收件人名字
+    private ArrayList<String> receiver;//收件人
+    private ArrayList<String> copy;
     private String send_date;//发送时间
     private boolean seen;//是否已读
     private String priority;//邮件优先级:1(High):紧急  3:普通(Normal)  5:低(Low)
@@ -93,11 +95,11 @@ public class Mail implements Serializable {
         this.from = from;
     }
 
-    public String getReceiver() {
+    public ArrayList<String> getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(String receiver) {
+    public void setReceiver(ArrayList<String> receiver) {
         this.receiver = receiver;
     }
 
@@ -163,6 +165,22 @@ public class Mail implements Serializable {
 
     public void setHtml(boolean html) {
         this.html = html;
+    }
+
+    public String getPersonal() {
+        return personal;
+    }
+
+    public void setPersonal(String personal) {
+        this.personal = personal;
+    }
+
+    public ArrayList<String> getCopy() {
+        return copy;
+    }
+
+    public void setCopy(ArrayList<String> copy) {
+        this.copy = copy;
     }
 
     @Override

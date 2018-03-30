@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.invonate.ygoa3.Entry.Mission;
+import cn.invonate.ygoa3.Entry.Sum;
 import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.Task.TaskApprovedActivity;
 import cn.invonate.ygoa3.Task.TaskCopyActivity;
@@ -39,6 +40,7 @@ import cn.invonate.ygoa3.Util.Domain;
 import cn.invonate.ygoa3.WebView.WebViewActivity;
 import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
+import cn.invonate.ygoa3.main.work.application.MyApplicationActivity;
 import cn.invonate.ygoa3.main.work.mail.MailActivity;
 import rx.Subscriber;
 
@@ -54,6 +56,10 @@ public class WorkFragment extends Fragment {
     TextView taskSum;
     @BindView(R.id.mail_sum)
     TextView mailSum;
+    @BindView(R.id.mession_sum)
+    TextView messionSum;
+    @BindView(R.id.meet_sum)
+    TextView meetSum;
     @BindView(R.id.refresh)
     PullToRefreshScrollView refresh;
 
@@ -66,6 +72,8 @@ public class WorkFragment extends Fragment {
             if (msg.what == 0) {
                 taskSum.setText(msg.getData().getInt("task_size") + "");
                 mailSum.setText(msg.getData().getInt("mail_size") + "");
+                messionSum.setText(msg.getData().getInt("mession_sum") + "");
+                meetSum.setText(msg.getData().getInt("meet_sum") + "");
                 refresh.onRefreshComplete();
             }
         }
@@ -123,7 +131,7 @@ public class WorkFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.layout_process, R.id.layout_process_added, R.id.layout_process_down, R.id.layout_process_copy, R.id.layout_mail, R.id.layout_work, R.id.layout_allow, R.id.layout_finance, R.id.layout_union, R.id.layout_recruit, R.id.layout_news, R.id.layout_notice, R.id.layout_meting, R.id.layout_meal})
+    @OnClick({R.id.layout_process, R.id.layout_process_added, R.id.layout_process_down, R.id.layout_process_copy, R.id.layout_mail, R.id.layout_work, R.id.layout_allow, R.id.layout_news, R.id.layout_notice, R.id.layout_meting, R.id.layout_meal})
     public void onViewClicked(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -149,29 +157,9 @@ public class WorkFragment extends Fragment {
                         + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=4");
                 break;
             case R.id.layout_allow:
-                intent = new Intent(getActivity(), WebViewActivity.class);
-                intent.putExtra("name", "日常审批");
-                intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
-                        + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=0");
+                intent = new Intent(getActivity(), MyApplicationActivity.class);
                 break;
-            case R.id.layout_finance:
-                intent = new Intent(getActivity(), WebViewActivity.class);
-                intent.putExtra("name", "财务审批");
-                intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
-                        + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=3");
-                break;
-            case R.id.layout_union:
-                intent = new Intent(getActivity(), WebViewActivity.class);
-                intent.putExtra("name", "公会审批");
-                intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
-                        + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=1");
-                break;
-            case R.id.layout_recruit:
-                intent = new Intent(getActivity(), WebViewActivity.class);
-                intent.putExtra("name", "人事招聘");
-                intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
-                        + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=2");
-                break;
+
             case R.id.layout_news:
                 intent = new Intent(getActivity(), WebViewActivity.class);
                 intent.putExtra("name", "新闻动态");
@@ -221,14 +209,77 @@ public class WorkFragment extends Fragment {
             public void onNext(Mission data) {
                 if (data.getSuccess() == 0) {
                     int task_sum = data.getData().size();
-                    getMailSize(task_sum);
+                    getMeet(task_sum);
+                } else {
+                    refresh.onRefreshComplete();
                 }
             }
         };
         HttpUtil.getInstance(getActivity(), false).getTask(subscriber, app.getUser().getSessionId());
     }
 
-    private void getMailSize(final int task_size) {
+
+    /**
+     *
+     */
+    private void getMeet(final int task_sum) {
+        Subscriber subscriber = new Subscriber<Sum>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("error", e.toString());
+                refresh.onRefreshComplete();
+            }
+
+            @Override
+            public void onNext(Sum data) {
+                Log.i("getMeet", data.toString());
+                if (data.getSuccess() == 0) {
+                    int meet_sum = data.getData();
+                    getMession(task_sum, meet_sum);
+                } else {
+                    refresh.onRefreshComplete();
+                }
+            }
+        };
+        HttpUtil.getInstance(getActivity(), false).queryPersonMeet(subscriber);
+    }
+
+    /**
+     *
+     */
+    private void getMession(final int task_sum, final int meet_sum) {
+        Subscriber subscriber = new Subscriber<Sum>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("error", e.toString());
+                refresh.onRefreshComplete();
+            }
+
+            @Override
+            public void onNext(Sum data) {
+                Log.i("getMession", data.toString());
+                if (data.getSuccess() == 0) {
+                    int mession_sum = data.getData();
+                    getMailSize(task_sum, meet_sum, mession_sum);
+                } else {
+                    refresh.onRefreshComplete();
+                }
+            }
+        };
+        HttpUtil.getInstance(getActivity(), false).queryPersonTask(subscriber);
+    }
+
+    private void getMailSize(final int task_size, final int meet_sum, final int mession_sum) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -260,6 +311,8 @@ public class WorkFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putInt("task_size", task_size);
                     bundle.putInt("mail_size", mail_size);
+                    bundle.putInt("meet_sum", meet_sum);
+                    bundle.putInt("mession_sum", mession_sum);
 
                     Message message = handler.obtainMessage();
                     message.what = 0;

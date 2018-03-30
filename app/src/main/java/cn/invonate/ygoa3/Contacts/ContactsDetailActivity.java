@@ -64,14 +64,12 @@ public class ContactsDetailActivity extends BaseActivity {
             phone.setText(contacts.getUser_phone() == null ? "" : contacts.getUser_phone());
             tel.setText(contacts.getOffice_phone() == null ? "" : contacts.getOffice_phone());
             mail.setText("".equals(contacts.getUser_code()) ? "" : contacts.getUser_code() + "@yong-gang.cn");
-
             if ("".equals(contacts.getUser_code())) {
                 headText.setText(contacts.getUser_name().substring(0, 1));
                 headText.setVisibility(View.VISIBLE);
             } else {
                 Glide.with(getApplicationContext()).load(HttpUtil.URL_FILE + contacts.getUser_photo()).skipMemoryCache(true).error(R.mipmap.pic_head).into(headImg);
             }
-
         }
         if (getIntent().getExtras().getBoolean("show_layout")) {
             layoutIcon.setVisibility(View.VISIBLE);

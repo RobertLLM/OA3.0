@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -105,11 +103,11 @@ public class SearchContactsActivity extends BaseActivity {
                 } else {
                     listConnect.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
                 }
-                listConnect.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                adapter.setOnItemClickListener(new MemberAdapter.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemClick(int position) {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("contacts", data.getRows().get(position-1));
+                        bundle.putSerializable("contacts", data.getRows().get(position));
                         stepActivity(bundle, ContactsDetailActivity.class);
                     }
                 });

@@ -1,7 +1,9 @@
 package cn.invonate.ygoa3.Task;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -32,6 +34,7 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.yonggang.liyangyang.ios_dialog.widget.ActionSheetDialog;
 import com.yonggang.liyangyang.lazyviewpagerlibrary.LazyFragmentPagerAdapter;
 
 import java.util.ArrayList;
@@ -45,6 +48,7 @@ import butterknife.OnClick;
 import cn.invonate.ygoa3.Adapter.MemberAdapter;
 import cn.invonate.ygoa3.BaseActivity;
 import cn.invonate.ygoa3.Contacts.Select.SelectDepartment2Activity;
+import cn.invonate.ygoa3.Contacts.Select.SelectDepartment3Activity;
 import cn.invonate.ygoa3.Entry.Contacts;
 import cn.invonate.ygoa3.Entry.FormatTask;
 import cn.invonate.ygoa3.Entry.Task;
@@ -104,6 +108,8 @@ public class TaskDetailActivity extends BaseActivity {
     private TextView layout_add;
     private SwipeMenuListView list_contact;
 
+    private tFinish finish;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +122,13 @@ public class TaskDetailActivity extends BaseActivity {
         workflowType = getIntent().getExtras().getString("workflowType");
         need_layout = getIntent().getExtras().getBoolean("need_layout");
         isXt = getIntent().getExtras().getString("isXt");
+
+        finish = new tFinish();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("tFinish");
+        registerReceiver(finish, filter);
+
+
         if (need_layout) {
             layoutNeed.setVisibility(View.VISIBLE);
             layoutMore.setVisibility(View.VISIBLE);
@@ -123,6 +136,12 @@ public class TaskDetailActivity extends BaseActivity {
             layoutNeed.setVisibility(View.GONE);
             layoutMore.setVisibility(View.GONE);
         }
+
+        if (("1").equals(isXt)) {
+            layoutMore.setVisibility(View.GONE);
+            copy.setVisibility(View.GONE);
+        }
+
         pagerTask.setOffscreenPageLimit(5);
         getTaskDetail();
         copy.setOnClickListener(new View.OnClickListener() {
@@ -204,10 +223,34 @@ public class TaskDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TaskDetailActivity.this, SelectDepartment2Activity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("list", ccl);
+                intent.putExtras(bundle);
                 startActivityForResult(intent, 0x123);
             }
         });
         taskSum.setText("0");
+
+        layoutMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActionSheetDialog dialog = new ActionSheetDialog(TaskDetailActivity.this).builder();
+                dialog.setTitle("请选择操作")
+                        .addSheetItem("协同", ActionSheetDialog.SheetItemColor.Black, new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                stepToXt();
+                            }
+                        }).show();
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(finish);
+        super.onDestroy();
+
     }
 
     /**
@@ -251,24 +294,12 @@ public class TaskDetailActivity extends BaseActivity {
             if (data != null) {
                 ArrayList<Contacts> select = (ArrayList<Contacts>) data.getExtras().getSerializable("list");
                 Log.i("select", JSON.toJSONString(select));
-                for (Contacts c : select) {
-                    if (!check(c)) {
-                        ccl.add(c);
-                    }
-                }
+                ccl.clear();
+                ccl.addAll(select);
                 taskSum.setText(ccl.size() + "");
                 adapter.notifyDataSetChanged();
             }
         }
-    }
-
-    private boolean check(Contacts contacts) {
-        for (Contacts c : ccl) {
-            if (c.getUser_code().equals(contacts)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 
@@ -292,138 +323,148 @@ public class TaskDetailActivity extends BaseActivity {
             public void onNext(String data) {
                 Log.i("getTaskDetail ", data);
                 String data1 = "{\n" +
-                        "  \"title\": \"招工申请\",\n" +
+                        "  \"title\": \"费用报销单\",\n" +
                         "  \"inputs\": [\n" +
                         "    {\n" +
-                        "      \"value\": \"恒创软件软件开发科\",\n" +
-                        "      \"label\": \"申报单位\",\n" +
-                        "      \"type\": \"label\"\n" +
+                        "      \"value\": \"ces\",\n" +
+                        "      \"label\": \"费用事由\",\n" +
+                        "      \"type\": \"label\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
                         "    },\n" +
                         "    {\n" +
-                        "      \"value\": \"2018-03-22\",\n" +
-                        "      \"label\": \"申报日期\",\n" +
-                        "      \"type\": \"label\"\n" +
+                        "      \"value\": \"详细说明\",\n" +
+                        "      \"label\": \"详细说明\",\n" +
+                        "      \"type\": \"label\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
                         "    },\n" +
                         "    {\n" +
-                        "      \"value\": \"临时计划\",\n" +
-                        "      \"label\": \"计划类型\",\n" +
-                        "      \"type\": \"label\"\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "      \"name\": \"workflowType\",\n" +
-                        "      \"value\": \"3\",\n" +
-                        "      \"type\": \"hidden\"\n" +
-                        "    },\n" +
-                        "    {\n" +
+                        "      \"type\": \"accordion\",\n" +
                         "      \"value\": [\n" +
                         "        {\n" +
                         "          \"content\": {\n" +
-                        "            \"岗位\": \"test岗位1\",\n" +
-                        "            \"人才类型\": \"操作工\",\n" +
-                        "            \"人才层次\": \"不限\",\n" +
-                        "            \"专业类型\": \"土建类\",\n" +
-                        "            \"专业\": \"建筑学\",\n" +
-                        "            \"岗位描述\": \"2\",\n" +
-                        "            \"核定人数\": \"3\",\n" +
-                        "            \"现岗位人数\": \"4\",\n" +
-                        "            \"增添人数\": \"5\",\n" +
-                        "            \"班别\": \"常白班\",\n" +
-                        "            \"上班时间\": \"6小时\",\n" +
-                        "            \"休息天数\": \"2天\\/月\",\n" +
-                        "            \"薪资级数\": \"6\",\n" +
-                        "            \"招工原由\": \"岗位补缺\",\n" +
-                        "            \"招工原由详细说明\": \"7\",\n" +
-                        "            \"性别\": \"男\",\n" +
-                        "            \"学历\": \"初中及以上\",\n" +
-                        "            \"年龄段\": \"学徒工\",\n" +
-                        "            \"地域\": \"不限\",\n" +
-                        "            \"到岗日期\": \"2018-05-21\",\n" +
-                        "            \"其他要求\": \"9\"\n" +
+                        "            \"分摊部门\": \"供销事业部销售处扬州办事处\",\n" +
+                        "            \"发生时间\": \"2017-02-03\",\n" +
+                        "            \"费用名称\": \"广告费--产品试用费\",\n" +
+                        "            \"税前金额\": 10,\n" +
+                        "            \"税金\": 0,\n" +
+                        "            \"汇款方式\": \"电汇/现汇\",\n" +
+                        "            \"金额\": \"10.00\",\n" +
+                        "            \"已付\": 0,\n" +
+                        "            \"附外来凭证\": \"0\",\n" +
+                        "            \"备注\": null\n" +
                         "          },\n" +
-                        "          \"deltext\": \"驳回\",\n" +
-                        "          \"delurl\": \"\\/ygoa\\/ydpt\\/processMxDel.action?businessId=d4294973-2c04-11e8-9e21-1866daf6a144&id=d42e230c-2c04-11e8-9e21-1866daf6a144&comment=\",\n" +
-                        "          \"header\": \"test岗位1\"\n" +
+                        "          \"header\": \"供销事业部销售处扬州办事处 :10.00\"\n" +
                         "        },\n" +
                         "        {\n" +
                         "          \"content\": {\n" +
-                        "            \"岗位\": \"test岗位2\",\n" +
-                        "            \"人才类型\": \"技工\",\n" +
-                        "            \"人才层次\": \"应届\",\n" +
-                        "            \"专业类型\": \"农业类\",\n" +
-                        "            \"专业\": \"园艺\",\n" +
-                        "            \"岗位描述\": \"22\",\n" +
-                        "            \"核定人数\": \"33\",\n" +
-                        "            \"现岗位人数\": \"44\",\n" +
-                        "            \"增添人数\": \"55\",\n" +
-                        "            \"班别\": \"二班倒\",\n" +
-                        "            \"上班时间\": \"8小时\",\n" +
-                        "            \"休息天数\": \"3天\\/月\",\n" +
-                        "            \"薪资级数\": \"66\",\n" +
-                        "            \"招工原由\": \"新增岗位\",\n" +
-                        "            \"招工原由详细说明\": \"77\",\n" +
-                        "            \"性别\": \"男\",\n" +
-                        "            \"学历\": \"高中及以上\",\n" +
-                        "            \"年龄段\": \"18-30岁\",\n" +
-                        "            \"地域\": \"本地\",\n" +
-                        "            \"到岗日期\": \"2018-04-27\",\n" +
-                        "            \"其他要求\": \"99\"\n" +
+                        "            \"已付\": 0,\n" +
+                        "            \"附外来凭证\": \"0\",\n" +
+                        "            \"备注\": null\n" +
                         "          },\n" +
-                        "          \"deltext\": \"驳回\",\n" +
-                        "          \"delurl\": \"\\/ygoa\\/ydpt\\/processMxDel.action?businessId=d4294973-2c04-11e8-9e21-1866daf6a144&id=f42156a2-2d75-11e8-9e21-1866daf6a144&comment=\",\n" +
-                        "          \"header\": \"test岗位2\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"content\": {\n" +
-                        "            \"岗位\": \"test岗位3\",\n" +
-                        "            \"人才类型\": \"专业技术人才\",\n" +
-                        "            \"人才层次\": \"往届\",\n" +
-                        "            \"专业类型\": \"管理类\",\n" +
-                        "            \"专业\": \"心理学\",\n" +
-                        "            \"岗位描述\": \"222\",\n" +
-                        "            \"核定人数\": \"333\",\n" +
-                        "            \"现岗位人数\": \"444\",\n" +
-                        "            \"增添人数\": \"555\",\n" +
-                        "            \"班别\": \"常白班\",\n" +
-                        "            \"上班时间\": \"6小时\",\n" +
-                        "            \"休息天数\": \"2天\\/月\",\n" +
-                        "            \"薪资级数\": \"666\",\n" +
-                        "            \"招工原由\": \"新建项目\",\n" +
-                        "            \"招工原由详细说明\": \"777\",\n" +
-                        "            \"性别\": \"男\",\n" +
-                        "            \"学历\": \"中专及以上\",\n" +
-                        "            \"年龄段\": \"30-40岁\",\n" +
-                        "            \"地域\": \"不限\",\n" +
-                        "            \"到岗日期\": \"2018-04-28\",\n" +
-                        "            \"其他要求\": \"999\"\n" +
-                        "          },\n" +
-                        "          \"deltext\": \"驳回\",\n" +
-                        "          \"delurl\": \"\\/ygoa\\/ydpt\\/processMxDel.action?businessId=d4294973-2c04-11e8-9e21-1866daf6a144&id=f422ebd2-2d75-11e8-9e21-1866daf6a144&comment=\",\n" +
-                        "          \"header\": \"test岗位3\"\n" +
+                        "          \"header\": \"供销事业部销售处扬州办事处 :10.00\"\n" +
                         "        }\n" +
                         "      ],\n" +
-                        "      \"label\": \"明细\",\n" +
-                        "      \"type\": \"accordion\"\n" +
+                        "      \"label\": \"费用明细\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"name\": \"text\",\n" +
+                        "      \"label\": \"经办人\",\n" +
+                        "      \"type\": \"text\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"value\": \"10.00\",\n" +
+                        "      \"label\": \"本次支付\",\n" +
+                        "      \"type\": \"label\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"name\": \"字段名\",\n" +
+                        "      \"label\": \"选人\",\n" +
+                        "      \"type\": \"picker\",\n" +
+                        "      \"limitCount\": \"1\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"value\": \"1\",\n" +
+                        "      \"label\": \"收款单位\",\n" +
+                        "      \"type\": \"label\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"value\": \"沈浩2017-02-10\",\n" +
+                        "      \"label\": \"经办人\",\n" +
+                        "      \"type\": \"label\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"name\": \"workflowType\",\n" +
+                        "      \"value\": \"13\",\n" +
+                        "      \"type\": \"hidden\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
                         "    },\n" +
                         "    {\n" +
                         "      \"name\": \"businessId\",\n" +
-                        "      \"value\": \"d4294973-2c04-11e8-9e21-1866daf6a144\",\n" +
-                        "      \"type\": \"hidden\"\n" +
+                        "      \"value\": \"9988D5B1-7A4F-4873-9A3C-03C4435534F6\",\n" +
+                        "      \"type\": \"hidden\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
                         "    },\n" +
                         "    {\n" +
-                        "      \"name\": \"taskId\",\n" +
-                        "      \"value\": \"57050014\",\n" +
-                        "      \"type\": \"hidden\"\n" +
+                        "      \"value\": \"测试1234\",\n" +
+                        "      \"type\": \"hidden\",\n" +
+                        "      \"areaCode\": \"0_A_详情\"\n" +
                         "    },\n" +
                         "    {\n" +
-                        "      \"value\": \"\",\n" +
-                        "      \"label\": \"\",\n" +
-                        "      \"type\": \"label\"\n" +
+                        "      \"value\": [\n" +
+                        "        \"未付金额：1000\",\n" +
+                        "        \"\",\n" +
+                        "        \"已付金额：11111\",\n" +
+                        "        \"合计：1000000\"\n" +
+                        "      ],\n" +
+                        "      \"color\": [\n" +
+                        "        \"5ABE98\",\n" +
+                        "        \"\",\n" +
+                        "        \"F4511E\",\n" +
+                        "        \"#333333\"\n" +
+                        "      ],\n" +
+                        "      \"type\": \"fourSingle\",\n" +
+                        "      \"areaCode\": \"1_A_付款信息\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"value\": [\n" +
+                        "        \"第二次付款\",\n" +
+                        "        \"已付\",\n" +
+                        "        \"金额：11111\",\n" +
+                        "        \"HK:8000000\"\n" +
+                        "      ],\n" +
+                        "      \"color\": [\n" +
+                        "        \"#333333\",\n" +
+                        "        \"5ABE98\",\n" +
+                        "        \"#333333\",\n" +
+                        "        \"#A9A9A9\"\n" +
+                        "      ],\n" +
+                        "      \"type\": \"fourSingle\",\n" +
+                        "      \"areaCode\": \"1_A_付款信息\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"type\": \"attachment\",\n" +
+                        "      \"label\": \"安监局费用2017.excel\",\n" +
+                        "      \"size\": \"1024kb\",\n" +
+                        "      \"url\": \"/ygoa/xxxxxx\",\n" +
+                        "      \"areaCode\": \"2_B_发票\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"type\": \"attachment\",\n" +
+                        "      \"label\": \"安监局费用2017.doc\",\n" +
+                        "      \"size\": \"1024kb\",\n" +
+                        "      \"url\": \"/ygoa/xxxxxx\",\n" +
+                        "      \"areaCode\": \"3_B_合同\"\n" +
                         "    }\n" +
                         "  ],\n" +
-                        "  \"buttons\": null,\n" +
                         "  \"success\": \"0\"\n" +
                         "}\n";
-                TaskDetail detail = JSON.parseObject(data1, TaskDetail.class);
+                TaskDetail detail = JSON.parseObject(data, TaskDetail.class);
                 title.setText(detail.getTitle());
                 initFragment(detail, check(detail.getInputs()));
 
@@ -657,54 +698,102 @@ public class TaskDetailActivity extends BaseActivity {
         }
     }
 
+    private void stepToXt() {
+        Map<String, String> params = new HashMap<>();
+        params.put("sessionId", app.getUser().getSessionId());
+        for (Fragment f : fragments) {
+            if (f instanceof TaskDetailFragment) {
+                Map<String, String> map = ((TaskDetailFragment) f).getMessage();
+                if (map == null) {
+                    return;
+                }
+                params.putAll(map);
+            } else if (f instanceof TaskDetailFragment1) {
+                Map<String, String> map = ((TaskDetailFragment1) f).getMessage();
+                if (map == null) {
+                    return;
+                }
+                params.putAll(map);
+            } else if (f instanceof TaskDetailFragment2) {
+                Map<String, String> map = ((TaskDetailFragment2) f).getMessage();
+                if (map == null) {
+                    return;
+                }
+                params.putAll(map);
+            }
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putString("map", JSON.toJSONString(params));
+        stepActivity(bundle, SelectDepartment3Activity.class);
+    }
+
     /**
      * 同意和拒绝
      */
     private void processTask(String url, String name, String value) {
-        if (!name.equals("")) {
-            Map<String, String> params = new HashMap<>();
-            params.put(name, value);
-            params.put("sessionId", app.getUser().getSessionId());
-            for (Fragment f : fragments) {
-                if (f instanceof TaskDetailFragment) {
-                    Map<String, String> map = ((TaskDetailFragment) f).getMessage();
-                    if (map == null) {
-                        return;
-                    }
-                    params.putAll(map);
-                } else if (f instanceof TaskDetailFragment1) {
-                    Map<String, String> map = ((TaskDetailFragment1) f).getMessage();
-                    if (map == null) {
-                        return;
-                    }
-                    params.putAll(map);
-                } else if (f instanceof TaskDetailFragment2) {
-                    Map<String, String> map = ((TaskDetailFragment2) f).getMessage();
-                    if (map == null) {
-                        return;
-                    }
-                    params.putAll(map);
+        Map<String, String> params = new HashMap<>();
+        params.put(name, value);
+        params.put("sessionId", app.getUser().getSessionId());
+        for (Fragment f : fragments) {
+            if (f instanceof TaskDetailFragment) {
+                Map<String, String> map = ((TaskDetailFragment) f).getMessage();
+                if (map == null) {
+                    return;
+                }
+                params.putAll(map);
+            } else if (f instanceof TaskDetailFragment1) {
+                Map<String, String> map = ((TaskDetailFragment1) f).getMessage();
+                if (map == null) {
+                    return;
+                }
+                params.putAll(map);
+            } else if (f instanceof TaskDetailFragment2) {
+                Map<String, String> map = ((TaskDetailFragment2) f).getMessage();
+                if (map == null) {
+                    return;
+                }
+                params.putAll(map);
+            }
+        }
+        String cmnt = msg.getText().toString().trim();
+        if (("1").equals(isXt) && cmnt.equals("")) {
+            Toast.makeText(app, "请输入审批意见", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!"".equals(cmnt)) {
+            params.put("cmnt", cmnt);
+        }
+
+        StringBuffer sb = new StringBuffer();
+        for (Contacts c : ccl) {
+            sb.append(c.getUser_code() + ",");
+        }
+
+        params.put("ccr", sb.toString());
+
+        Log.i("params", JSON.toJSONString(params));
+
+        SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<Task>() {
+
+            @Override
+            public void onNext(Task data) {
+                Log.i("processTask", data.toString());
+                if (data.getSuccess() == 0) {
+                    finish();
+                } else {
+                    Toast.makeText(app, data.getMsg() + "", Toast.LENGTH_SHORT).show();
                 }
             }
-            String cmnt = msg.getText().toString().trim();
-            if (!"".equals(cmnt)) {
-                params.put("cmnt", cmnt);
-            }
-            Log.i("params", JSON.toJSONString(params));
+        };
+        HttpUtil.getInstance(this, false).processTask(new ProgressSubscriber(onNextListener, this, ""), url, params);
+    }
 
-            SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<Task>() {
+    class tFinish extends BroadcastReceiver {
 
-                @Override
-                public void onNext(Task data) {
-                    Log.i("processTask", data.toString());
-                    if (data.getSuccess() == 0) {
-                        finish();
-                    } else {
-                        Toast.makeText(app, data.getMsg() + "", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            };
-            HttpUtil.getInstance(this, false).processTask(new ProgressSubscriber(onNextListener, this, ""), url, params);
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
         }
     }
 }

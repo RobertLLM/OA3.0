@@ -3,6 +3,8 @@ package cn.invonate.ygoa3.Util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import cn.invonate.ygoa3.YGApplication;
+
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -12,7 +14,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class SpUtil {
     private static final String FIRST = "first";
     private static final String USER_SHARED = "user_shared";
-
+    private static final String APP_NAME = "oa";
     /**
      * 读取用户名
      *
@@ -83,6 +85,28 @@ public class SpUtil {
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("first", is);
         editor.apply();
+    }
+
+
+    public static String readString(String key) {
+        return getSharedPreferences().getString(key, "");
+    }
+
+    public static void writeString(String key, String value) {
+        getSharedPreferences().edit().putString(key, value).apply();
+    }
+
+    public static void remove(String key) {
+        getSharedPreferences().edit().remove(key).apply();
+    }
+
+    public static void removeAll() {
+        getSharedPreferences().edit().clear().apply();
+    }
+
+    public static SharedPreferences getSharedPreferences() {
+        return YGApplication.getContext()
+                .getSharedPreferences(APP_NAME, Context.MODE_PRIVATE);
     }
 
 }
