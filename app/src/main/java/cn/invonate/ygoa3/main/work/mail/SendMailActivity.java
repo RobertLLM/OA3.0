@@ -21,6 +21,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.ess.filepicker.FilePicker;
+import com.ess.filepicker.model.EssFile;
+import com.ess.filepicker.util.Const;
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 
 import java.io.File;
@@ -179,7 +183,6 @@ public class SendMailActivity extends BaseActivity {
                     public void onClick(View v) {
                         dialog.show();
                         List<String> to = new ArrayList<>();
-//                        to.add(edit_to.getText().toString() + "@yong-gang.cn");
                         send_email(to, null, null, edit_subject.getText().toString().trim(), edit_content.getText().toString().trim(), true);
                     }
                 }).show();
@@ -232,6 +235,13 @@ public class SendMailActivity extends BaseActivity {
                         .start(this);
                 break;
             case R.id.btn_file:
+                FilePicker
+                        .from(this)
+                        .chooseForMimeType()
+                        .setMaxCount(1)
+                        .setFileTypes("doc", "xls", "ppt", "pdf", "apk", "mp3", "gif", "txt", "mp4", "zip")
+                        .requestCode(0x999)
+                        .start();
                 break;
         }
     }
@@ -278,6 +288,11 @@ public class SendMailActivity extends BaseActivity {
                 }
             }
             input_adapter2.notifyDataSetChanged();
+        } else if (requestCode == 0x999 && resultCode == RESULT_OK) {
+            ArrayList<EssFile> files = data.getParcelableArrayListExtra(Const.EXTRA_RESULT_SELECTION);
+            Log.i("files", JSON.toJSONString(files));
+            photoPaths.add(files.get(0).getAbsolutePath());
+            adapter.notifyDataSetChanged();
         }
 
     }
@@ -304,14 +319,6 @@ public class SendMailActivity extends BaseActivity {
             Toast.makeText(this, "请输入收件人", Toast.LENGTH_SHORT).show();
             return;
         }
-        if ("".equals(subject)) {
-            Toast.makeText(this, "请输入主题", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if ("".equals(body)) {
-            Toast.makeText(this, "请输入正文", Toast.LENGTH_SHORT).show();
-            return;
-        }
         dialog.show();
         if (mail != null) {
             body = body +
@@ -319,6 +326,12 @@ public class SendMailActivity extends BaseActivity {
                     "\r\n" +
                     "\r\n" +
                     mail.getContent();
+        }
+        if (body == null) {
+            body = "";
+        }
+        if (subject == null) {
+            subject = "";
         }
         Mails email = new Mails(app, app.getUser().getUser_code() + "@yong-gang.cn", app.getUser().getUser_name(), to, cc, bcc, subject, body);
         try {
@@ -406,6 +419,7 @@ public class SendMailActivity extends BaseActivity {
             super.onPostExecute(result);
         }
     }
+
 
     private void push(String msg, String code) {
         Subscriber subscriber = new Subscriber<String>() {
@@ -621,7 +635,6 @@ public class SendMailActivity extends BaseActivity {
                         public boolean onKey(View v, int keyCode, KeyEvent event) {
                             if (keyCode == KeyEvent.KEYCODE_DEL) {
                                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                                    Log.d("keyCode", "6666666666666666666666666666666");
                                     if (holder.address.getText().toString().trim().length() < 1) {
                                         if (!data.isEmpty()) {
                                             data.remove(data.size() - 1);

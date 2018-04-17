@@ -31,6 +31,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.invonate.ygoa3.Entry.Mission;
 import cn.invonate.ygoa3.Entry.Sum;
+import cn.invonate.ygoa3.Entry.TaskCopy;
 import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.Task.TaskApprovedActivity;
 import cn.invonate.ygoa3.Task.TaskCopyActivity;
@@ -60,6 +61,9 @@ public class WorkFragment extends Fragment {
     TextView messionSum;
     @BindView(R.id.meet_sum)
     TextView meetSum;
+    @BindView(R.id.copy_sum)
+    TextView copy_sum;
+
     @BindView(R.id.refresh)
     PullToRefreshScrollView refresh;
 
@@ -74,6 +78,7 @@ public class WorkFragment extends Fragment {
                 mailSum.setText(msg.getData().getInt("mail_size") + "");
                 messionSum.setText(msg.getData().getInt("mession_sum") + "");
                 meetSum.setText(msg.getData().getInt("meet_sum") + "");
+                copy_sum.setText(msg.getData().getInt("copy_sum") + "");
                 refresh.onRefreshComplete();
             }
         }
@@ -87,6 +92,9 @@ public class WorkFragment extends Fragment {
         app = (YGApplication) getActivity().getApplication();
         taskSum.addTextChangedListener(new TextChangeListener(taskSum));
         mailSum.addTextChangedListener(new TextChangeListener(mailSum));
+        messionSum.addTextChangedListener(new TextChangeListener(messionSum));
+        meetSum.addTextChangedListener(new TextChangeListener(meetSum));
+        copy_sum.addTextChangedListener(new TextChangeListener(copy_sum));
         getTaskSize();
         refresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
             @Override
@@ -270,7 +278,7 @@ public class WorkFragment extends Fragment {
                 Log.i("getMession", data.toString());
                 if (data.getSuccess() == 0) {
                     int mession_sum = data.getData();
-                    getMailSize(task_sum, meet_sum, mession_sum);
+                    getCopyTask(task_sum, meet_sum, mession_sum);
                 } else {
                     refresh.onRefreshComplete();
                 }
@@ -279,7 +287,37 @@ public class WorkFragment extends Fragment {
         HttpUtil.getInstance(getActivity(), false).queryPersonTask(subscriber);
     }
 
-    private void getMailSize(final int task_size, final int meet_sum, final int mession_sum) {
+    /**
+     * 获取未读抄送
+     */
+    private void getCopyTask(final int task_size, final int meet_sum, final int mession_sum) {
+        Subscriber subscriber = new Subscriber<TaskCopy>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("error", e.toString());
+            }
+
+            @Override
+            public void onNext(final TaskCopy data) {
+                Log.i("getCopyTask", data.toString());
+                if (data.getSuccess() == 0) {
+                    refresh.onRefreshComplete();
+                    int copy_size = data.getDataUn().size();
+                    getMailSize(task_size, meet_sum, mession_sum, copy_size);
+                } else {
+                    refresh.onRefreshComplete();
+                }
+            }
+        };
+        HttpUtil.getInstance(getActivity(), false).getCopyTask(subscriber, app.getUser().getSessionId());
+    }
+
+    private void getMailSize(final int task_size, final int meet_sum, final int mession_sum, final int copy_size) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -313,7 +351,7 @@ public class WorkFragment extends Fragment {
                     bundle.putInt("mail_size", mail_size);
                     bundle.putInt("meet_sum", meet_sum);
                     bundle.putInt("mession_sum", mession_sum);
-
+                    bundle.putInt("copy_size", copy_size);
                     Message message = handler.obtainMessage();
                     message.what = 0;
                     message.setData(bundle);

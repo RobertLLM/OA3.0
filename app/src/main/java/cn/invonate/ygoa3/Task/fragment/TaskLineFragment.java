@@ -36,7 +36,7 @@ public class TaskLineFragment extends Fragment implements LazyFragmentPagerAdapt
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        businessId =  getArguments().getString("businessId");
+        businessId = getArguments().getString("businessId");
     }
 
     @Nullable
@@ -55,7 +55,6 @@ public class TaskLineFragment extends Fragment implements LazyFragmentPagerAdapt
     }
 
     /**
-     *
      * 获取审批流程
      */
     private void getTaskLine() {
@@ -67,18 +66,21 @@ public class TaskLineFragment extends Fragment implements LazyFragmentPagerAdapt
 
             @Override
             public void onError(Throwable e) {
-                Log.i("error",e.toString());
-                listLine.onRefreshComplete();
+                Log.i("error", e.toString());
+                if (listLine != null) {
+                    listLine.onRefreshComplete();
+                }
             }
 
             @Override
             public void onNext(TaskLine data) {
                 Log.i("getTaskLine", data.toString());
-                listLine.setAdapter(new LineAdapter(data.getData(), getActivity()));
+                LineAdapter adapter = new LineAdapter(data.getData(), getActivity());
+                listLine.setAdapter(adapter);
                 listLine.onRefreshComplete();
             }
         };
-        HttpUtil.getInstance(getActivity(),false).getTaskLine(subscriber, businessId);
+        HttpUtil.getInstance(getActivity(), false).getTaskLine(subscriber, businessId);
     }
 
     @Override

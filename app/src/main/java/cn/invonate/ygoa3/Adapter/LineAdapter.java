@@ -24,11 +24,11 @@ import cn.invonate.ygoa3.R;
 public class LineAdapter extends BaseAdapter {
 
     private List<TaskLine.LineBean> data;
-    private LayoutInflater inflater;
+    private Context context;
 
     public LineAdapter(List<TaskLine.LineBean> data, Context context) {
         this.data = data;
-        this.inflater = LayoutInflater.from(context);
+        this.context = context;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class LineAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_line, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_line, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

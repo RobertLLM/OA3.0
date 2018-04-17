@@ -98,8 +98,7 @@ public class Mails extends javax.mail.Authenticator {
     public boolean send(boolean is_draft) throws Exception {
         Properties props = _setProperties();
         if (!_user.equals("") && !_pass.equals("") && _to.size() > 0
-                && !_from.equals("") && !_subject.equals("")
-                && !_body.equals("")) {
+                && !_from.equals("")) {
             Session session = Session.getInstance(props, this);
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(_from, _personal));
@@ -121,7 +120,6 @@ public class Mails extends javax.mail.Authenticator {
                             new InternetAddress(item));
                 }
             }
-
             msg.setSubject(_subject);
             msg.setSentDate(new Date()); // setup message body
             BodyPart messageBodyPart = new MimeBodyPart();

@@ -127,8 +127,6 @@ public class TaskDetailActivity extends BaseActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction("tFinish");
         registerReceiver(finish, filter);
-
-
         if (need_layout) {
             layoutNeed.setVisibility(View.VISIBLE);
             layoutMore.setVisibility(View.VISIBLE);
@@ -465,23 +463,27 @@ public class TaskDetailActivity extends BaseActivity {
                         "  \"success\": \"0\"\n" +
                         "}\n";
                 TaskDetail detail = JSON.parseObject(data, TaskDetail.class);
-                title.setText(detail.getTitle());
-                initFragment(detail, check(detail.getInputs()));
+                if (detail.getSuccess() == 0) {
+                    title.setText(detail.getTitle());
+                    initFragment(detail, check(detail.getInputs()));
 
-                if ("1".equals(isXt)) {
-                    List<TaskDetail.Button> buttons = new ArrayList<>();
-                    buttons.add(new TaskDetail.Button("", "确定", "/ygoa/ydpt/approveAllXt.action", "true"));
-                    detail.setButtons(buttons);
-                } else {
-                    if (detail.getButtons() == null || detail.getButtons().isEmpty()) {
+                    if ("1".equals(isXt)) {
                         List<TaskDetail.Button> buttons = new ArrayList<>();
-                        buttons.add(new TaskDetail.Button("approveResult", "同意", "/ygoa/ydpt/processTask.action", "true"));
-                        buttons.add(new TaskDetail.Button("approveResult", "驳回", "/ygoa/ydpt/processTask.action", "false"));
+                        buttons.add(new TaskDetail.Button("", "确定", "/ygoa/ydpt/approveAllXt.action", "true"));
                         detail.setButtons(buttons);
+                    } else {
+                        if (detail.getButtons() == null || detail.getButtons().isEmpty()) {
+                            List<TaskDetail.Button> buttons = new ArrayList<>();
+                            buttons.add(new TaskDetail.Button("approveResult", "同意", "/ygoa/ydpt/processTask.action", "true"));
+                            buttons.add(new TaskDetail.Button("approveResult", "驳回", "/ygoa/ydpt/processTask.action", "false"));
+                            detail.setButtons(buttons);
+                        }
                     }
+                    listButton.setLayoutManager(new GridLayoutManager(TaskDetailActivity.this, detail.getButtons().size()));
+                    listButton.setAdapter(new ButtonAdapter(detail.getButtons(), TaskDetailActivity.this));
+                } else {
+                    Toast.makeText(TaskDetailActivity.this, detail.getMsg(), Toast.LENGTH_SHORT).show();
                 }
-                listButton.setLayoutManager(new GridLayoutManager(TaskDetailActivity.this, detail.getButtons().size()));
-                listButton.setAdapter(new ButtonAdapter(detail.getButtons(), TaskDetailActivity.this));
             }
         };
         HttpUtil.getInstance(this, false).getTaskDetail(subscriber, app.getUser().getSessionId(), businessId, taskId, workflowType);
@@ -698,6 +700,9 @@ public class TaskDetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     *
+     */
     private void stepToXt() {
         Map<String, String> params = new HashMap<>();
         params.put("sessionId", app.getUser().getSessionId());
@@ -722,10 +727,11 @@ public class TaskDetailActivity extends BaseActivity {
                 params.putAll(map);
             }
         }
-
+        Intent intent = new Intent(this, SelectDepartment3Activity.class);
         Bundle bundle = new Bundle();
         bundle.putString("map", JSON.toJSONString(params));
-        stepActivity(bundle, SelectDepartment3Activity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     /**

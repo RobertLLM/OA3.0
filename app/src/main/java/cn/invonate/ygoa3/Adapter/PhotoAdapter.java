@@ -52,7 +52,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.FileViewHold
             Uri uri = Uri.fromFile(new File((String) path.get(position)));
             Glide.with(context)
                     .load(uri)
-                    .skipMemoryCache(true)
+                    //.skipMemoryCache(true)
                     .into(holder.pic);
             entry = new FileEntry();
             File file = new File((String) path.get(position));

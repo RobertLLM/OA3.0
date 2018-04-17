@@ -5,91 +5,123 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import cn.invonate.ygoa3.Entry.Mission;
+import cn.invonate.ygoa3.Entry.TaskEntry;
 import cn.invonate.ygoa3.R;
 
 /**
  * Created by liyangyang on 2018/1/15.
  */
 
-public class TaskAdapter extends BaseAdapter {
-    private List<Mission.MissionBean> data;
+public class TaskAdapter extends BaseExpandableListAdapter {
+    private List<TaskEntry> data;
     private LayoutInflater inflater;
 
-    public TaskAdapter(List<Mission.MissionBean> data, Context context) {
+    public TaskAdapter(List<TaskEntry> data, Context context) {
         this.data = data;
         this.inflater = LayoutInflater.from(context);
     }
 
     @Override
-    public int getCount() {
+    public int getGroupCount() {
         return data.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return data.get(position);
+    public int getChildrenCount(int groupPosition) {
+        return data.get(groupPosition).getTasks().size();
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
+    public Object getGroup(int groupPosition) {
+        return data.get(groupPosition);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+    public Object getChild(int groupPosition, int childPosition) {
+        return data.get(groupPosition).getTasks().get(childPosition);
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return groupPosition;
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return childPosition;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_task, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
+            convertView = inflater.inflate(R.layout.item_task_head, null);
         }
-        holder.lb.setText(data.get(position).getLb());
-        if (position > 0 && data.get(position).getLb().equals(data.get(position - 1).getLb())) {
-            holder.lb.setVisibility(View.GONE);
-        } else {
-            holder.lb.setVisibility(View.VISIBLE);
+        convertView.setTag(R.layout.item_task_head, groupPosition);
+        convertView.setTag(R.layout.item_task, -1);
+        TextView lb = convertView.findViewById(R.id.lb);
+        lb.setText(data.get(groupPosition).getLb() + "(" + data.get(groupPosition).getTasks().size() + ")");
+        return convertView;
+    }
+
+    @Override
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.item_task, null);
         }
-        holder.title.setText(data.get(position).getTitle());
-        holder.depart.setText(data.get(position).getApplyDept());
+        convertView.setTag(R.layout.item_task_head, groupPosition);
+        convertView.setTag(R.layout.item_task, childPosition);
+
+        TextView depart = convertView.findViewById(R.id.depart);
+        TextView lxdbh = convertView.findViewById(R.id.lxdbh);
+        TextView jinji = convertView.findViewById(R.id.jinji);
+        TextView title = convertView.findViewById(R.id.title);
+        ImageView file = convertView.findViewById(R.id.file);
+        TextView userName = convertView.findViewById(R.id.user_name);
+        TextView zhaiyao = convertView.findViewById(R.id.zhaiyao);
+        TextView re = convertView.findViewById(R.id.re);
+        TextView xt = convertView.findViewById(R.id.xt);
+
+        title.setText(data.get(groupPosition).getTasks().get(childPosition).getTitle());
+        depart.setText(data.get(groupPosition).getTasks().get(childPosition).getApplyDept());
         // 是否显示附件
-        if ("1".equals(data.get(position).getIs_fj())) {
-            holder.file.setVisibility(View.VISIBLE);
+        if ("1".equals(data.get(groupPosition).getTasks().get(childPosition).getIs_fj())) {
+            file.setVisibility(View.VISIBLE);
         } else {
-            holder.file.setVisibility(View.GONE);
+            file.setVisibility(View.GONE);
         }
         // 是否显示紧急
-        if ("1".equals(data.get(position).getImportant_leval())) {
-            holder.jinji.setVisibility(View.VISIBLE);
+        if ("1".equals(data.get(groupPosition).getTasks().get(childPosition).getImportant_leval())) {
+            jinji.setVisibility(View.VISIBLE);
         } else {
-            holder.jinji.setVisibility(View.GONE);
+            jinji.setVisibility(View.GONE);
         }
 
         // 是否显示重审
-        if ("1".equals(data.get(position).getReject_message())) {
-            holder.re.setVisibility(View.VISIBLE);
+        if ("1".equals(data.get(groupPosition).getTasks().get(childPosition).getReject_message())) {
+            re.setVisibility(View.VISIBLE);
         } else {
-            holder.re.setVisibility(View.GONE);
+            re.setVisibility(View.GONE);
         }
 
         // 是否显示协同
-        if ("1".equals(data.get(position).getIsXt())) {
-            holder.xt.setVisibility(View.VISIBLE);
+        if ("1".equals(data.get(groupPosition).getTasks().get(childPosition).getIsXt())) {
+            xt.setVisibility(View.VISIBLE);
         } else {
-            holder.xt.setVisibility(View.GONE);
+            xt.setVisibility(View.GONE);
         }
 
-        String message = data.get(position).getOpinion_();
+        String message = data.get(groupPosition).getTasks().get(childPosition).getOpinion_();
 
         int color = Color.parseColor("#000000");
 
@@ -119,47 +151,27 @@ public class TaskAdapter extends BaseAdapter {
             message = "已处理";
         }
 
-        String[] date = data.get(position).getCreate_().split("T");
-        holder.userName.setText(data.get(position).getUser_name() + " " + message + " " + date[0]);
-        holder.userName.setTextColor(color);
+        String[] date = data.get(groupPosition).getTasks().get(childPosition).getCreate_().split("T");
+        userName.setText(data.get(groupPosition).getTasks().get(childPosition).getUser_name() + " " + message + " " + date[0]);
+        userName.setTextColor(color);
 
         //  设置摘要
-        if (data.get(position).getZhaiyao() == null || "".equals(data.get(position).getZhaiyao())) {
-            holder.zhaiyao.setVisibility(View.GONE);
+        if (data.get(groupPosition).getTasks().get(childPosition).getZhaiyao() == null || "".equals(data.get(groupPosition).getTasks().get(childPosition).getZhaiyao())) {
+            zhaiyao.setVisibility(View.GONE);
         } else {
-            holder.zhaiyao.setVisibility(View.VISIBLE);
+            zhaiyao.setVisibility(View.VISIBLE);
         }
-        holder.zhaiyao.setText(data.get(position).getZhaiyao());
-        holder.lxdbh.setText(data.get(position).getLxdbh());
-        holder.lxdbh.setText(data.get(position).getLxdbh());
+        zhaiyao.setText(data.get(groupPosition).getTasks().get(childPosition).getZhaiyao());
+        lxdbh.setText(data.get(groupPosition).getTasks().get(childPosition).getLxdbh());
+        lxdbh.setText(data.get(groupPosition).getTasks().get(childPosition).getLxdbh());
+
+
+
         return convertView;
     }
 
-    static class ViewHolder {
-        @BindView(R.id.lb)
-        TextView lb;
-        @BindView(R.id.depart)
-        TextView depart;
-        @BindView(R.id.lxdbh)
-        TextView lxdbh;
-        @BindView(R.id.jinji)
-        TextView jinji;
-        @BindView(R.id.title)
-        TextView title;
-        @BindView(R.id.file)
-        ImageView file;
-        @BindView(R.id.user_name)
-        TextView userName;
-        @BindView(R.id.zhaiyao)
-        TextView zhaiyao;
-        @BindView(R.id.re)
-        TextView re;
-        @BindView(R.id.xt)
-        TextView xt;
-
-
-        ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
     }
 }

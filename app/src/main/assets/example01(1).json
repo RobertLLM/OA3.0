@@ -125,7 +125,8 @@
     },
     {
       "type": "attachment",
-      "label": "安监局费用2017.excel",
+      "name": "安监局费用2017.excel",
+      "label":"",
       "size": "1024kb",
       "url": "/ygoa/xxxxxx",
       "areaCode": "2_B_发票"

@@ -19,7 +19,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.sun.mail.imap.protocol.FLAGS;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -45,7 +48,6 @@ import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.Util.Domain;
 import cn.invonate.ygoa3.Util.MailHolder;
 import cn.invonate.ygoa3.Util.POP3ReceiveMailTest;
-import cn.invonate.ygoa3.View.LYYPullToRefreshListView;
 import cn.invonate.ygoa3.YGApplication;
 
 public class MailActivity extends BaseActivity implements View.OnClickListener {
@@ -59,7 +61,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.mail_box_name)
     TextView mailBoxName;
     @BindView(R.id.list_mail)
-    LYYPullToRefreshListView listMail;
+    ListView listMail;
 
     ArrayList<Mail> list_mails = new ArrayList<>(); //邮件规范类集合
 
@@ -74,6 +76,8 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
     RelativeLayout layoutNone;
     @BindView(R.id.rl_edit)
     RelativeLayout rlEdit;
+    @BindView(R.id.refresh)
+    SmartRefreshLayout refresh;
 
     private String folderName = "INBOX";// 默认收件箱
 
@@ -100,10 +104,10 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                                 if (!adapter.isSelect_mode()) {
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("mode", mode);
-                                    bundle.putInt("position", position - 1);
+                                    bundle.putInt("position", position);
                                     stepActivity(bundle, MailDetailActivity.class);
                                 } else {
-                                    list_mails.get(position - 1).setIs_selected(!list_mails.get(position - 1).isIs_selected());
+                                    list_mails.get(position).setIs_selected(!list_mails.get(position).isIs_selected());
                                     adapter.notifyDataSetChanged();
                                     if (checkSelect()) {
                                         etMail.setText("删除");
@@ -126,13 +130,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                     } else {//不是第一页，更新数据
                         adapter.notifyDataSetChanged();
                     }
-                    listMail.onRefreshComplete();
-                    // 如果已加载完全部数据，将上拉加载取消
-                    if (adapter.getCount() < total) {
-                        listMail.setMode(PullToRefreshBase.Mode.BOTH);
-                    } else {
-                        listMail.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-                    }
+                    refresh.finishRefresh();
                     rlEdit.setOnClickListener(MailActivity.this);
                     dialog.dismiss();
                     break;
@@ -141,11 +139,11 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                         adapter.notifyDataSetChanged();
                     }//若取到数据为空
                     Toast.makeText(MailActivity.this, "暂无邮件", Toast.LENGTH_SHORT).show();
-                    listMail.onRefreshComplete();
+                    refresh.finishRefresh();
                     break;
                 case MESSAGE_MAIL_ERROR:
                     //Toast.makeText(MailActivity.this, "获取邮件失败，请检查网络连接", Toast.LENGTH_SHORT).show();
-                    listMail.onRefreshComplete();
+                    refresh.finishRefresh();
                     break;
                 case 4:
                     getMails(0);
@@ -169,20 +167,32 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
         ButterKnife.bind(this);
         initPop();//初始化弹窗
         app = (YGApplication) getApplication();
-        listMail.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        refresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+            public void onRefresh(RefreshLayout refreshLayout) {
                 getMails(0);
             }
 
+        });
+        refresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getMails(adapter.getCount() / 20);
+            public void onLoadMore(RefreshLayout refreshlayout) {
+                if (adapter.getCount() < total) {
+                    getMails(adapter.getCount() / 20);
+                } else {
+                    refresh.finishLoadMore();
+                }
             }
         });
         dialog = new ProgressDialog(this);
         dialog.setTitle("删除中");
-        getMails(0);
+//        getMails(0);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh.autoRefresh();
     }
 
     @Override
@@ -352,7 +362,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                     mode = 3;
                     break;
             }
-            getMails(0);
+            refresh.autoRefresh();
             pop.dismiss();
         }
     };

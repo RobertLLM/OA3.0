@@ -7,10 +7,12 @@
       <module fileurl="file://$PROJECT_DIR$/SwipMenuListViewlibrary/SwipMenuListViewlibrary.iml" filepath="$PROJECT_DIR$/SwipMenuListViewlibrary/SwipMenuListViewlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/autolayout/autolayout.iml" filepath="$PROJECT_DIR$/autolayout/autolayout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/filepicker/filepicker.iml" filepath="$PROJECT_DIR$/filepicker/filepicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/ios_dialog/ios_dialog.iml" filepath="$PROJECT_DIR$/ios_dialog/ios_dialog.iml" />
       <module fileurl="file://$PROJECT_DIR$/jcvideoplayer-lib/jcvideoplayer-lib.iml" filepath="$PROJECT_DIR$/jcvideoplayer-lib/jcvideoplayer-lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/lazyviewpagerlibrary/lazyviewpagerlibrary.iml" filepath="$PROJECT_DIR$/lazyviewpagerlibrary/lazyviewpagerlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/pullToReflash_library/pullToReflash_library.iml" filepath="$PROJECT_DIR$/pullToReflash_library/pullToReflash_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test/test.iml" filepath="$PROJECT_DIR$/test/test.iml" />
     </modules>
   </component>
 </project>

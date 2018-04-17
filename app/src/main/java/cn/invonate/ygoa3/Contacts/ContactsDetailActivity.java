@@ -8,12 +8,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.yonggang.liyangyang.ios_dialog.widget.ActionSheetDialog;
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 
 import butterknife.BindView;
@@ -21,9 +24,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.invonate.ygoa3.BaseActivity;
 import cn.invonate.ygoa3.Entry.Contacts;
+import cn.invonate.ygoa3.Entry.RequestLxr;
 import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.View.CircleImageView;
+import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
+import cn.invonate.ygoa3.httpUtil.ProgressSubscriber;
+import cn.invonate.ygoa3.httpUtil.SubscriberOnNextListener;
 
 public class ContactsDetailActivity extends BaseActivity {
 
@@ -49,11 +56,14 @@ public class ContactsDetailActivity extends BaseActivity {
     @BindView(R.id.head_text)
     TextView headText;
 
+    YGApplication app;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_detail);
         ButterKnife.bind(this);
+        app = (YGApplication) getApplication();
         contacts = (Contacts) getIntent().getExtras().getSerializable("contacts");
         if (contacts != null) {
             Glide.with(getApplicationContext()).load(HttpUtil.URL_FILE + contacts.getUser_photo()).skipMemoryCache(true).error(R.mipmap.pic_head).into(headImg);
@@ -86,63 +96,65 @@ public class ContactsDetailActivity extends BaseActivity {
                 break;
 
             case R.id.layout_message:
+                Toast.makeText(this, "暂未开放", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.layout_friend:
-                ActionSheetDialog dialog = new ActionSheetDialog(this).builder();
-                if (contacts.getUser_phone() != null && !"".equals(contacts.getUser_phone())) {
-                    dialog.addSheetItem(contacts.getUser_phone(), ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
-                        @Override
-                        public void onClick(int wh) {
-                            AlertDialog alert = new AlertDialog(ContactsDetailActivity.this).builder();
-                            alert.setPositiveButton("呼叫", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (ContextCompat.checkSelfPermission(ContactsDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(ContactsDetailActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 0);
-                                    } else {
-                                        call(contacts.getUser_phone());
-                                    }
-                                }
-                            }).setNegativeButton("取消", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                }
-                            }).setMsg(contacts.getUser_phone()).show();
-                        }
-                    });
-                }
-                if (contacts.getOffice_phone() != null && !"".equals(contacts.getOffice_phone())) {
-                    dialog.addSheetItem(contacts.getOffice_phone(), ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
-                        @Override
-                        public void onClick(int which) {
-                            AlertDialog alert = new AlertDialog(ContactsDetailActivity.this).builder();
-                            alert.setPositiveButton("呼叫", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //call(contacts.getOffice_phone());
-                                    //判断用户是否已经授权，未授权则向用户申请授权，已授权则直接进行呼叫操作
-                                    if (ContextCompat.checkSelfPermission(ContactsDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(ContactsDetailActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
-                                    } else {
-                                        call(contacts.getOffice_phone());
-                                    }
-                                }
-                            }).setNegativeButton("取消", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                }
-                            }).setMsg(contacts.getOffice_phone()).show();
-                        }
-                    });
-                }
-                dialog.setTitle("请选择联系方式").show();
+//                ActionSheetDialog dialog = new ActionSheetDialog(this).builder();
+//                if (contacts.getUser_phone() != null && !"".equals(contacts.getUser_phone())) {
+//                    dialog.addSheetItem(contacts.getUser_phone(), ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
+//                        @Override
+//                        public void onClick(int wh) {
+//                            AlertDialog alert = new AlertDialog(ContactsDetailActivity.this).builder();
+//                            alert.setPositiveButton("呼叫", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    if (ContextCompat.checkSelfPermission(ContactsDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                                        ActivityCompat.requestPermissions(ContactsDetailActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 0);
+//                                    } else {
+//                                        call(contacts.getUser_phone());
+//                                    }
+//                                }
+//                            }).setNegativeButton("取消", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//
+//                                }
+//                            }).setMsg(contacts.getUser_phone()).show();
+//                        }
+//                    });
+//                }
+//                if (contacts.getOffice_phone() != null && !"".equals(contacts.getOffice_phone())) {
+//                    dialog.addSheetItem(contacts.getOffice_phone(), ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
+//                        @Override
+//                        public void onClick(int which) {
+//                            AlertDialog alert = new AlertDialog(ContactsDetailActivity.this).builder();
+//                            alert.setPositiveButton("呼叫", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    //call(contacts.getOffice_phone());
+//                                    //判断用户是否已经授权，未授权则向用户申请授权，已授权则直接进行呼叫操作
+//                                    if (ContextCompat.checkSelfPermission(ContactsDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                                        ActivityCompat.requestPermissions(ContactsDetailActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+//                                    } else {
+//                                        call(contacts.getOffice_phone());
+//                                    }
+//                                }
+//                            }).setNegativeButton("取消", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//
+//                                }
+//                            }).setMsg(contacts.getOffice_phone()).show();
+//                        }
+//                    });
+//                }
+//                dialog.setTitle("请选择联系方式").show();
+                Toast.makeText(this, "暂未开放", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.layout_add:
-
+                add(contacts.getId_());
                 break;
 
             case R.id.phone:
@@ -194,4 +206,22 @@ public class ContactsDetailActivity extends BaseActivity {
             }
         }
     }
+
+    /**
+     * 添加联系人
+     */
+    private void add(String id) {
+        RequestLxr lxr = new RequestLxr(app.getUser().getUser_id(), id);
+        SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<String>() {
+            @Override
+            public void onNext(String data) {
+                Log.i("add", data);
+                JSONObject obj = JSON.parseObject(data);
+                Toast.makeText(app, obj.getString("msg"), Toast.LENGTH_SHORT).show();
+            }
+        };
+        HttpUtil.getInstance(this, false).addToCylxr(new ProgressSubscriber(onNextListener, this, "请稍后"), JSON.toJSONString(lxr));
+    }
+
+
 }

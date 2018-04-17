@@ -27,6 +27,7 @@ import cn.invonate.ygoa3.Entry.Task;
 import cn.invonate.ygoa3.Entry.TaskCopy;
 import cn.invonate.ygoa3.Entry.TaskLine;
 import cn.invonate.ygoa3.Entry.User;
+import cn.invonate.ygoa3.Entry.Version;
 import cn.invonate.ygoa3.Entry.Welfare;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
@@ -237,7 +238,7 @@ public interface HttpService {
 
     // 获取我的应用
     @GET("/ygoa/html/user/queryPhoneMenu.action")
-    Observable<List<MyApplicationList>> get_application();
+    Observable<List<List<MyApplicationList>>> get_application();
 
 
     // 会议未确认数
@@ -256,7 +257,25 @@ public interface HttpService {
             @Field("str") String str,
             @Field("assignee") String assignee);
 
-    //
+    // 获取附件
+    @POST
+    @FormUrlEncoded
+    Observable<String> getFile(
+            @Url String url,
+            @FieldMap Map<String, String> params
+    );
 
+    // 添加常用联系人
+    @POST("/ygoa/ydpt/addToCylxr.action")
+    @FormUrlEncoded
+    Observable<String> addToCylxr(
+            @Field("jsonData") String jsonData
+    );
+
+    // 获取版本号
+    @GET("ygoa/ydpt/queryVersion.action")
+    Observable<Version> getVersion(
+
+    );
 
 }

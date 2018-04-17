@@ -115,7 +115,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="30px">
 
-                <WebView
+                <com.tencent.smtt.sdk.WebView
                     android:id="@+id/web_content"
                     android:layout_width="match_parent"
                     android:layout_height="800px"

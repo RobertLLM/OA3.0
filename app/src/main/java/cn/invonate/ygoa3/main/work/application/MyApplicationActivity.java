@@ -20,6 +20,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.TypeReference;
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,8 +38,7 @@ import cn.invonate.ygoa3.Util.SpUtil;
 import cn.invonate.ygoa3.WebView.WebViewActivity;
 import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
-import cn.invonate.ygoa3.httpUtil.ProgressSubscriber2;
-import cn.invonate.ygoa3.httpUtil.SubscriberOnNextListener2;
+import rx.Subscriber;
 
 /**
  * Created by yang on 2018/3/19.
@@ -45,7 +46,6 @@ import cn.invonate.ygoa3.httpUtil.SubscriberOnNextListener2;
 
 public class MyApplicationActivity extends BaseActivity {
     YGApplication app;
-    private String result = "[[{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_013\",\"function_description\":null,\"function_image\":null,\"function_name\":\"轧辊联系单\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"0982ff53-ee55-1035-b83c-cfed343b8e16\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/jg\\/gh_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/jg\\/doQueryGh.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_015\",\"function_description\":null,\"function_image\":null,\"function_name\":\"新供方审批\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"23e8c5ef-00c6-11e8-9e21-1866daf6a144\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/xgfsp\\/phone_xgfsp_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/xgfsp\\/queryXgfsp.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_010\",\"function_description\":null,\"function_image\":null,\"function_name\":\"快餐配送确认单\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"2831efb0-e162-11e7-a2de-005056aa7b3d\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/fastFood\\/phone_fastFood_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/fastFood\\/doQueryFastFood.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_006\",\"function_description\":null,\"function_image\":null,\"function_name\":\"采购联络单\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"5498a79d-1eee-1036-a111-70555ac2bf79\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/xxllcgd\\/phone_xxllcgd_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/xxllcgd\\/doQueryXxllcgd.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION\",\"function_description\":null,\"function_image\":null,\"function_name\":\"日常审批\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"58554c79-d2cf-1035-9a60-5afad4399f72\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_004\",\"function_description\":null,\"function_image\":null,\"function_name\":\"工程联系单\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"66dc9ae4-d2cf-1035-9a60-5afad4399f72\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/projectRelationBill\\/phone_project_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/projectRelationBill\\/doQueryProjectRelationBill.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_001\",\"function_description\":null,\"function_image\":null,\"function_name\":\"用车申请\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"760a1c4c-d2cf-1035-9a60-5afad4399f72\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/car\\/car_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/car\\/car_list.jsp\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_005\",\"function_description\":null,\"function_image\":null,\"function_name\":\"信息联络单\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"841b09bd-d2cf-1035-9a60-5afad4399f72\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/xxll\\/xxllcld_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/xxll\\/doQueryXxllcld.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_016\",\"function_description\":null,\"function_image\":null,\"function_name\":\"月度能源考核确认\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"8ff3edb4-0c78-11e8-9e21-1866daf6a144\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/ydnykhqrb\\/phone_ydnykhqrb_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/ydnykhqrb\\/doQueryYdnykhqrb.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_002\",\"function_description\":null,\"function_image\":null,\"function_name\":\"用能申请\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"91e7ba7d-d2cf-1035-9a60-5afad4399f72\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/ynsq\\/phone_ynsq_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/ynsq\\/doQueryYnsq.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_009\",\"function_description\":null,\"function_image\":null,\"function_name\":\"委托验审联系单\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"b0a9bd81-d8b7-11e7-9173-005056aa7b3d\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/wtyslxd\\/phone_wtyslxd_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/wtyslxd\\/doQueryWtyslxd.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_008\",\"function_description\":null,\"function_image\":null,\"function_name\":\"使用情况证明单\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"b1a4e5e7-2622-1036-b64b-f2f5f5ebb7d6\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/htsyqkzmd\\/phone_htsyqkzmd_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/htsyqkzmd\\/doQueryHtsyqkzmd.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_011\",\"function_description\":null,\"function_image\":null,\"function_name\":\"设备新增\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"ba074f0a-d469-1035-9467-42118d933a67\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/sbsq\\/phone_sbsq_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/sbsq\\/doQuerySbsq.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_007\",\"function_description\":null,\"function_image\":null,\"function_name\":\"办公家具申请单\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"f27d8d92-d469-1035-9467-42118d933a67\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/officeFurniture\\/phone_officeFurniture_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/officeFurniture\\/doQueryOfficeFurniture.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_APPLICATION_003\",\"function_description\":null,\"function_image\":null,\"function_name\":\"文件评审\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"f8f05d08-d2cf-1035-9a60-5afad4399f72\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/wjps\\/phone_wjps_list1.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/wjps\\/doQueryWjps.action\"}],[{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_GHSP_003\",\"function_description\":null,\"function_image\":null,\"function_name\":\"慰问申请\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"1cd93834-d2d0-1035-9a60-5afad4399f72\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/wwsq\\/phone_wwsq_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/wwsq\\/doQueryWwsq.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_GHSP_001\",\"function_description\":null,\"function_image\":null,\"function_name\":\"活动经费申请\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"273fda64-d2d0-1035-9a60-5afad4399f72\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/activityFee\\/phone_activityFee_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/activityFee\\/doQueryActivityFee.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_GHSP_002\",\"function_description\":null,\"function_image\":null,\"function_name\":\"新婚礼品申请\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"31c323f2-d2d0-1035-9a60-5afad4399f72\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/merryGift\\/phone_merryGift_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/merryGift\\/doQueryMerryGift.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_GHSP\",\"function_description\":null,\"function_image\":null,\"function_name\":\"工会审批\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"5de1508f-d654-11e7-bb04-005056aa7b3d\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\"}],[{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_RSZP_005\",\"function_description\":null,\"function_image\":null,\"function_name\":\"完成进度\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"2ff4c923-1c95-1036-9ab6-80501163bd8d\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/zgsq\\/phone_jhwcjd_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/zgsq\\/doQueryZgjhwcjd.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_RSZP\",\"function_description\":null,\"function_image\":null,\"function_name\":\"人事招聘\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"6f0f3a8e-d664-11e7-bb04-005056aa7b3d\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_RSZP_004\",\"function_description\":null,\"function_image\":null,\"function_name\":\"驳回明细\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"88a2a260-1a58-1036-9e7f-66a91f9ebdd8\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/zgsq\\/phone_zgsqbhmx_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/zgsq\\/doQueryZgsqbhmx.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_RSZP_001\",\"function_description\":null,\"function_image\":null,\"function_name\":\"招工申请\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"a1ff82ee-08e2-1036-9cd2-60133df92be8\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/zgsq\\/phone_zgsq_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/zgsq\\/doQueryZgsq.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_RSZP_006\",\"function_description\":null,\"function_image\":null,\"function_name\":\"人员信息台账\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"e28108cb-1bbf-1036-a167-92602ab301ec\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/zgsq\\/phone_zgsqlyxxtz_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/zgsq\\/doQueryZgsqlyxxtz.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_RSZP_003\",\"function_description\":null,\"function_image\":null,\"function_name\":\"临时计划\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"e7143cbb-1a35-1036-9e7f-66a91f9ebdd8\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/zgsq\\/phone_zgsqlsjh_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/zgsq\\/doQueryZgsqlsjh.action\"},{\"attributes\":{},\"checked\":null,\"children\":[],\"function_code\":\"C_RSZP_002\",\"function_description\":null,\"function_image\":null,\"function_name\":\"年度计划\",\"function_type\":null,\"iconCls\":null,\"id\":null,\"id_\":\"fb704ad9-195d-1036-9e7f-66a91f9ebdd8\",\"menutitle\":null,\"parent_id\":null,\"phone_url\":\"\\/ygoa\\/view\\/zgsq\\/phone_zgsqndjh_list.jsp\",\"search_name\":null,\"state\":null,\"target\":null,\"target_\":null,\"text\":null,\"url_\":\"\\/view\\/zgsq\\/doQueryZgsqndjh.action\"}]]";
     @BindView(R.id.pic_back)
     ImageView picBack;
     @BindView(R.id.edit)
@@ -75,6 +75,7 @@ public class MyApplicationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_application);
         ButterKnife.bind(this);
+        app = (YGApplication) getApplication();
         initUrlPic();
     }
 
@@ -130,28 +131,34 @@ public class MyApplicationActivity extends BaseActivity {
             picToNames.add(new MyApplicationList.PicToName("年度计划", R.mipmap.app_ndjh));
             picToNames.add(new MyApplicationList.PicToName("临时计划", R.mipmap.app_lsjh));
             picToNames.add(new MyApplicationList.PicToName("人员信息台账", R.mipmap.app_ryxxtz));
-            picToNames.add(new MyApplicationList.PicToName("招工申请", R.mipmap.app_zgsq));
+            picToNames.add(new MyApplicationList.PicToName("招工", R.mipmap.app_zgsq));
             picToNames.add(new MyApplicationList.PicToName("驳回明细", R.mipmap.app_bhmx));
             picToNames.add(new MyApplicationList.PicToName("完成进度", R.mipmap.app_wcjd));
             //日常审批
-            picToNames.add(new MyApplicationList.PicToName("轧辊联系单", R.mipmap.app_zh));
+            picToNames.add(new MyApplicationList.PicToName("轧辊", R.mipmap.app_zh));
             picToNames.add(new MyApplicationList.PicToName("新供方审批", R.mipmap.app_xgf));
-            picToNames.add(new MyApplicationList.PicToName("快餐配送确认单", R.mipmap.app_dcps));
-            picToNames.add(new MyApplicationList.PicToName("采购联络单", R.mipmap.app_cgd));
-            picToNames.add(new MyApplicationList.PicToName("工程联系单", R.mipmap.app_gclxd));
-            picToNames.add(new MyApplicationList.PicToName("用车申请", R.mipmap.app_ycsq));
-            picToNames.add(new MyApplicationList.PicToName("信息联络单", R.mipmap.app_xxlld));
-            picToNames.add(new MyApplicationList.PicToName("月度能源考核确认", R.mipmap.app_ndjh));
-            picToNames.add(new MyApplicationList.PicToName("用能申请", R.mipmap.app_ynsq));
-            picToNames.add(new MyApplicationList.PicToName("委托验审联系单", R.mipmap.app_wtys));
-            picToNames.add(new MyApplicationList.PicToName("使用情况证明单", R.mipmap.app_syqk));
+            picToNames.add(new MyApplicationList.PicToName("快餐配送", R.mipmap.app_dcps));
+            picToNames.add(new MyApplicationList.PicToName("采购", R.mipmap.app_cgd));
+            picToNames.add(new MyApplicationList.PicToName("工程", R.mipmap.app_gclxd));
+            picToNames.add(new MyApplicationList.PicToName("用车", R.mipmap.app_ycsq));
+            picToNames.add(new MyApplicationList.PicToName("信息", R.mipmap.app_xxlld));
+            picToNames.add(new MyApplicationList.PicToName("月度能源考核", R.mipmap.app_ydnykh));
+            picToNames.add(new MyApplicationList.PicToName("用能", R.mipmap.app_ynsq));
+            picToNames.add(new MyApplicationList.PicToName("委托验审", R.mipmap.app_wtys));
+            picToNames.add(new MyApplicationList.PicToName("使用情况证明", R.mipmap.app_syqk));
             picToNames.add(new MyApplicationList.PicToName("设备新增", R.mipmap.app_sbxz));
-            picToNames.add(new MyApplicationList.PicToName("办公家具申请单", R.mipmap.app_bgjj));
+            picToNames.add(new MyApplicationList.PicToName("办公家具", R.mipmap.app_bgjj));
             picToNames.add(new MyApplicationList.PicToName("文件评审", R.mipmap.app_wjps));
             //工会审批
-            picToNames.add(new MyApplicationList.PicToName("新婚礼品申请", R.mipmap.app_xhlp));
-            picToNames.add(new MyApplicationList.PicToName("活动经费申请", R.mipmap.app_hdjf));
-            picToNames.add(new MyApplicationList.PicToName("慰问申请", R.mipmap.app_ww));
+            picToNames.add(new MyApplicationList.PicToName("新婚礼品", R.mipmap.app_xhlp));
+            picToNames.add(new MyApplicationList.PicToName("活动经费", R.mipmap.app_hdjf));
+            picToNames.add(new MyApplicationList.PicToName("慰问", R.mipmap.app_ww));
+            //财务
+            picToNames.add(new MyApplicationList.PicToName("汇款汇总单", R.mipmap.app_hksphz));
+            picToNames.add(new MyApplicationList.PicToName("费用报销", R.mipmap.app_fybxd));
+            picToNames.add(new MyApplicationList.PicToName("汇款", R.mipmap.app_hksp));
+            picToNames.add(new MyApplicationList.PicToName("借款", R.mipmap.app_jk));
+            picToNames.add(new MyApplicationList.PicToName("退款", R.mipmap.app_tk));
             SpUtil.writeString("function_name_id", JSON.toJSONString(picToNames));
         }
         if (!TextUtils.isEmpty(SpUtil.readString("commonApp"))) {
@@ -171,12 +178,11 @@ public class MyApplicationActivity extends BaseActivity {
         }
         commonAdapter = new CommonAdapter(commonApplication, MyApplicationActivity.this, commonApp);
         rvCommonApp.setAdapter(commonAdapter);
-        stringToJson(result);
+        //stringToJson(result);
+        getApplicationList();
     }
 
-    private void stringToJson(String result) {
-        List<List<MyApplicationList>> allApplications = JSONArray.parseObject(result, new TypeReference<List<List<MyApplicationList>>>() {
-        });
+    private void stringToJson(List<List<MyApplicationList>> allApplications) {
         for (int i = 0; i < allApplications.size(); i++) {
             for (int j = 0; j < allApplications.get(i).size(); j++) {
                 if (TextUtils.isEmpty(allApplications.get(i).get(j).getPhone_url())) {
@@ -190,6 +196,7 @@ public class MyApplicationActivity extends BaseActivity {
                 allApplication.add(dateBean);
             }
         }
+        KLog.json(JSON.toJSONString(allApplication));
 
         //添加头部及偏移位置
 
@@ -304,19 +311,31 @@ public class MyApplicationActivity extends BaseActivity {
 
 
     private void getApplicationList() {
-        SubscriberOnNextListener2 onNextListener = new SubscriberOnNextListener2<MyApplicationList>() {
-
+        Subscriber subscriber = new Subscriber<List<List<MyApplicationList>>>() {
             @Override
-            public void onNext(MyApplicationList myApplicationList) {
+            public void onCompleted() {
 
             }
 
             @Override
             public void onError(Throwable e) {
-
+                if (e instanceof SocketTimeoutException) {
+                    Toast.makeText(getApplicationContext(), "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
+                } else if (e instanceof UnknownHostException) {
+                    Toast.makeText(getApplicationContext(), "网络中断，请检查您的网络状态", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
+
+            @Override
+            public void onNext(List<List<MyApplicationList>> allApplications) {
+                stringToJson(allApplications);
+            }
+
+
         };
-        HttpUtil.getInstance(MyApplicationActivity.this, false).get_application(new ProgressSubscriber2(onNextListener, MyApplicationActivity.this));
+        HttpUtil.getInstance(MyApplicationActivity.this, false).get_application(subscriber);
     }
 
 
@@ -373,11 +392,14 @@ public class MyApplicationActivity extends BaseActivity {
                     break;
                 case 1:
                     holder.tv_app_name.setText(myApplicationLists.get(position).getFunction_name());
-                    holder.pic_app_name.setImageResource(myApplicationLists.get(position).getPic_id());
+                    int res = myApplicationLists.get(position).getPic_id();
+                    holder.pic_app_name.setImageResource(res);
                     if (isShow) {
                         holder.add_delete.setVisibility(View.VISIBLE);
+                        holder.bg_color.setBackgroundColor(getResources().getColor(R.color.title_color));
                     } else {
                         holder.add_delete.setVisibility(View.GONE);
+                        holder.bg_color.setBackgroundColor(getResources().getColor(R.color.white));
                     }
                     if (getViewStatus(position).get(position)) {
                         holder.add_delete.setImageResource(R.mipmap.app_delete);
@@ -420,7 +442,7 @@ public class MyApplicationActivity extends BaseActivity {
 
                             Intent intent = new Intent(MyApplicationActivity.this, WebViewActivity.class);
                             intent.putExtra("name", myApplicationLists.get(position).getFunction_name());
-                            intent.putExtra("url", HttpUtil.BASE_URL + myApplicationLists.get(position).getPhone_url());
+                            intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code=" + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&url=" + myApplicationLists.get(position).getPhone_url());
                             startActivity(intent);
                         }
                     });
@@ -440,12 +462,14 @@ public class MyApplicationActivity extends BaseActivity {
             ImageView add_delete;
             ImageView pic_app_name;
             TextView tv_app_name;
+            View bg_color;
 
             public ViewHolder(View itemView, int viewType) {
                 super(itemView);
                 if (viewType == 0) {
                     head = itemView.findViewById(R.id.head);
                 } else {
+                    bg_color = itemView.findViewById(R.id.bg_color);
                     add_delete = itemView.findViewById(R.id.pic_add_delete);
                     pic_app_name = itemView.findViewById(R.id.pic_app_name);
                     tv_app_name = itemView.findViewById(R.id.tv_app_name);
@@ -490,8 +514,10 @@ public class MyApplicationActivity extends BaseActivity {
             holder.pic_app_name.setImageResource(myApplicationLists.get(position).getPic_id());
             if (isShow) {
                 holder.add_delete.setVisibility(View.VISIBLE);
+                holder.bg_color.setBackgroundColor(getResources().getColor(R.color.title_color));
             } else {
                 holder.add_delete.setVisibility(View.GONE);
+                holder.bg_color.setBackgroundColor(getResources().getColor(R.color.white));
             }
             holder.add_delete.setImageResource(R.mipmap.app_delete);
             holder.add_delete.setOnClickListener(new View.OnClickListener() {
@@ -533,12 +559,14 @@ public class MyApplicationActivity extends BaseActivity {
             ImageView add_delete;
             ImageView pic_app_name;
             TextView tv_app_name;
+            View bg_color;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 add_delete = itemView.findViewById(R.id.pic_add_delete);
                 pic_app_name = itemView.findViewById(R.id.pic_app_name);
                 tv_app_name = itemView.findViewById(R.id.tv_app_name);
+                bg_color = itemView.findViewById(R.id.bg_color);
             }
         }
     }

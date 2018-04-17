@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.zhy.autolayout.utils.AutoUtils;
 
+import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -57,7 +58,11 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder
                 @Override
                 public void onClick(View v) {
                     int pos = holder.getLayoutPosition();
-                    onItemClickListener.onItemClick(holder.itemView, pos);
+                    try {
+                        onItemClickListener.onItemClick(holder.itemView, pos);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -96,7 +101,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder
      * 点击监听
      */
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(View view, int position) throws FileNotFoundException;
     }
 
     /**

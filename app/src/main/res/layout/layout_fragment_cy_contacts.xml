@@ -10,33 +10,42 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.baoyz.swipemenulistview.SwipeMenuListView
-                android:id="@+id/list_connect"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/dialog"
-                android:layout_width="280px"
-                android:layout_height="280px"
-                android:layout_gravity="center"
-                android:background="@drawable/back_toast"
-                android:gravity="center"
-                android:text="A"
-                android:textColor="@color/white"
-                android:textSize="80px"
-                android:visibility="gone" />
+                <com.baoyz.swipemenulistview.SwipeMenuListView
+                    android:id="@+id/list_connect"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <cn.invonate.ygoa3.Util.pingyin.SideBar
-                android:id="@+id/sidebar"
-                android:layout_width="60px"
-                android:layout_height="match_parent"
-                android:layout_gravity="center|right" />
-        </FrameLayout>
+                <TextView
+                    android:id="@+id/dialog"
+                    android:layout_width="280px"
+                    android:layout_height="280px"
+                    android:layout_gravity="center"
+                    android:background="@drawable/back_toast"
+                    android:gravity="center"
+                    android:text="A"
+                    android:textColor="@color/white"
+                    android:textSize="80px"
+                    android:visibility="gone" />
+
+                <cn.invonate.ygoa3.Util.pingyin.SideBar
+                    android:id="@+id/sidebar"
+                    android:layout_width="60px"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center|right" />
+            </FrameLayout>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
     </LinearLayout>
 
 </LinearLayout>

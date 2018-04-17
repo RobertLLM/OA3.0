@@ -94,6 +94,11 @@ public class MailAdapter extends BaseAdapter {
         holder.mail_time.setText(data.get(position).getSend_date());
         holder.mail_title.setText(data.get(position).getSubject());
         holder.select.setChecked(data.get(position).isIs_selected());
+        if (data.get(position).isContainerAttachment()){
+            holder.img_file.setVisibility(View.VISIBLE);
+        }else{
+            holder.img_file.setVisibility(View.GONE);
+        }
         AutoUtils.autoSize(convertView);
         return convertView;
     }
@@ -109,6 +114,8 @@ public class MailAdapter extends BaseAdapter {
         TextView mail_title;
         @BindView(R.id.select)
         CheckBox select;
+        @BindView(R.id.img_file)
+        ImageView img_file;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

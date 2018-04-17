@@ -73,12 +73,6 @@ public class POP3ReceiveMailTest {
             mail.setSeen(isSeen(msg));
             System.out.println("是否已读：" + mail.isSeen());
 
-            mail.setPriority(getPriority(msg));
-            System.out.println("邮件优先级：" + mail.getPriority());
-
-            mail.setReplay_sign(isReplySign(msg));
-            System.out.println("是否需要回执：" + mail.isReplay_sign());
-
             mail.setSize(msg.getSize());
             System.out.println("邮件大小：" + mail.getSize() * 1024 + "kb");
 
@@ -481,7 +475,7 @@ public class POP3ReceiveMailTest {
             String filename = part.getFileName();
             if (filename != null) {
                 if (filename.indexOf("=?gb18030?") != -1) {
-                    filename = filename.replace("gb18030", "gb2312");
+                    filename = filename.replace("gb18030", "utf-8");
                 }
                 filename = MimeUtility.decodeText(filename);
                 attachments.add(filename);

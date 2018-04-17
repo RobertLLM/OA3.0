@@ -22,10 +22,10 @@ import cn.invonate.ygoa3.WebView.WebViewActivity;
 import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
 import cn.invonate.ygoa3.login.FundActivity;
-import cn.invonate.ygoa3.login.group.GroupActivity;
 import cn.invonate.ygoa3.login.Property.PropertyActivity;
 import cn.invonate.ygoa3.login.SettingActivity;
 import cn.invonate.ygoa3.login.WageActivity;
+import cn.invonate.ygoa3.login.group.GroupActivity;
 
 
 /**

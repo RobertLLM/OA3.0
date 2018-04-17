@@ -18,8 +18,6 @@ public class Mail implements Serializable {
     private ArrayList<String> copy;
     private String send_date;//发送时间
     private boolean seen;//是否已读
-    private String priority;//邮件优先级:1(High):紧急  3:普通(Normal)  5:低(Low)
-    private boolean replay_sign;//是否需要回复
     private int size;//邮件大小
     private boolean isContainerAttachment;//是否有附件
     private ArrayList<FileEntry> files;
@@ -117,22 +115,6 @@ public class Mail implements Serializable {
 
     public void setSeen(boolean seen) {
         this.seen = seen;
-    }
-
-    public String getPriority() {
-        return priority;
-    }
-
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
-
-    public boolean isReplay_sign() {
-        return replay_sign;
-    }
-
-    public void setReplay_sign(boolean replay_sign) {
-        this.replay_sign = replay_sign;
     }
 
     public int getSize() {

@@ -27,7 +27,7 @@ public class HttpUtil {
     //private static final String BASE_URL = "http://192.168.2.1/";
     //public static final String BASE_URL = "http://192.168.3.97:8080";
     // public static final String BASE_URL = "http://192.168.1.6";
-//    public static final String BASE_URL = "http://192.168.202.145:8080";
+//    public static final String BASE_URL = "http://192.168.202.148:8080";
     public static final String BASE_URL = "http://ygoa.yong-gang.cn";
     //public static final String BASE_URL = "http://172.23.134.14:8080";
     public static final String URL_FILE = "http://ygoa.yong-gang.cn/ygoa/upload/";
@@ -478,11 +478,46 @@ public class HttpUtil {
     }
 
     /**
+     * 推送
+     *
      * @param subscriber
      * @param assignee
      */
     public void push(Subscriber subscriber, String str, String assignee) {
         Observable observable = httpService.push(str, assignee);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 获取附件
+     *
+     * @param subscriber
+     * @param url
+     * @param params
+     */
+    public void getFile(Subscriber subscriber, String url, Map<String, String> params) {
+        Observable observable = httpService.getFile(url, params);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 添加常用联系人
+     *
+     * @param subscriber
+     * @param jsonData
+     */
+    public void addToCylxr(Subscriber subscriber, String jsonData) {
+        Observable observable = httpService.addToCylxr(jsonData);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 获取版本号
+     *
+     * @param subscriber
+     */
+    public void getVersion(Subscriber subscriber) {
+        Observable observable = httpService.getVersion();
         toSubscribe(observable, subscriber);
     }
 

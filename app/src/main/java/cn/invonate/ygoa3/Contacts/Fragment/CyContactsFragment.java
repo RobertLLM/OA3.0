@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -60,6 +61,8 @@ public class CyContactsFragment extends Fragment {
     @BindView(R.id.sidebar)
     SideBar sidebar;
     Unbinder unbinder;
+    @BindView(R.id.refresh)
+    SwipeRefreshLayout refresh;
 
     /**
      * 汉字转换成拼音的类
@@ -88,6 +91,13 @@ public class CyContactsFragment extends Fragment {
         filterEdit = head.findViewById(R.id.filter_edit);
         listConnect.addHeaderView(head);
         sidebar.setTextView(dialog);
+
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCyContacts();
+            }
+        });
 
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
@@ -133,6 +143,7 @@ public class CyContactsFragment extends Fragment {
             @Override
             public void onError(Throwable e) {
                 Log.i("error", e.toString());
+                refresh.setRefreshing(false);
             }
 
             @Override
@@ -145,7 +156,6 @@ public class CyContactsFragment extends Fragment {
                 listConnect.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-//                        Toast.makeText(getActivity(), position+"", Toast.LENGTH_SHORT).show();
                         delete_contacts(adapter.getData().get(position).getC_id());
                         return false;
                     }
@@ -192,6 +202,7 @@ public class CyContactsFragment extends Fragment {
 
                     }
                 });
+                refresh.setRefreshing(false);
             }
         };
         HttpUtil.getInstance(getActivity(), false).getCyContacts(subscriber, app.getUser().getSessionId(), 1, 10000);

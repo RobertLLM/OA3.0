@@ -35,7 +35,7 @@ public class TaskCopyActivity extends BaseActivity {
         setContentView(R.layout.activity_task_copy);
         ButterKnife.bind(this);
         app = (YGApplication) getApplication();
-        taskTab.setTexts(new String[]{"已读代办", "未读代办"});
+        taskTab.setTexts(new String[]{"未查阅", "已查阅"});
         initFragment();
         pagerTask.setAdapter(new TaskPagerAdapter(getSupportFragmentManager()));
         taskTab.setOnSegmentChangedListener(new SegmentControlView.OnSegmentChangedListener() {

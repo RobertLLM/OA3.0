@@ -1,23 +1,33 @@
 package cn.invonate.ygoa3.WebView;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
-import android.webkit.JsPromptResult;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
+import com.tencent.smtt.export.external.interfaces.JsPromptResult;
+import com.tencent.smtt.export.external.interfaces.JsResult;
+import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.DownloadListener;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -51,23 +61,44 @@ public class WebViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
         ButterKnife.bind(this);
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
         url = getIntent().getStringExtra("url");
         name.setText(getIntent().getStringExtra("name"));
-        initWebView(webView);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 0);
+        } else {
+            initWebView(webView);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            initWebView(webView);
+        }
     }
 
     private void initWebView(final WebView webView) {
+        IX5WebViewExtension i5 = webView.getX5WebViewExtension();
+        Log.i("i5", i5 == null ? "null" : i5.toString());
         WebSettings webSettings = webView.getSettings();
         webSettings.setSavePassword(false);
         webSettings.setSaveFormData(false);
-        webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(true);
-        webView.loadUrl(url);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);//支持js调用window.open方法
+        webSettings.setAllowFileAccess(true);// 设置允许访问文件数据
+        webSettings.setSupportMultipleWindows(true);// 设置允许开启多窗口
+        webSettings.setDomStorageEnabled(true);//
+        webSettings.setJavaScriptEnabled(true);// 设置支持javascript
         webView.setWebViewClient(new YgWebViewClient());
+        webView.setDownloadListener(new MyWebViewDownLoadListener());
         webView.setWebChromeClient(new WebChromeClient() {
 
             @Override
             public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+                Log.i("onCreateWindow", "onCreateWindow");
                 newWebView = new WebView(WebViewActivity.this);//新创建一个webview
                 initWebView(newWebView);//初始化webview
                 container.addView(newWebView);//把webview加载到activity界面上
@@ -142,6 +173,7 @@ public class WebViewActivity extends BaseActivity {
                 return true;
             }
         });
+        webView.loadUrl(url);
     }
 
     // Web视图
@@ -175,7 +207,6 @@ public class WebViewActivity extends BaseActivity {
     protected void onDestroy() {
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().startSync();
-        CookieManager.getInstance().removeSessionCookie();
         webView.clearCache(true);
         webView.clearHistory();
         webView.loadUrl("about:blank");
@@ -237,5 +268,21 @@ public class WebViewActivity extends BaseActivity {
 
         return map;
     }
+
+    private class MyWebViewDownLoadListener implements DownloadListener {
+
+        @Override
+        public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+            Log.i("tag", "url=" + url);
+            Log.i("tag", "userAgent=" + userAgent);
+            Log.i("tag", "contentDisposition=" + contentDisposition);
+            Log.i("tag", "mimetype=" + mimetype);
+            Log.i("tag", "contentLength=" + contentLength);
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        }
+    }
+
 
 }

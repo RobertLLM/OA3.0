@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -31,6 +30,7 @@ import com.alibaba.fastjson.JSON;
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 import com.yonggang.liyangyang.lazyviewpagerlibrary.LazyFragmentPagerAdapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +47,11 @@ import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
 import cn.invonate.ygoa3.httpUtil.ProgressSubscriber;
 import cn.invonate.ygoa3.httpUtil.SubscriberOnNextListener;
+import cn.invonate.ygoa3.main.BasePicActivity;
+import cn.invonate.ygoa3.main.FileWebActivity;
+import drawthink.expandablerecyclerview.adapter.BaseRecyclerViewAdapter;
+import drawthink.expandablerecyclerview.bean.RecyclerViewData;
+import drawthink.expandablerecyclerview.holder.BaseViewHolder;
 
 /**
  * Created by liyangyang on 2018/1/15.
@@ -61,7 +66,15 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
     private YGApplication app;
 
     private static String img[] = {"bmp", "jpg", "jpeg", "png", "tiff", "gif", "pcx", "tga", "exif", "fpx", "svg", "psd",
-            "cdr", "pcd", "dxf", "ufo", "eps", "ai", "raw", "wmf"};
+            "cdr", "pcd", "dxf", "ufo", "eps", "ai", "raw", "wmf",
+            "BMP", "JPG", "JPEG", "PNG", "TIFF", "GIF", "PCX", "TGA", "EXIF", "FPX", "SVG", "PSD",
+            "CDR", "PCD", "DXF", "UFO", "EPS", "AI", "RAW", "WMF"};
+    private static String windows[] = {
+            "doc", "xls", "ppt",
+            "docx", "xls", "pptx",
+            "DOC", "XLS", "PPT",
+            "DOCX", "XLSX", "PPTX",
+    };
 
     private List<TaskDetail.Input> inputs;
 
@@ -120,6 +133,8 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
         public static final int FILE = 7;
         public static final int FOUR_SINGLE = 8;
         public static final int PICKER = 9;
+        public static final int ALERT = 10;
+        public static final int NULL = 11;
 
         private List<TaskDetail.Input> data;
         private LayoutInflater inflater;
@@ -150,8 +165,12 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                     return new ViewHolder(inflater.inflate(R.layout.item_detail_file, parent, false));
                 case PICKER:
                     return new ViewHolder(inflater.inflate(R.layout.item_detail_picker, parent, false));
+                case ALERT:
+                    return new ViewHolder(inflater.inflate(R.layout.item_detail_alert, parent, false));
+                case NULL:
+                    return new ViewHolder(inflater.inflate(R.layout.item_detail_alert, parent, false));
             }
-            return null;
+            return new ViewHolder(inflater.inflate(R.layout.item_detail_alert, parent, false));
         }
 
         @Override
@@ -222,21 +241,12 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                     }
                     Log.i("values", JSON.toJSONString(values));
                     holder.label.setText(data.get(position).getLabel());
-                    holder.list_accordion.setAdapter(new AccordionAdapter(values, inflater));
-                    setListViewHeightBasedOnChildren(holder.list_accordion);
-                    holder.list_accordion.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-                        @Override
-                        public void onGroupExpand(int groupPosition) {
-                            setListViewHeightBasedOnChildren(holder.list_accordion);
-                        }
-                    });
-                    holder.list_accordion.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-                        @Override
-                        public void onGroupCollapse(int groupPosition) {
-                            setListViewHeightBasedOnChildren(holder.list_accordion);
-                        }
-                    });
-
+                    List<RecyclerViewData> list_data = new ArrayList<>();
+                    for (TaskDetail.Accordion ac : values) {
+                        list_data.add(new RecyclerViewData(ac, ac.getMaps(), true));
+                    }
+                    holder.list_accordion.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    holder.list_accordion.setAdapter(new AccordionAdapter(getActivity(), list_data));
                     break;
                 case FOUR_SINGLE:
                     List<String> value = JSON.parseArray(data.get(position).getValue(), String.class);
@@ -289,16 +299,118 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                     }
                     break;
                 case FILE:
-                    holder.name.setText(data.get(position).getLabel());
+                    if (data.get(position).getLabel() != null) {
+                        holder.label.setText(data.get(position).getLabel());
+                        holder.label.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.label.setVisibility(View.GONE);
+                    }
+                    holder.name.setText(data.get(position).getName());
                     holder.size.setText(data.get(position).getSize());
-                    holder.layout_file.setOnClickListener(new View.OnClickListener() {
+
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (is_img(data.get(position).getLabel())) {
-                            } else {
+
+                            Intent intent = null;
+                            Bundle bundle = new Bundle();
+                            String url = "";
+                            switch (data.get(position).getType()) {
+                                case "fujian"://
+                                case "wjpsfujian"://
+                                case "attachment"://
+                                    if (is_img(data.get(position).getName())) {
+                                        ArrayList<String> pic = new ArrayList<>();
+                                        pic.add(HttpUtil.URL_FILE + data.get(position).getUrl());
+                                        Log.i("file_pic", HttpUtil.URL_FILE + data.get(position).getUrl());
+                                        intent = new Intent(getActivity(), BasePicActivity.class);
+                                        bundle.putStringArrayList("imgs", pic);
+                                        bundle.putInt("index", 0);
+                                    } else {
+                                        intent = new Intent(getActivity(), FileWebActivity.class);
+                                        bundle.putString("url", HttpUtil.URL_FILE + data.get(position).getUrl());
+                                    }
+                                    break;
+                                case "ifbreport":
+                                    intent = new Intent(getActivity(), FileWebActivity.class);
+                                    url = HttpUtil.BASE_URL + "/ygoa/DownloadAttachmentOther?url="
+                                            + data.get(position).getPk()
+                                            + "&system_lb=5"
+                                            + "&wdlx=" + data.get(position).getWdlx();
+                                    bundle.putString("url", url);
+                                    break;
+                                case "ifbdownload":
+                                    intent = new Intent(getActivity(), FileWebActivity.class);
+                                    url = HttpUtil.BASE_URL + "/ygoa/DownloadAttachmentOther?url="
+                                            + data.get(position).getPk()
+                                            + "&system_lb=6"
+                                            + "&wdlx=" + data.get(position).getWdlx();
+                                    bundle.putString("url", url);
+                                    break;
+                                case "ifbdownloadFromDisk":
+                                    intent = new Intent(getActivity(), FileWebActivity.class);
+                                    url = HttpUtil.BASE_URL + "/ygoa/DownloadAttachmentOther?url="
+                                            + data.get(position).getPk()
+                                            + "&system_lb=7"
+                                            + "&wdlx=" + data.get(position).getWdlx();
+                                    bundle.putString("url", url);
+                                    break;
+                                case "jzcwdownload":
+                                    intent = new Intent(getActivity(), FileWebActivity.class);
+                                    url = HttpUtil.BASE_URL + "/ygoa/DownloadAttachmentOther?url="
+                                            + data.get(position).getPk()
+                                            + "&system_lb=8"
+                                            + "&wdlx=" + data.get(position).getWdlx();
+                                    bundle.putString("url", url);
+                                    break;
+                                case "cwcwdownload":
+                                    intent = new Intent(getActivity(), FileWebActivity.class);
+                                    url = HttpUtil.BASE_URL + "/ygoa/DownloadAttachmentOther?url="
+                                            + data.get(position).getPk()
+                                            + "&system_lb=0"
+                                            + "&wdlx=" + data.get(position).getWdlx();
+                                    bundle.putString("url", url);
+                                    break;
+                                case "sbazgsdownload":
+                                    intent = new Intent(getActivity(), FileWebActivity.class);
+                                    url = HttpUtil.BASE_URL + "/ygoa/DownloadAttachmentOther?url="
+                                            + data.get(position).getPk()
+                                            + "&system_lb="
+                                            + "&wdlx=" + data.get(position).getWdlx();
+                                    bundle.putString("url", url);
+                                    break;
+                                case "ifbdownloadHtDisk":
+                                    intent = new Intent(getActivity(), FileWebActivity.class);
+                                    url = HttpUtil.BASE_URL + "/ygoa/DownloadAttachmentOther?url="
+                                            + data.get(position).getPk()
+                                            + "&system_lb="
+                                            + "&wdlx=" + data.get(position).getWdlx();
+                                    bundle.putString("url", url);
+                                    break;
+                                case "download":
+                                    intent = new Intent(getActivity(), FileWebActivity.class);
+                                    url = HttpUtil.BASE_URL + "/ygoa/DownloadAttachmentOther?url="
+                                            + data.get(position).getPk()
+                                            + "&system_lb=10"
+                                            + "&wdlx=" + data.get(position).getWdlx();
+                                    bundle.putString("url", url);
+                                    break;
+                                case "ygsbDownload":
+                                    intent = new Intent(getActivity(), FileWebActivity.class);
+                                    url = HttpUtil.BASE_URL + "/ygoa/DownloadAttachmentOther?url="
+                                            + data.get(position).getPk()
+                                            + "&system_lb=4"
+                                            + "&wdlx=" + data.get(position).getWdlx();
+                                    bundle.putString("url", url);
+                                    break;
+                            }
+                            if (intent != null) {
+                                intent.putExtras(bundle);
+                                startActivity(intent);
                             }
                         }
                     });
+                    break;
                 case PICKER:
                     holder.label.setText(data.get(position).getLabel());
                     holder.add.setOnClickListener(new View.OnClickListener() {
@@ -322,6 +434,16 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                         holder.text_picker.setText(s);
                     }
                     break;
+                case ALERT:
+                    AlertDialog dialog = new AlertDialog(getActivity()).builder();
+                    dialog.setMsg(data.get(position).getLabel())
+                            .setPositiveButton("确定", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                }
+                            }).show();
+                    break;
             }
         }
 
@@ -332,12 +454,27 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
          * @return
          */
         private boolean is_img(String name) {
-            String[] names = name.split(".");
-            if (names.length > 1) {
+            if (name.contains(".")) {
+                String type = name.substring(name.lastIndexOf(".") + 1, name.length());
                 for (String img : img) {
-                    if (names[1].equals(img)) {
+                    if (type.equals(img)) {
                         return true;
                     }
+                }
+            }
+            return false;
+        }
+
+        /**
+         * 判断后缀是否为windows
+         *
+         * @param name
+         * @return
+         */
+        private boolean is_windows(String name) {
+            for (String window : windows) {
+                if (name.contains(window)) {
+                    return true;
                 }
             }
             return false;
@@ -350,7 +487,15 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
 
         @Override
         public int getItemViewType(int position) {
-            switch (data.get(position).getType()) {
+            TaskDetail.Input input = data.get(position);
+            if (input == null) {
+                return NULL;
+            }
+            String type = input.getType();
+            if (type == null) {
+                return NULL;
+            }
+            switch (type) {
                 case "label":
                     return LABEL;
                 case "text":
@@ -363,6 +508,10 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                     return SELECT;
                 case "accordion":
                     return ACCORDION;
+                case "accordion2":
+                    return ACCORDION;
+                case "accordion3":
+                    return ACCORDION;
                 case "fourSingle":
                     return FOUR_SINGLE;
                 case "picker":
@@ -370,6 +519,8 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                 //附件
                 case "fujian"://
                 case "wjpsfujian"://
+                case "download":
+                case "ygsbDownload":
                 case "ifbreport":
                 case "ifbdownload":
                 case "ifbdownloadFromDisk":
@@ -379,8 +530,11 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                 case "ifbdownloadHtDisk":
                 case "attachment"://
                     return FILE;
+                case "alert":
+                    return ALERT;
+                default:
+                    return NULL;
             }
-            return super.getItemViewType(position);
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -415,7 +569,7 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
              */
             @Nullable
             @BindView(R.id.list_accordion)
-            ExpandableListView list_accordion;
+            RecyclerView list_accordion;
 
             /**
              * foursingle
@@ -466,74 +620,43 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
             }
         }
 
-        class AccordionAdapter extends BaseExpandableListAdapter {
+        class AccordionAdapter extends BaseRecyclerViewAdapter<TaskDetail.Accordion, TaskDetail.Accordion.MapEntry, AccordionAdapter.AccordionHolder> {
 
-            private List<TaskDetail.Accordion> data;
-            private LayoutInflater inflater;
+            private LayoutInflater mInflater;
 
-            public AccordionAdapter(List<TaskDetail.Accordion> data, LayoutInflater inflater) {
-                this.data = data;
-                this.inflater = inflater;
+            public AccordionAdapter(Context ctx, List<RecyclerViewData> datas) {
+                super(ctx, datas);
+                this.mInflater = LayoutInflater.from(ctx);
             }
 
             @Override
-
-            public int getGroupCount() {
-                return data.size();
+            public View getGroupView(ViewGroup parent) {
+                return mInflater.inflate(R.layout.item_detail_accordion_group, parent, false);
             }
 
             @Override
-            public int getChildrenCount(int groupPosition) {
-                return data.get(groupPosition).getMaps().size();
+            public View getChildView(ViewGroup parent) {
+                return mInflater.inflate(R.layout.item_detail_accordion_child, parent, false);
             }
 
             @Override
-            public Object getGroup(int groupPosition) {
-                return data.get(groupPosition);
+            public AccordionHolder createRealViewHolder(Context ctx, View view, int viewType) {
+                return new AccordionHolder(ctx, view, viewType);
             }
 
             @Override
-            public Object getChild(int groupPosition, int childPosition) {
-                return data.get(groupPosition);
-            }
-
-            @Override
-            public long getGroupId(int groupPosition) {
-                return groupPosition;
-            }
-
-            @Override
-            public long getChildId(int groupPosition, int childPosition) {
-                return childPosition;
-            }
-
-            @Override
-            public boolean hasStableIds() {
-                return false;
-            }
-
-            @Override
-            public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-                if (convertView == null) {
-                    convertView = inflater.inflate(R.layout.item_detail_accordion_group, null);
-                }
-                convertView.setTag(R.layout.item_detail_accordion_group, groupPosition);
-                convertView.setTag(R.layout.item_detail_accordion_child, -1);
-                final TextView value = convertView.findViewById(R.id.value);
-                Button btn = convertView.findViewById(R.id.btn);
-                btn.setFocusable(false);
-                btn.setClickable(true);
-                if (data.get(groupPosition).getDelurl() == null) {
-                    btn.setVisibility(View.GONE);
+            public void onBindGroupHolder(AccordionHolder holder, int groupPos, int position, final TaskDetail.Accordion groupData) {
+                if (groupData.getDelurl() == null) {
+                    holder.btn.setVisibility(View.GONE);
                 } else {
-                    btn.setVisibility(View.VISIBLE);
+                    holder.btn.setVisibility(View.VISIBLE);
                 }
-                btn.setText(data.get(groupPosition).getDeltext());
-                value.setText(data.get(groupPosition).getHeader());
-                btn.setOnClickListener(new View.OnClickListener() {
+                holder.btn.setText(groupData.getDeltext());
+                holder.value.setText(groupData.getHeader());
+                holder.btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String url = data.get(groupPosition).getDelurl();
+                        String url = groupData.getDelurl();
                         if (url.contains("comment=")) {
                             AlertDialog dialog = new AlertDialog(getActivity()).builder();
                             View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_input_message, null);
@@ -549,7 +672,7 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                                 @Override
                                 public void onClick(View v) {
                                     if (input.getText().toString().length() != 0) {
-                                        singlePost(data.get(groupPosition).getDelurl() + input.getText().toString());
+                                        singlePost(groupData.getDelurl() + input.getText().toString());
                                     }
                                 }
                             }).show();
@@ -558,33 +681,48 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                         }
                     }
                 });
-                return convertView;
             }
 
             @Override
-            public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-                if (convertView == null) {
-                    convertView = inflater.inflate(R.layout.item_detail_accordion_child, null);
-                }
-                convertView.setTag(R.layout.item_detail_accordion_group, groupPosition);
-                convertView.setTag(R.layout.item_detail_accordion_child, childPosition);
-                TextView key = convertView.findViewById(R.id.key);
-                TextView value = convertView.findViewById(R.id.value);
-                key.setText(data.get(groupPosition).getMaps().get(childPosition).getKey());
-                value.setText(data.get(groupPosition).getMaps().get(childPosition).getValue());
-                if (childPosition % 2 == 0) {
-                    key.setBackgroundColor(Color.parseColor("#f6fbff"));
-                    value.setBackgroundColor(Color.parseColor("#f6fbff"));
+            public void onBindChildpHolder(AccordionHolder holder, int groupPos, int childPos, int position, TaskDetail.Accordion.MapEntry childData) {
+                holder.key.setText(childData.getKey());
+                holder.value.setText(childData.getValue());
+                if (childPos % 2 == 0) {
+                    holder.key.setBackgroundColor(Color.parseColor("#f6fbff"));
+                    holder.value.setBackgroundColor(Color.parseColor("#f6fbff"));
                 } else {
-                    key.setBackgroundColor(Color.parseColor("#ffffff"));
-                    value.setBackgroundColor(Color.parseColor("#ffffff"));
+                    holder.key.setBackgroundColor(Color.parseColor("#ffffff"));
+                    holder.value.setBackgroundColor(Color.parseColor("#ffffff"));
                 }
-                return convertView;
+            }
+
+            class AccordionHolder extends BaseViewHolder {
+
+                private TextView key;
+                private TextView value;
+                private Button btn;
+
+                public AccordionHolder(Context ctx, View itemView, int viewType) {
+                    super(ctx, itemView, viewType);
+                    key = itemView.findViewById(R.id.key);
+                    value = itemView.findViewById(R.id.value);
+                    btn = itemView.findViewById(R.id.btn);
+                }
+
+                @Override
+                public int getChildViewResId() {
+                    return R.id.child;
+                }
+
+                @Override
+                public int getGroupViewResId() {
+                    return R.id.group;
+                }
             }
 
             @Override
-            public boolean isChildSelectable(int groupPosition, int childPosition) {
-                return false;
+            public boolean canExpandAll() {
+                return true;
             }
         }
 
@@ -602,8 +740,6 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
             }
             ViewGroup.LayoutParams params = listView.getLayoutParams();
             params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-            //listView.getDividerHeight()获取子项间分隔符占用的高度
-            //params.height最后得到整个ListView完整显示需要的高度
             listView.setLayoutParams(params);
         }
 
@@ -730,11 +866,7 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i("SelectDepartment", requestCode + "------" + resultCode);
         if (data != null) {
-            if (resultCode == 0x888) {
-                int index = data.getExtras().getInt("index");
-                inputs.get(index).setPickValue((List<Contacts>) data.getExtras().getSerializable("list"));
-                adapter.notifyDataSetChanged();
-            }
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -763,7 +895,6 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
         Map<String, String> params = new HashMap<>();
         Log.i("getMessage", JSON.toJSONString(inputs));
         for (TaskDetail.Input i : inputs) {
-
             switch (i.getType()) {
                 case "text":
                     if (i.isRequired() && i.getValue() == null) {
@@ -794,20 +925,18 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                     params.put(i.getName(), i.getValue());
                     break;
                 case "picker":
-                    if (i.isRequired() && i.getPickValue() == null) {
-                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
                     String s = "";
                     List<Contacts> list_contacts = i.getPickValue();
-                    for (Contacts c : list_contacts) {
-                        s = s + c.getUser_code() + ",";
+                    if (list_contacts != null) {
+                        for (Contacts c : list_contacts) {
+                            s = s + c.getUser_code() + ",";
+                        }
+                        params.put(i.getName(), s);
                     }
-                    params.put(i.getName(), s);
+
             }
         }
         return params;
     }
-
 
 }

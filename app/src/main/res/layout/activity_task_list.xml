@@ -18,16 +18,16 @@
             android:layout_width="120px"
             android:layout_height="120px"
             android:padding="30px"
-            android:src="@mipmap/pic_back"/>
+            android:src="@mipmap/pic_back" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="我的待办"
             android:paddingEnd="120px"
             android:singleLine="true"
+            android:text="我的待办"
             android:textColor="@color/black"
             android:textSize="50px" />
 
@@ -38,10 +38,26 @@
         android:layout_height="1px"
         android:background="#E1E1E1" />
 
-    <cn.invonate.ygoa3.View.LYYPullToRefreshListView
-        android:id="@+id/list_task"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ExpandableListView
+                android:id="@+id/list_task"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:divider="#E1E1E1"
+                android:dividerHeight="1dp"/>
+
+        </LinearLayout>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 
 </LinearLayout>

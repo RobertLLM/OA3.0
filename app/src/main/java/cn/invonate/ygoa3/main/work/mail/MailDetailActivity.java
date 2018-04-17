@@ -4,25 +4,30 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sun.mail.imap.protocol.FLAGS;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.yonggang.liyangyang.ios_dialog.widget.ActionSheetDialog;
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -46,6 +51,7 @@ import cn.invonate.ygoa3.Util.MailHolder;
 import cn.invonate.ygoa3.Util.POP3ReceiveMailTest;
 import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.main.BytePicActivity;
+import cn.invonate.ygoa3.main.LocalViewActivity;
 
 public class MailDetailActivity extends BaseActivity {
 
@@ -144,10 +150,10 @@ public class MailDetailActivity extends BaseActivity {
             webSettings.setTextSize(WebSettings.TextSize.LARGER);
         } else if (mDensity == 160) {
             webSettings.setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-            webSettings.setTextSize(WebSettings.TextSize.NORMAL);
+            webSettings.setTextSize(WebSettings.TextSize.LARGER);
         } else if (mDensity == 120) {
             webSettings.setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
-            webSettings.setTextSize(WebSettings.TextSize.SMALLER);
+            webSettings.setTextSize(WebSettings.TextSize.NORMAL);
         } else if (mDensity == DisplayMetrics.DENSITY_XHIGH) {
             webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
             webSettings.setTextSize(WebSettings.TextSize.LARGER);
@@ -332,7 +338,7 @@ public class MailDetailActivity extends BaseActivity {
         initWebView(webContent);
         webContent.setWebViewClient(new YgWebViewClient());
         Mail mail = MailHolder.mail_model.get(index);
-        ArrayList<FileEntry> files = new ArrayList<>();
+        final ArrayList<FileEntry> files = new ArrayList<>();
         scContent.scrollTo(0, 0);
         txtSubject.setText("主题：" + mail.getSubject());
         txtFrom.setText("发件人：" + mail.getPersonal());
@@ -341,7 +347,6 @@ public class MailDetailActivity extends BaseActivity {
         webContent.loadDataWithBaseURL(null, mail.getContent(), "text/html", "utf-8", null);
         webContent.setWebChromeClient(new WebChromeClient());
         get_single_mail(MailHolder.mails.get(position));
-        //Log.i("附件数量", mail.getAttachments().size() + "");
         for (int i = 0; i < mail.getAttachments().size(); i++) {
             FileEntry entry = IOToFile(mail.getAttachments().get(i), mail.getAttachmentsInputStreams().get(i), mail.getFile_size().get(i));
             Log.i("附件内容", entry.toString());
@@ -352,19 +357,35 @@ public class MailDetailActivity extends BaseActivity {
         adapter.setOnItemClickListener(new FileAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                Bundle bundle = new Bundle();
                 if (adapter.getItemViewType(position) == FileAdapter.TYPE_IMG) {
-                    Bundle bundle = new Bundle();
                     bundle.putInt("index", index);
                     bundle.putInt("position", position);
                     stepActivity(bundle, BytePicActivity.class);
                 } else {
-
+                    String name = files.get(position).getName();
+//                    File file = MyUtils.getCacheFile(name, MailDetailActivity.this);
+                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), name);
+                    if (file.exists()) {
+                        bundle.putString("path", name);
+                        stepActivity(bundle, LocalViewActivity.class);
+                    } else {
+                        OutputStream output = null;
+                        try {
+                            output = new FileOutputStream(file);
+                            BufferedOutputStream bufferedOutput = new BufferedOutputStream(output);
+                            bufferedOutput.write(files.get(position).getIs());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        bundle.putString("path", name);
+                        stepActivity(bundle, LocalViewActivity.class);
+                    }
                 }
 
             }
         });
         listFiles.setAdapter(adapter);
-
     }
 
     private FileEntry IOToFile(String name, byte[] is, int size) {

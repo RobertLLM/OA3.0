@@ -39,12 +39,19 @@
 
             <TextView
                 android:id="@+id/mail_sender"
-                android:layout_width="480px"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="发件人：赵日阳"
                 android:textColor="@color/black"
                 android:textSize="45px" />
+
+            <ImageView
+                android:id="@+id/img_file"
+                android:layout_width="40px"
+                android:layout_height="40px"
+                android:layout_marginTop="6px"
+                android:src="@mipmap/file" />
 
             <TextView
                 android:id="@+id/mail_time"

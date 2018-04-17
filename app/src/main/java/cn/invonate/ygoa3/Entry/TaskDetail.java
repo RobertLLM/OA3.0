@@ -14,6 +14,7 @@ import java.util.Map;
 public class TaskDetail {
     private String title;
     private int success;
+    private String msg;
     private ArrayList<Input> inputs;
     private List<Button> buttons;
 
@@ -49,6 +50,14 @@ public class TaskDetail {
         this.buttons = buttons;
     }
 
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     @Override
     public String toString() {
         return JSON.toJSONString(this);
@@ -72,6 +81,9 @@ public class TaskDetail {
         private String url;
         private List<Contacts> pickValue;
         private int limitCount;
+        private String wdlx;
+        private String pk;
+        private boolean is_fake;
 
         public Input() {
 
@@ -219,6 +231,30 @@ public class TaskDetail {
 
         public void setLimitCount(int limitCount) {
             this.limitCount = limitCount;
+        }
+
+        public String getWdlx() {
+            return wdlx;
+        }
+
+        public void setWdlx(String wdlx) {
+            this.wdlx = wdlx;
+        }
+
+        public String getPk() {
+            return pk;
+        }
+
+        public void setPk(String pk) {
+            this.pk = pk;
+        }
+
+        public boolean isIs_fake() {
+            return is_fake;
+        }
+
+        public void setIs_fake(boolean is_fake) {
+            this.is_fake = is_fake;
         }
     }
 

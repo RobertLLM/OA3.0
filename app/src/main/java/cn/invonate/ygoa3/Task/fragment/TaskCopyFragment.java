@@ -89,7 +89,6 @@ public class TaskCopyFragment extends Fragment {
                             startActivity(intent);
                         }
                     });
-
                     listTask.onRefreshComplete();
                 } else {
                     Toast.makeText(getActivity(), "获取失败，请重新登录", Toast.LENGTH_SHORT).show();

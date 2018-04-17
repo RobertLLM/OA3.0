@@ -107,13 +107,14 @@ public class SearchContactsActivity extends BaseActivity {
                     @Override
                     public void onItemClick(int position) {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("contacts", data.getRows().get(position));
+                        bundle.putSerializable("contacts", adapter.getData().get(position));
+                        bundle.putBoolean("show_layout", true);
                         stepActivity(bundle, ContactsDetailActivity.class);
                     }
                 });
             }
         };
-        HttpUtil.getInstance(this,false).getMembers(subscriber, keyword, page, 20);
+        HttpUtil.getInstance(this, false).getMembers(subscriber, keyword, page, 20);
     }
 
     @OnClick(R.id.pic_back)

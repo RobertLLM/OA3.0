@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,6 @@ import java.io.FileOutputStream;
 
 import cn.invonate.ygoa3.PhotoView.PhotoViewAttacher;
 import cn.invonate.ygoa3.R;
-import cn.invonate.ygoa3.httpUtil.HttpUtil;
 
 /**
  * Created by liyangyang on 2018/3/15.
@@ -51,7 +51,7 @@ public class ImageDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mImageUrl = getArguments() != null ? getArguments().getString("url") : null;
-
+        Log.i("mImageUrl", mImageUrl);
     }
 
     @Override
@@ -77,10 +77,9 @@ public class ImageDetailFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Glide.with(ImageDetailFragment.this)
-                .load(HttpUtil.URL_FILE + mImageUrl)
-                //.asBitmap()
-                //.error(R.mipmap.pic_loading_error)
-
+                .load(mImageUrl)
+//                .asBitmap()
+//                .error(R.mipmap.pic_loading_error)
                 .into(new GlideDrawableImageViewTarget(mImageView) {
                     @Override
                     public void onResourceReady(final GlideDrawable drawable, GlideAnimation anim) {
