@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -20,7 +21,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -44,6 +44,7 @@ import cn.invonate.ygoa3.Permission.PermissionsActivity;
 import cn.invonate.ygoa3.Permission.PermissionsChecker;
 import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.Util.DownLoadRunnable;
+import cn.invonate.ygoa3.Util.MyProvide;
 import cn.invonate.ygoa3.Util.MyUtils;
 import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
@@ -316,12 +317,12 @@ public class MainActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             haveInstallPermission = getPackageManager().canRequestPackageInstalls();
             if (haveInstallPermission) {//有权限
-                install(this);
+                install();
             } else { // 没有权限
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.REQUEST_INSTALL_PACKAGES}, 10010);
             }
         } else {
-            install(this);
+            install();
         }
     }
 
@@ -332,7 +333,7 @@ public class MainActivity extends BaseActivity {
         switch (requestCode) {
             case 10010:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    install(this);
+                    install();
                 } else {
                     startInstallPermissionSettingActivity();
                 }
@@ -348,26 +349,26 @@ public class MainActivity extends BaseActivity {
         startActivityForResult(intent, 26);
     }
 
-    public void install(Context context) {
-        Log.i("install", "start");
-        File file = MyUtils.getCacheFile(MyUtils.APP_NAME, context);
+    public void install() {
+        File file = new File(Environment.getExternalStorageDirectory() + "/" + "/" + MyUtils.PACKAGE_NAME + "/" + MyUtils.APP_NAME);
         if (file == null || !file.exists()) {
             return;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri data;
-        // 判断版本大于等于7.0
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            data = FileProvider.getUriForFile(context, "cn.invonate.ygoa3.fileprovider", file);
-            // 给目标应用一个临时授权
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        } else {
-            data = Uri.fromFile(file);
-        }
         // 在Boradcast中启动活动需要添加Intent.FLAG_ACTIVITY_NEW_TASK
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setDataAndType(data, "application/vnd.android.package-archive");
-        context.startActivity(intent);
+
+        // 判断版本大于等于7.0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Uri data = MyProvide.getUriForFile(this, "cn.invonate.ygoa3.fileprovider", file);
+            // 给目标应用一个临时授权
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(data, "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.fromFile(file),
+                    "application/vnd.android.package-archive");
+        }
+        startActivity(intent);
         Log.i("install", "finish");
     }
 

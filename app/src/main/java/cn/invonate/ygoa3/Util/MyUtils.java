@@ -7,10 +7,14 @@ import android.view.WindowManager;
 
 import java.io.File;
 
+import cn.invonate.ygoa3.YGApplication;
+
 
 public class MyUtils {
 
-    public static final String APP_NAME="download/oa.apk";//名字
+    public static final String APP_NAME = "oa.apk";//名字
+
+    public static final String PACKAGE_NAME = YGApplication.getContext().getPackageName();
 
     /**
      * 获得存储文件
@@ -19,21 +23,22 @@ public class MyUtils {
      * @param
      * @return
      */
-    public static File getCacheFile(String name,Context context) {
-        String cachePath;
-        if (Environment.MEDIA_MOUNTED.equals(Environment
-                .getExternalStorageState())
-                || !Environment.isExternalStorageRemovable()) {
-
-            cachePath = context.getExternalCacheDir().getPath();
-        } else {
-            cachePath = context.getCacheDir().getPath();
-        }
-        return new File(cachePath + File.separator + name);
+    public static File getCacheFile(String name, Context context) {
+//        String cachePath;
+//        if (Environment.MEDIA_MOUNTED.equals(Environment
+//                .getExternalStorageState())
+//                || !Environment.isExternalStorageRemovable()) {
+//
+//            cachePath = context.getExternalCacheDir().getPath();
+//        } else {
+//            cachePath = context.getCacheDir().getPath();
+//        }
+        return new File(Environment.getExternalStorageDirectory() + "/" + MyUtils.PACKAGE_NAME + "/" + MyUtils.APP_NAME);
     }
 
     /**
      * 获取手机大小，px
+     *
      * @param context
      * @return
      */

@@ -156,7 +156,8 @@ public interface HttpService {
     @FormUrlEncoded
     Observable<Lomo> getLomoList(
             @Field("page") int page,
-            @Field("rows") int rows
+            @Field("rows") int rows,
+            @Field("user_id") String user_id
     );
 
     // 个人资产

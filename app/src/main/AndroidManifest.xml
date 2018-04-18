@@ -175,8 +175,7 @@
             android:name=".Util.MyProvide"
             android:authorities="cn.invonate.ygoa3.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true"
-            tools:replace="android:authorities">
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
@@ -293,7 +292,8 @@
         <activity android:name=".main.work.mail.ContactsListActivity" />
         <activity android:name=".main.FileWebActivity" />
         <activity android:name=".Permission.PermissionsActivity" />
-        <activity android:name=".main.LocalViewActivity"></activity>
+        <activity android:name=".main.LocalViewActivity" />
+        <activity android:name=".login.AboutUsActivity"></activity>
     </application>
 
 </manifest>

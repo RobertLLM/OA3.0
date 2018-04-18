@@ -121,7 +121,7 @@ public class PicFragment extends Fragment {
                 }
             }
         };
-        HttpUtil.getInstance(getActivity(), false).getLomoList(subscriber, page, 20);
+        HttpUtil.getInstance(getActivity(), false).getLomoList(subscriber, page, 20, app.getUser().getUser_id());
     }
 
 
@@ -403,13 +403,19 @@ public class PicFragment extends Fragment {
                     holder.layout_imgs3.setVisibility(View.GONE);
                 }
                 int sum_zan = data.get(position - 1).getTh_num();
-                if (sum_zan > 0) {
-                    holder.imgZan.setImageResource(R.mipmap.heat1);
-                } else {
-                    holder.imgZan.setImageResource(R.mipmap.heat0);
-                }
+//                if (sum_zan > 0) {
+//                    holder.imgZan.setImageResource(R.mipmap.heat1);
+//                } else {
+//                    holder.imgZan.setImageResource(R.mipmap.heat0);
+//                }
                 holder.sumZan.setText(sum_zan + "");
 
+                String thum_up = data.get(position - 1).getThumb_up();
+                if (thum_up.equals("0")){
+                    holder.imgZan.setImageResource(R.mipmap.heat0);
+                }else{
+                    holder.imgZan.setImageResource(R.mipmap.heat1);
+                }
                 holder.sumContent.setText(data.get(position - 1).getInfo_num() + "");
 
             }

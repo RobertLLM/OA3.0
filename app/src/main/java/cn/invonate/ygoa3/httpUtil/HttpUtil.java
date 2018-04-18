@@ -312,8 +312,8 @@ public class HttpUtil {
      * @param page
      * @param rows
      */
-    public void getLomoList(Subscriber subscriber, int page, int rows) {
-        Observable observable = httpService.getLomoList(page, rows);
+    public void getLomoList(Subscriber subscriber, int page, int rows, String user_id) {
+        Observable observable = httpService.getLomoList(page, rows, user_id);
         toSubscribe(observable, subscriber);
     }
 

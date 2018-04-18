@@ -32,7 +32,6 @@ public class BasePicActivity extends AppCompatActivity {
         index = getIntent().getExtras().getInt("index");
         pagePic.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         pagePic.setCurrentItem(index);
-
     }
 
     /**

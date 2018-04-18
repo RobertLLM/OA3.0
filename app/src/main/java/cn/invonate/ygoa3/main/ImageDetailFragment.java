@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 
 import cn.invonate.ygoa3.PhotoView.PhotoViewAttacher;
 import cn.invonate.ygoa3.R;
+import cn.invonate.ygoa3.httpUtil.HttpUtil;
 
 /**
  * Created by liyangyang on 2018/3/15.
@@ -76,10 +77,12 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (!mImageUrl.contains("http://")) {
+            mImageUrl = HttpUtil.URL_FILE + mImageUrl;
+        }
+        Log.i("Glide",mImageUrl);
         Glide.with(ImageDetailFragment.this)
                 .load(mImageUrl)
-//                .asBitmap()
-//                .error(R.mipmap.pic_loading_error)
                 .into(new GlideDrawableImageViewTarget(mImageView) {
                     @Override
                     public void onResourceReady(final GlideDrawable drawable, GlideAnimation anim) {

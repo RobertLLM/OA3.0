@@ -31,7 +31,7 @@ public class SettingActivity extends BaseActivity {
         registerReceiver(finish, intentFilter);
     }
 
-    @OnClick({R.id.pic_back, R.id.layout_clean, R.id.layout_change_pass, R.id.layout_exit})
+    @OnClick({R.id.pic_back, R.id.layout_clean, R.id.layout_change_pass, R.id.layout_us, R.id.layout_exit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.pic_back:
@@ -56,6 +56,9 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.layout_change_pass:
                 stepActivity(ChangePassActivity.class);
+                break;
+            case R.id.layout_us:
+                stepActivity(AboutUsActivity.class);
                 break;
             case R.id.layout_exit:
                 AlertDialog dialog = new AlertDialog(this).builder();
