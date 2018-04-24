@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSON;
 import com.ess.filepicker.FilePicker;
 import com.ess.filepicker.model.EssFile;
 import com.ess.filepicker.util.Const;
+import com.yonggang.liyangyang.ios_dialog.widget.ActionSheetDialog;
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 
 import java.io.File;
@@ -94,13 +95,14 @@ public class SendMailActivity extends BaseActivity {
         adapter = new PhotoAdapter(photoPaths, this);
         listFile.setLayoutManager(new LinearLayoutManager(this));
         listFile.setAdapter(adapter);
-        list_to.setLayoutManager(new GridLayoutManager(this, 4));
-        input_adapter = new SendMailAdapter(list_contacts, this);
-        list_to.setAdapter(input_adapter);
 
         list_copy.setLayoutManager(new GridLayoutManager(this, 4));
         input_adapter2 = new SendMailAdapter2(list_copys, this);
         list_copy.setAdapter(input_adapter2);
+
+        list_to.setLayoutManager(new GridLayoutManager(this, 4));
+        input_adapter = new SendMailAdapter(list_contacts, this);
+        list_to.setAdapter(input_adapter);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -190,11 +192,11 @@ public class SendMailActivity extends BaseActivity {
             case R.id.send:
                 List<String> to = new ArrayList<>();
                 for (Contacts c : list_contacts) {
-                    to.add(c.getUser_code() + "@yong-gang.cn");
+                    to.add(c.getUser_name() + "<" + c.getUser_code() + "@yong-gang.cn>");
                 }
                 List<String> cc = new ArrayList<>();
                 for (Contacts c : list_copys) {
-                    cc.add(c.getUser_code() + "@yong-gang.cn");
+                    cc.add(c.getUser_name() + "<" + c.getUser_code() + "@yong-gang.cn>");
                 }
                 send_email(to, cc, null, edit_subject.getText().toString().trim(), edit_content.getText().toString().trim(), false);
                 break;
@@ -235,13 +237,38 @@ public class SendMailActivity extends BaseActivity {
                         .start(this);
                 break;
             case R.id.btn_file:
-                FilePicker
-                        .from(this)
-                        .chooseForMimeType()
-                        .setMaxCount(1)
-                        .setFileTypes("doc", "xls", "ppt", "pdf", "apk", "mp3", "gif", "txt", "mp4", "zip")
-                        .requestCode(0x999)
-                        .start();
+//                FilePicker
+//                        .from(this)
+//                        .chooseForMimeType()
+//                        .setMaxCount(1)
+//                        .setFileTypes("doc", "xls", "ppt", "pdf", "apk", "mp3", "gif", "txt", "mp4", "zip")
+//                        .requestCode(0x999)
+//                        .start();
+                ActionSheetDialog action = new ActionSheetDialog(this).builder();
+                action.setTitle("请选择方式")
+                        .addSheetItem("按路径选择", ActionSheetDialog.SheetItemColor.Black, new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                FilePicker
+                                        .from(SendMailActivity.this)
+                                        .chooseForBrowser()
+                                        .setMaxCount(1)
+                                        .requestCode(0x999)
+                                        .start();
+                            }
+                        })
+                        .addSheetItem("按文件类型选择", ActionSheetDialog.SheetItemColor.Black, new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                FilePicker
+                                        .from(SendMailActivity.this)
+                                        .chooseForMimeType()
+                                        .setMaxCount(1)
+                                        .setFileTypes("doc", "xls", "ppt", "pdf", "apk", "mp3", "gif", "txt", "mp4", "zip", "rar")
+                                        .requestCode(0x999)
+                                        .start();
+                            }
+                        }).show();
                 break;
         }
     }
@@ -512,6 +539,10 @@ public class SendMailActivity extends BaseActivity {
             this.context = context;
         }
 
+        void request() {
+
+        }
+
         @Override
         public SendMailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -630,7 +661,6 @@ public class SendMailActivity extends BaseActivity {
                 case TYPE_INOPUT:
                     holder.address.setText("");
                     holder.address.addTextChangedListener(new TextWatch(holder.address, list_copys));
-                    holder.address.requestFocus();
                     holder.address.setOnKeyListener(new View.OnKeyListener() {
                         public boolean onKey(View v, int keyCode, KeyEvent event) {
                             if (keyCode == KeyEvent.KEYCODE_DEL) {

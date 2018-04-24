@@ -521,4 +521,55 @@ public class HttpUtil {
         toSubscribe(observable, subscriber);
     }
 
+
+    /**
+     * 随手拍点赞
+     *
+     * @param subscriber
+     * @param user_id
+     * @param lomo_id
+     */
+    public void setLike(Subscriber subscriber, String user_id, String lomo_id) {
+        Observable observable = httpService.setLike(user_id, lomo_id);
+        toSubscribe(observable, subscriber);
+    }
+
+
+    /**
+     * 随手拍取消赞
+     *
+     * @param subscriber
+     * @param thumb_id
+     */
+    public void cancelLike(Subscriber subscriber, String thumb_id) {
+        Observable observable = httpService.cancelLike(thumb_id);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 获取随手拍评论
+     *
+     * @param subscriber
+     * @param lomo_id
+     */
+    public void getComments(Subscriber subscriber, String lomo_id) {
+        Observable observable = httpService.getComments(lomo_id);
+        toSubscribe(observable, subscriber);
+    }
+
+
+    /**
+     * 发表评论
+     *
+     * @param subscriber
+     * @param userid
+     * @param comm_cont
+     * @param lomo_id
+     */
+    public void sendComments(Subscriber subscriber, String userid, String comm_cont, String lomo_id) {
+        Observable observable = httpService.sendComments(userid, comm_cont, lomo_id);
+        toSubscribe(observable, subscriber);
+    }
+
+
 }

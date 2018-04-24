@@ -74,15 +74,19 @@ public class MailAdapter extends BaseAdapter {
                 } else {
                     holder.mail_img.setImageResource(R.mipmap.icon_read);
                 }
+                holder.mail_sender.setText(data.get(position).getPersonal());
                 break;
             case "Sent":
                 holder.mail_img.setImageResource(R.mipmap.icon_sent);
+                holder.mail_sender.setText(getReceiver(data.get(position).getReceiver()));
                 break;
             case "Drafts":
                 holder.mail_img.setImageResource(R.mipmap.icon_drafts);
+                holder.mail_sender.setText(data.get(position).getPersonal());
                 break;
             case "Trash":
                 holder.mail_img.setImageResource(R.mipmap.icon_trash);
+                holder.mail_sender.setText(data.get(position).getPersonal());
                 break;
         }
         if (select_mode) {
@@ -90,13 +94,13 @@ public class MailAdapter extends BaseAdapter {
         } else {
             holder.select.setVisibility(View.GONE);
         }
-        holder.mail_sender.setText(data.get(position).getPersonal());
+//        holder.mail_sender.setText(data.get(position).getPersonal());
         holder.mail_time.setText(data.get(position).getSend_date());
         holder.mail_title.setText(data.get(position).getSubject());
         holder.select.setChecked(data.get(position).isIs_selected());
-        if (data.get(position).isContainerAttachment()){
+        if (data.get(position).isContainerAttachment()) {
             holder.img_file.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.img_file.setVisibility(View.GONE);
         }
         AutoUtils.autoSize(convertView);
@@ -120,5 +124,21 @@ public class MailAdapter extends BaseAdapter {
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    private String getReceiver(List<String> names) {
+        String result = "";
+        for (String name : names) {
+            if (name.contains("\"")) {
+                result += name.substring(1, name.lastIndexOf("\"")) + ",";
+            } else {
+                result += name + ",";
+            }
+        }
+        if (result.length() > 0) {
+            result = result.substring(0, result.length() - 1);
+        }
+
+        return result;
     }
 }

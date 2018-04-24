@@ -6,13 +6,15 @@
 
     <AutoCompleteTextView
         android:id="@+id/address"
+        android:hint="输入工号选人"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@null"
+        android:gravity="center_vertical"
         android:dropDownWidth="match_parent"
         android:completionThreshold="1"
         android:textColor="@color/black"
-        android:textSize="45px" />
+        android:textSize="38px" />
 
 </LinearLayout>

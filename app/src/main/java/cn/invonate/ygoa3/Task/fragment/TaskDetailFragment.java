@@ -895,45 +895,47 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
         Map<String, String> params = new HashMap<>();
         Log.i("getMessage", JSON.toJSONString(inputs));
         for (TaskDetail.Input i : inputs) {
-            switch (i.getType()) {
-                case "text":
-                    if (i.isRequired() && i.getValue() == null) {
-                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
-                    params.put(i.getName(), i.getValue());
-                    break;
-                case "hidden":
-                    if (i.isRequired() && i.getValue() == null) {
-                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
-                    params.put(i.getName(), i.getValue());
-                    break;
-                case "date":
-                    if (i.isRequired() && i.getValue() == null) {
-                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
-                    params.put(i.getName(), i.getValue());
-                    break;
-                case "select":
-                    if (i.isRequired() && i.getValue() == null) {
-                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
-                    params.put(i.getName(), i.getValue());
-                    break;
-                case "picker":
-                    String s = "";
-                    List<Contacts> list_contacts = i.getPickValue();
-                    if (list_contacts != null) {
-                        for (Contacts c : list_contacts) {
-                            s = s + c.getUser_code() + ",";
+            if (i != null && i.getType() != null) {
+                switch (i.getType()) {
+                    case "text":
+                        if (i.isRequired() && i.getValue() == null) {
+                            Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                            return null;
                         }
-                        params.put(i.getName(), s);
-                    }
+                        params.put(i.getName(), i.getValue());
+                        break;
+                    case "hidden":
+                        if (i.isRequired() && i.getValue() == null) {
+                            Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                            return null;
+                        }
+                        params.put(i.getName(), i.getValue());
+                        break;
+                    case "date":
+                        if (i.isRequired() && i.getValue() == null) {
+                            Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                            return null;
+                        }
+                        params.put(i.getName(), i.getValue());
+                        break;
+                    case "select":
+                        if (i.isRequired() && i.getValue() == null) {
+                            Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                            return null;
+                        }
+                        params.put(i.getName(), i.getValue());
+                        break;
+                    case "picker":
+                        String s = "";
+                        List<Contacts> list_contacts = i.getPickValue();
+                        if (list_contacts != null) {
+                            for (Contacts c : list_contacts) {
+                                s = s + c.getUser_code() + ",";
+                            }
+                            params.put(i.getName(), s);
+                        }
 
+                }
             }
         }
         return params;

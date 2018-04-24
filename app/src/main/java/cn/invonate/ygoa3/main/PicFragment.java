@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -32,6 +31,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.invonate.ygoa3.Cycle.CycleDetailActivity;
+import cn.invonate.ygoa3.Entry.Like;
 import cn.invonate.ygoa3.Entry.Lomo;
 import cn.invonate.ygoa3.Entry.User;
 import cn.invonate.ygoa3.R;
@@ -39,7 +40,13 @@ import cn.invonate.ygoa3.View.CircleImageView;
 import cn.invonate.ygoa3.View.LYYPullToRefreshListView;
 import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
+import cn.invonate.ygoa3.httpUtil.ProgressSubscriber;
+import cn.invonate.ygoa3.httpUtil.SubscriberOnNextListener;
+import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by liyangyang on 2018/2/22.
@@ -95,7 +102,7 @@ public class PicFragment extends Fragment {
             }
 
             @Override
-            public void onNext(Lomo data) {
+            public void onNext(final Lomo data) {
                 total = data.getTotal();
                 data.initImage();
                 Log.i("getLomoList", data.toString());
@@ -106,7 +113,13 @@ public class PicFragment extends Fragment {
                     listNews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Toast.makeText(getActivity(), position + "", Toast.LENGTH_SHORT).show();
+                            if (position > 1) {
+                                Intent intent = new Intent(getActivity(), CycleDetailActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("cycle", data.getRows().get(position - 2));
+                                intent.putExtras(bundle);
+                                startActivityForResult(intent, 0x999);
+                            }
                         }
                     });
                 } else {
@@ -179,7 +192,7 @@ public class PicFragment extends Fragment {
                 Glide.with(context)
                         .load(HttpUtil.URL_FILE + data.get(position - 1).getUser_photo())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)//禁用磁盘缓存
-                        .skipMemoryCache(true).into(holder.head);
+                        .dontAnimate().skipMemoryCache(true).into(holder.head);
                 holder.name.setText(data.get(position - 1).getUSER_NAME());
                 holder.time.setText(data.get(position - 1).getPUBLISH_TIME());
                 try {
@@ -192,7 +205,10 @@ public class PicFragment extends Fragment {
                     holder.layout_imgs2.setVisibility(View.GONE);
                     holder.layout_imgs3.setVisibility(View.GONE);
                     holder.img_play.setVisibility(View.VISIBLE);
-                    holder.newsPic.setImageBitmap(getNetVideoBitmap(HttpUtil.URL_FILE + data.get(position - 1).getLOMO_VIDEO()));
+                    holder.newsPic.setImageResource(R.drawable.image_init);
+                    setVideoImage(holder.newsPic, HttpUtil.URL_FILE + data.get(position - 1).getLOMO_VIDEO());
+//                    new Thread(new ImageThread(holder.newsPic, HttpUtil.URL_FILE + data.get(position - 1).getLOMO_VIDEO())).start();
+//                    holder.newsPic.setImageBitmap(getNetVideoBitmap(HttpUtil.URL_FILE + data.get(position - 1).getLOMO_VIDEO()));
                     holder.newsPic2.setVisibility(View.INVISIBLE);
                     holder.newsPic3.setVisibility(View.INVISIBLE);
                     holder.newsPic4.setVisibility(View.INVISIBLE);
@@ -228,7 +244,7 @@ public class PicFragment extends Fragment {
                             holder.layout_imgs.setVisibility(View.VISIBLE);
                             holder.layout_imgs2.setVisibility(View.GONE);
                             holder.layout_imgs3.setVisibility(View.GONE);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).into(holder.newsPic);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).dontAnimate().into(holder.newsPic);
                             holder.newsPic.setVisibility(View.VISIBLE);
                             holder.newsPic2.setVisibility(View.INVISIBLE);
                             holder.newsPic3.setVisibility(View.INVISIBLE);
@@ -244,8 +260,8 @@ public class PicFragment extends Fragment {
                             holder.layout_imgs.setVisibility(View.VISIBLE);
                             holder.layout_imgs2.setVisibility(View.GONE);
                             holder.layout_imgs3.setVisibility(View.GONE);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).into(holder.newsPic);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).into(holder.newsPic2);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).dontAnimate().into(holder.newsPic);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).dontAnimate().into(holder.newsPic2);
                             holder.newsPic.setVisibility(View.VISIBLE);
                             holder.newsPic2.setVisibility(View.VISIBLE);
                             holder.newsPic3.setVisibility(View.INVISIBLE);
@@ -260,9 +276,9 @@ public class PicFragment extends Fragment {
                             holder.layout_imgs.setVisibility(View.VISIBLE);
                             holder.layout_imgs2.setVisibility(View.GONE);
                             holder.layout_imgs3.setVisibility(View.GONE);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).into(holder.newsPic);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).into(holder.newsPic2);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).into(holder.newsPic3);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).dontAnimate().into(holder.newsPic);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).dontAnimate().into(holder.newsPic2);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).dontAnimate().into(holder.newsPic3);
                             holder.newsPic.setVisibility(View.VISIBLE);
                             holder.newsPic2.setVisibility(View.VISIBLE);
                             holder.newsPic3.setVisibility(View.VISIBLE);
@@ -277,10 +293,10 @@ public class PicFragment extends Fragment {
                             holder.layout_imgs.setVisibility(View.VISIBLE);
                             holder.layout_imgs2.setVisibility(View.VISIBLE);
                             holder.layout_imgs3.setVisibility(View.GONE);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).into(holder.newsPic);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).into(holder.newsPic2);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).into(holder.newsPic3);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).into(holder.newsPic4);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).dontAnimate().into(holder.newsPic);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).dontAnimate().into(holder.newsPic2);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).dontAnimate().into(holder.newsPic3);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).dontAnimate().into(holder.newsPic4);
                             holder.newsPic.setVisibility(View.VISIBLE);
                             holder.newsPic2.setVisibility(View.VISIBLE);
                             holder.newsPic3.setVisibility(View.VISIBLE);
@@ -295,11 +311,11 @@ public class PicFragment extends Fragment {
                             holder.layout_imgs.setVisibility(View.VISIBLE);
                             holder.layout_imgs2.setVisibility(View.VISIBLE);
                             holder.layout_imgs3.setVisibility(View.GONE);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).into(holder.newsPic);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).into(holder.newsPic2);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).into(holder.newsPic3);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).into(holder.newsPic4);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(4)).into(holder.newsPic5);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).dontAnimate().into(holder.newsPic);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).dontAnimate().into(holder.newsPic2);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).dontAnimate().into(holder.newsPic3);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).dontAnimate().into(holder.newsPic4);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(4)).dontAnimate().into(holder.newsPic5);
                             holder.newsPic.setVisibility(View.VISIBLE);
                             holder.newsPic2.setVisibility(View.VISIBLE);
                             holder.newsPic3.setVisibility(View.VISIBLE);
@@ -314,12 +330,12 @@ public class PicFragment extends Fragment {
                             holder.layout_imgs.setVisibility(View.VISIBLE);
                             holder.layout_imgs2.setVisibility(View.VISIBLE);
                             holder.layout_imgs3.setVisibility(View.GONE);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).into(holder.newsPic);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).into(holder.newsPic2);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).into(holder.newsPic3);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).into(holder.newsPic4);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(4)).into(holder.newsPic5);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(5)).into(holder.newsPic6);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).dontAnimate().into(holder.newsPic);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).dontAnimate().into(holder.newsPic2);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).dontAnimate().into(holder.newsPic3);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).dontAnimate().into(holder.newsPic4);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(4)).dontAnimate().into(holder.newsPic5);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(5)).dontAnimate().into(holder.newsPic6);
                             holder.newsPic.setVisibility(View.VISIBLE);
                             holder.newsPic2.setVisibility(View.VISIBLE);
                             holder.newsPic3.setVisibility(View.VISIBLE);
@@ -334,13 +350,13 @@ public class PicFragment extends Fragment {
                             holder.layout_imgs.setVisibility(View.VISIBLE);
                             holder.layout_imgs2.setVisibility(View.VISIBLE);
                             holder.layout_imgs3.setVisibility(View.VISIBLE);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).into(holder.newsPic);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).into(holder.newsPic2);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).into(holder.newsPic3);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).into(holder.newsPic4);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(4)).into(holder.newsPic5);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(5)).into(holder.newsPic6);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(6)).into(holder.newsPic7);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).dontAnimate().into(holder.newsPic);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).dontAnimate().into(holder.newsPic2);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).dontAnimate().into(holder.newsPic3);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).dontAnimate().into(holder.newsPic4);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(4)).dontAnimate().into(holder.newsPic5);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(5)).dontAnimate().into(holder.newsPic6);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(6)).dontAnimate().into(holder.newsPic7);
                             holder.newsPic.setVisibility(View.VISIBLE);
                             holder.newsPic2.setVisibility(View.VISIBLE);
                             holder.newsPic3.setVisibility(View.VISIBLE);
@@ -355,14 +371,14 @@ public class PicFragment extends Fragment {
                             holder.layout_imgs.setVisibility(View.VISIBLE);
                             holder.layout_imgs2.setVisibility(View.VISIBLE);
                             holder.layout_imgs3.setVisibility(View.VISIBLE);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).into(holder.newsPic);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).into(holder.newsPic2);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).into(holder.newsPic3);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).into(holder.newsPic4);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(4)).into(holder.newsPic5);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(5)).into(holder.newsPic6);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(6)).into(holder.newsPic7);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(7)).into(holder.newsPic8);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).dontAnimate().into(holder.newsPic);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).dontAnimate().into(holder.newsPic2);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).dontAnimate().into(holder.newsPic3);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).dontAnimate().into(holder.newsPic4);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(4)).dontAnimate().into(holder.newsPic5);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(5)).dontAnimate().into(holder.newsPic6);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(6)).dontAnimate().into(holder.newsPic7);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(7)).dontAnimate().into(holder.newsPic8);
                             holder.newsPic.setVisibility(View.VISIBLE);
                             holder.newsPic2.setVisibility(View.VISIBLE);
                             holder.newsPic3.setVisibility(View.VISIBLE);
@@ -377,15 +393,15 @@ public class PicFragment extends Fragment {
                             holder.layout_imgs.setVisibility(View.VISIBLE);
                             holder.layout_imgs2.setVisibility(View.VISIBLE);
                             holder.layout_imgs3.setVisibility(View.VISIBLE);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).into(holder.newsPic);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).into(holder.newsPic2);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).into(holder.newsPic3);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).into(holder.newsPic4);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(4)).into(holder.newsPic5);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(5)).into(holder.newsPic6);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(6)).into(holder.newsPic7);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(7)).into(holder.newsPic8);
-                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(8)).into(holder.newsPic9);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(0)).dontAnimate().into(holder.newsPic);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(1)).dontAnimate().into(holder.newsPic2);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(2)).dontAnimate().into(holder.newsPic3);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(3)).dontAnimate().into(holder.newsPic4);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(4)).dontAnimate().into(holder.newsPic5);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(5)).dontAnimate().into(holder.newsPic6);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(6)).dontAnimate().into(holder.newsPic7);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(7)).dontAnimate().into(holder.newsPic8);
+                            Glide.with(context).load(HttpUtil.URL_FILE + list_imgs.get(8)).dontAnimate().into(holder.newsPic9);
                             holder.newsPic.setVisibility(View.VISIBLE);
                             holder.newsPic2.setVisibility(View.VISIBLE);
                             holder.newsPic3.setVisibility(View.VISIBLE);
@@ -411,10 +427,22 @@ public class PicFragment extends Fragment {
                 holder.sumZan.setText(sum_zan + "");
 
                 String thum_up = data.get(position - 1).getThumb_up();
-                if (thum_up.equals("0")){
+                if (thum_up.equals("0")) {
                     holder.imgZan.setImageResource(R.mipmap.heat0);
-                }else{
+                    holder.imgZan.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            setLike(position - 1, data.get(position - 1).getLOMO_ID());
+                        }
+                    });
+                } else {
                     holder.imgZan.setImageResource(R.mipmap.heat1);
+                    holder.imgZan.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            cancelLike(position - 1, data.get(position - 1).getThumb_up());
+                        }
+                    });
                 }
                 holder.sumContent.setText(data.get(position - 1).getInfo_num() + "");
 
@@ -541,28 +569,123 @@ public class PicFragment extends Fragment {
             }
         }
 
-        /**
-         * 获取视频第一帧
-         *
-         * @param videoUrl
-         * @return
-         */
-        public Bitmap getNetVideoBitmap(String videoUrl) {
-            Bitmap bitmap = null;
 
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            try {
-                //根据url获取缩略图
-                retriever.setDataSource(videoUrl, new HashMap());
-                //获得第一帧图片
-                bitmap = retriever.getFrameAtTime();
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } finally {
-                retriever.release();
-            }
-            return bitmap;
+    }
+
+    /**
+     * 获取视频第一帧
+     *
+     * @param videoUrl
+     * @return
+     */
+    public Bitmap getNetVideoBitmap(String videoUrl) {
+        Bitmap bitmap = null;
+
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            //根据url获取缩略图
+            retriever.setDataSource(videoUrl, new HashMap());
+            //获得第一帧图片
+            bitmap = retriever.getFrameAtTime();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } finally {
+            retriever.release();
         }
+        return bitmap;
+    }
+
+    class ImageThread implements Runnable {
+
+        ImageView imageView;
+        String videoUrl;
+
+        public ImageThread(ImageView imageView, String videoUrl) {
+            this.imageView = imageView;
+            this.videoUrl = videoUrl;
+        }
+
+        @Override
+        public void run() {
+
+        }
+    }
+
+    private void setVideoImage(final ImageView imageView, final String url) {
+
+        Observer<Bitmap> observer = new Observer<Bitmap>() {
+            @Override
+            public void onNext(Bitmap bit) {
+                imageView.setImageBitmap(bit);
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        };
+        Observable observable = Observable.create(new Observable.OnSubscribe<Bitmap>() {
+            @Override
+            public void call(Subscriber<? super Bitmap> subscriber) {
+                Bitmap bit = getNetVideoBitmap(url);
+                subscriber.onNext(bit);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread()); // 指定 Subscriber 的回调发生在主线程;
+
+        observable.subscribe(observer);
+    }
+
+    /**
+     * 随手拍点赞
+     *
+     * @param index
+     * @param lomo_id
+     */
+    private void setLike(final int index, String lomo_id) {
+        SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<Like>() {
+            @Override
+            public void onNext(Like data) {
+                Log.i("setLike", data.toString());
+                if (data.getResult() == 0) {
+                    list_lomo.get(index).setThumb_up(data.getThumb_up());
+                    list_lomo.get(index).setTh_num(list_lomo.get(index).getTh_num() + 1);
+                    adapter.notifyDataSetChanged();
+                } else {
+
+                }
+            }
+        };
+        HttpUtil.getInstance(getActivity(), false).setLike(new ProgressSubscriber(onNextListener, getActivity()), app.getUser().getUser_id(), lomo_id);
+    }
+
+    /**
+     * 取消赞
+     *
+     * @param index
+     * @param thumb_id
+     */
+    private void cancelLike(final int index, String thumb_id) {
+        SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<Like>() {
+            @Override
+            public void onNext(Like data) {
+                Log.i("cancelLike", data.toString());
+                if (data.getResult() == 0) {
+                    list_lomo.get(index).setThumb_up("0");
+                    list_lomo.get(index).setTh_num(list_lomo.get(index).getTh_num() - 1);
+                    adapter.notifyDataSetChanged();
+                } else {
+
+                }
+            }
+        };
+        HttpUtil.getInstance(getActivity(), false).cancelLike(new ProgressSubscriber(onNextListener, getActivity()), thumb_id);
     }
 
 

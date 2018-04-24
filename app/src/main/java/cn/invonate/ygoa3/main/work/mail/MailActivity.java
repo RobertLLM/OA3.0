@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -131,6 +133,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                         adapter.notifyDataSetChanged();
                     }
                     refresh.finishRefresh();
+                    refresh.finishLoadMore();
                     rlEdit.setOnClickListener(MailActivity.this);
                     dialog.dismiss();
                     break;
@@ -203,6 +206,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @OnClick({R.id.img_back, R.id.mail_add, R.id.mail_search, R.id.mail_box_name, R.id.layout_all, R.id.layout_none})
     public void onViewClicked(View view) {
         switch (view.getId()) {

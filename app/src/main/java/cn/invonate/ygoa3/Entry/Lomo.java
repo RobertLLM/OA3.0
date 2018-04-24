@@ -2,6 +2,7 @@ package cn.invonate.ygoa3.Entry;
 
 import com.alibaba.fastjson.JSON;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class Lomo {
         }
     }
 
-    public static class LomoBean {
+    public static class LomoBean implements Serializable{
         /**
          * IS_ANONYMOUS : 0
          * LOMO_CONTENT : MTI2NDU=

@@ -119,7 +119,6 @@
                     android:id="@+id/web_content"
                     android:layout_width="match_parent"
                     android:layout_height="800px"
-                    android:textSize="45px"
                     android:visibility="gone" />
 
             </FrameLayout>

@@ -168,12 +168,12 @@ public class POP3ReceiveMailTest {
         ArrayList<String> receiveAddresses = new ArrayList<>();
         Address[] addresss = null;
         addresss = msg.getRecipients(type);
-
         if (addresss == null || addresss.length < 1) {
 
         } else {
             for (Address address : addresss) {
                 InternetAddress internetAddress = (InternetAddress) address;
+                internetAddress.getPersonal();
                 receiveAddresses.add(internetAddress.toUnicodeString());
             }
         }

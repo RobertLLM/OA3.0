@@ -139,35 +139,34 @@ public class MailDetailActivity extends BaseActivity {
         webSettings.setJavaScriptEnabled(true); // 设置支持javascript脚本
         webSettings.setAllowFileAccess(true); // 允许访问文件
         webSettings.setBuiltInZoomControls(true); // 设置显示缩放按钮
-        webSettings.setSupportZoom(true); // 支持缩放
+        webSettings.setSupportZoom(false); // 不支持缩放
         webSettings.setLoadWithOverviewMode(true);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int mDensity = metrics.densityDpi;
         Log.d("lyy", "densityDpi = " + mDensity);
-        if (mDensity == 240) {
-            webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
+//        if (mDensity == 240) {
+//            webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
+//            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+//        } else if (mDensity == 160) {
+//            webSettings.setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+//            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+//        } else if (mDensity == 120) {
+//            webSettings.setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
+//            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+//        } else if (mDensity == DisplayMetrics.DENSITY_XHIGH) {
+//            webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
+//            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+//        } else if (mDensity == DisplayMetrics.DENSITY_TV) {
+//            webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
+//            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+//        } else {
             webSettings.setTextSize(WebSettings.TextSize.LARGER);
-        } else if (mDensity == 160) {
-            webSettings.setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-            webSettings.setTextSize(WebSettings.TextSize.LARGER);
-        } else if (mDensity == 120) {
-            webSettings.setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
-            webSettings.setTextSize(WebSettings.TextSize.NORMAL);
-        } else if (mDensity == DisplayMetrics.DENSITY_XHIGH) {
-            webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
-            webSettings.setTextSize(WebSettings.TextSize.LARGER);
-        } else if (mDensity == DisplayMetrics.DENSITY_TV) {
-            webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
-            webSettings.setTextSize(WebSettings.TextSize.LARGER);
-        } else {
-            webSettings.setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-            webSettings.setTextSize(WebSettings.TextSize.LARGER);
-        }
+//        }
         /**
          * 用WebView显示图片，可使用这个参数 设置网页布局类型： 1、LayoutAlgorithm.NARROW_COLUMNS ： 适应内容大小 2、LayoutAlgorithm.SINGLE_COLUMN:适应屏幕，内容将自动缩放
          */
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+//        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
     }
 
     @Override

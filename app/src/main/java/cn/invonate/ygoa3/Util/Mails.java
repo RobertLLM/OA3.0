@@ -104,20 +104,35 @@ public class Mails extends javax.mail.Authenticator {
             msg.setFrom(new InternetAddress(_from, _personal));
             if (_to != null) {
                 for (String item : _to) {
+                    InternetAddress address = new InternetAddress();
+                    String name = item.substring(0, item.indexOf('<'));
+                    String addr = item.substring(item.indexOf('<') + 1, item.indexOf('>'));
+                    address.setAddress(addr);
+                    address.setPersonal(name);
                     msg.addRecipient(Message.RecipientType.TO,
-                            new InternetAddress(item));
+                            address);
                 }
             }
             if (_cc != null) {
                 for (String item : _cc) {
+                    InternetAddress address = new InternetAddress();
+                    String name = item.substring(0, item.indexOf('<'));
+                    String addr = item.substring(item.indexOf('<') + 1, item.indexOf('>'));
+                    address.setAddress(addr);
+                    address.setPersonal(name);
                     msg.addRecipient(Message.RecipientType.CC,
-                            new InternetAddress(item));
+                            address);
                 }
             }
             if (_bcc != null) {
                 for (String item : _bcc) {
+                    InternetAddress address = new InternetAddress();
+                    String name = item.substring(0, item.indexOf('<'));
+                    String addr = item.substring(item.indexOf('<') + 1, item.indexOf('>'));
+                    address.setAddress(addr);
+                    address.setPersonal(name);
                     msg.addRecipient(Message.RecipientType.BCC,
-                            new InternetAddress(item));
+                            address);
                 }
             }
             msg.setSubject(_subject);
@@ -162,7 +177,7 @@ public class Mails extends javax.mail.Authenticator {
     public void addAttachment(FileEntry file) throws Exception {
         Log.i("FileEntry", file.getType());
         BodyPart messageBodyPart = new MimeBodyPart();
-        DataSource source = new ByteArrayDataSource(file.getIs(), "application/"+file.getType());
+        DataSource source = new ByteArrayDataSource(file.getIs(), "application/" + file.getType());
         messageBodyPart.setDataHandler(new DataHandler(source));
         messageBodyPart.setFileName(MimeUtility.encodeText(file.getName()));
         _multipart.addBodyPart(messageBodyPart);

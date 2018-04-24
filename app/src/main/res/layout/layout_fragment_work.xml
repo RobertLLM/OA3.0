@@ -156,7 +156,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="15px"
-                            android:text="已审批流程"
+                            android:text="已办流程"
                             android:textColor="@color/black"
                             android:textSize="40px" />
 

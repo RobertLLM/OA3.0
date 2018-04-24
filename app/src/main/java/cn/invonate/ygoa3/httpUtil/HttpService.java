@@ -7,6 +7,7 @@ import java.util.Map;
 import cn.invonate.ygoa3.Entry.Amount;
 import cn.invonate.ygoa3.Entry.Approved;
 import cn.invonate.ygoa3.Entry.ChangePass;
+import cn.invonate.ygoa3.Entry.Comment;
 import cn.invonate.ygoa3.Entry.Contacts;
 import cn.invonate.ygoa3.Entry.CyContacts;
 import cn.invonate.ygoa3.Entry.Department;
@@ -15,6 +16,7 @@ import cn.invonate.ygoa3.Entry.Fund;
 import cn.invonate.ygoa3.Entry.Group;
 import cn.invonate.ygoa3.Entry.Group_member;
 import cn.invonate.ygoa3.Entry.InitPassMessage;
+import cn.invonate.ygoa3.Entry.Like;
 import cn.invonate.ygoa3.Entry.Lomo;
 import cn.invonate.ygoa3.Entry.Member;
 import cn.invonate.ygoa3.Entry.Mission;
@@ -151,15 +153,6 @@ public interface HttpService {
             @Query("sessionId") String sessionId
     );
 
-    // 随后拍列表
-    @POST("/ygoa/ydptlomo/queryLomo.action")
-    @FormUrlEncoded
-    Observable<Lomo> getLomoList(
-            @Field("page") int page,
-            @Field("rows") int rows,
-            @Field("user_id") String user_id
-    );
-
     // 个人资产
     @GET("/ygoa/ydpt/queryPersonAsset.action")
     Observable<Property> getProperty(
@@ -279,4 +272,42 @@ public interface HttpService {
 
     );
 
+    // 随手拍列表
+    @POST("/ygoa/ydptlomo/queryLomo.action")
+    @FormUrlEncoded
+    Observable<Lomo> getLomoList(
+            @Field("page") int page,
+            @Field("rows") int rows,
+            @Field("user_id") String user_id
+    );
+
+    // 随手拍点赞
+    @POST("/ygoa/ydptlomo/give_like.action")
+    @FormUrlEncoded
+    Observable<Like> setLike(
+            @Field("userid") String userid,
+            @Field("lomo_id") String lomo_id
+    );
+
+    // 取消赞
+    @POST("/ygoa/ydptlomo/cancelPraise.action")
+    @FormUrlEncoded
+    Observable<Like> cancelLike(
+            @Field("thumb_id") String thumb_id
+    );
+
+    // 获取评论
+    @POST("/ygoa/ydptlomo/queryCommAndReplyByLomoID.action")
+    @FormUrlEncoded
+    Observable<Comment> getComments(
+            @Field("lomo_id") String lomo_id
+    );
+
+    @POST("/ygoa/ydptlomo/comment.action")
+    @FormUrlEncoded
+    Observable<String> sendComments(
+            @Field("userid") String userid,
+            @Field("comm_cont") String comm_cont,
+            @Field("lomo_id") String lomo_id
+    );
 }

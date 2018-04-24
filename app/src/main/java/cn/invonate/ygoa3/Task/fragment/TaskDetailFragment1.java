@@ -799,46 +799,48 @@ public class TaskDetailFragment1 extends Fragment implements LazyFragmentPagerAd
     public Map<String, String> getMessage() {
         Map<String, String> params = new HashMap<>();
         for (TaskDetail.Input i : inputs) {
-            switch (i.getType()) {
-                case "text":
-                    if (i.isRequired() && i.getValue() == null) {
-                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
-                    params.put(i.getName(), i.getValue());
-                    break;
-                case "hidden":
-                    if (i.isRequired() && i.getValue() == null) {
-                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
-                    params.put(i.getName(), i.getValue());
-                    break;
-                case "date":
-                    if (i.isRequired() && i.getValue() == null) {
-                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
-                    params.put(i.getName(), i.getValue());
-                    break;
-                case "select":
-                    if (i.isRequired() && i.getValue() == null) {
-                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
-                    params.put(i.getName(), i.getValue());
-                    break;
-                case "picker":
-                    if (i.isRequired() && i.getPickValue() == null) {
-                        Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
-                    String s = "";
-                    List<Contacts> list_contacts = i.getPickValue();
-                    for (Contacts c : list_contacts) {
-                        s = s + c.getUser_code() + ",";
-                    }
-                    params.put(i.getName(), s);
+            if (i != null && i.getType() != null) {
+                switch (i.getType()) {
+                    case "text":
+                        if (i.isRequired() && i.getValue() == null) {
+                            Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                            return null;
+                        }
+                        params.put(i.getName(), i.getValue());
+                        break;
+                    case "hidden":
+                        if (i.isRequired() && i.getValue() == null) {
+                            Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                            return null;
+                        }
+                        params.put(i.getName(), i.getValue());
+                        break;
+                    case "date":
+                        if (i.isRequired() && i.getValue() == null) {
+                            Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                            return null;
+                        }
+                        params.put(i.getName(), i.getValue());
+                        break;
+                    case "select":
+                        if (i.isRequired() && i.getValue() == null) {
+                            Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                            return null;
+                        }
+                        params.put(i.getName(), i.getValue());
+                        break;
+                    case "picker":
+                        if (i.isRequired() && i.getPickValue() == null) {
+                            Toast.makeText(app, i.getLabel() + "不能为空", Toast.LENGTH_SHORT).show();
+                            return null;
+                        }
+                        String s = "";
+                        List<Contacts> list_contacts = i.getPickValue();
+                        for (Contacts c : list_contacts) {
+                            s = s + c.getUser_code() + ",";
+                        }
+                        params.put(i.getName(), s);
+                }
             }
         }
         return params;

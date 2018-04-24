@@ -69,7 +69,13 @@ public class ContactsDetailActivity extends BaseActivity {
             Glide.with(getApplicationContext()).load(HttpUtil.URL_FILE + contacts.getUser_photo()).skipMemoryCache(true).error(R.mipmap.pic_head).into(headImg);
             name.setText(contacts.getUser_name());
             num.setText(contacts.getUser_code() == null ? "" : contacts.getUser_code());
-            sex.setText(contacts.getSex_() == null ? "" : contacts.getSex_());
+            String sex_ = contacts.getSex_();
+            if (sex_.equals("1")) {
+                sex_ = "男";
+            } else if (sex_.equals("0")) {
+                sex_ = "女";
+            }
+            sex.setText(sex_);
             depart.setText(contacts.getDepartment_name() == null ? "" : contacts.getDepartment_name());
             phone.setText(contacts.getUser_phone() == null ? "" : contacts.getUser_phone());
             tel.setText(contacts.getOffice_phone() == null ? "" : contacts.getOffice_phone());
@@ -100,56 +106,6 @@ public class ContactsDetailActivity extends BaseActivity {
                 break;
 
             case R.id.layout_friend:
-//                ActionSheetDialog dialog = new ActionSheetDialog(this).builder();
-//                if (contacts.getUser_phone() != null && !"".equals(contacts.getUser_phone())) {
-//                    dialog.addSheetItem(contacts.getUser_phone(), ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
-//                        @Override
-//                        public void onClick(int wh) {
-//                            AlertDialog alert = new AlertDialog(ContactsDetailActivity.this).builder();
-//                            alert.setPositiveButton("呼叫", new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    if (ContextCompat.checkSelfPermission(ContactsDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                                        ActivityCompat.requestPermissions(ContactsDetailActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 0);
-//                                    } else {
-//                                        call(contacts.getUser_phone());
-//                                    }
-//                                }
-//                            }).setNegativeButton("取消", new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//
-//                                }
-//                            }).setMsg(contacts.getUser_phone()).show();
-//                        }
-//                    });
-//                }
-//                if (contacts.getOffice_phone() != null && !"".equals(contacts.getOffice_phone())) {
-//                    dialog.addSheetItem(contacts.getOffice_phone(), ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
-//                        @Override
-//                        public void onClick(int which) {
-//                            AlertDialog alert = new AlertDialog(ContactsDetailActivity.this).builder();
-//                            alert.setPositiveButton("呼叫", new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    //call(contacts.getOffice_phone());
-//                                    //判断用户是否已经授权，未授权则向用户申请授权，已授权则直接进行呼叫操作
-//                                    if (ContextCompat.checkSelfPermission(ContactsDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                                        ActivityCompat.requestPermissions(ContactsDetailActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
-//                                    } else {
-//                                        call(contacts.getOffice_phone());
-//                                    }
-//                                }
-//                            }).setNegativeButton("取消", new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//
-//                                }
-//                            }).setMsg(contacts.getOffice_phone()).show();
-//                        }
-//                    });
-//                }
-//                dialog.setTitle("请选择联系方式").show();
                 Toast.makeText(this, "暂未开放", Toast.LENGTH_SHORT).show();
                 break;
 

@@ -2,6 +2,8 @@ package cn.invonate.ygoa3.login;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,11 +91,6 @@ public class FundActivity extends BaseActivity {
         });
 
 
-    }
-
-    @OnClick(R.id.pic_back)
-    public void onViewClicked() {
-        finish();
     }
 
     private void initDialog() {
@@ -212,4 +209,22 @@ public class FundActivity extends BaseActivity {
         Log.i("end_date", end_date);
         HttpUtil.getInstance(this, false).getFund(subscriber, app.getUser().getSessionId(), start_date + " 00:00:00", end_date + " 00:00:00", 10, page);
     }
+
+    @OnClick({R.id.pic_back, R.id.add})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.pic_back:
+                finish();
+                break;
+            case R.id.add:
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse("http://dc.yong-gang.cn/members/oa_recharge?cid=" + app.getUser().getUser_code());
+                intent.setData(content_url);
+                startActivity(intent);
+                break;
+        }
+    }
+
+
 }
