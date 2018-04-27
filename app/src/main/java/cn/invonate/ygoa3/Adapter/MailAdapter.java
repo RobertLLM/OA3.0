@@ -126,13 +126,13 @@ public class MailAdapter extends BaseAdapter {
         }
     }
 
-    private String getReceiver(List<String> names) {
+    private String getReceiver(List<Mail.Address> names) {
         String result = "";
-        for (String name : names) {
-            if (name.contains("\"")) {
-                result += name.substring(1, name.lastIndexOf("\"")) + ",";
+        for (Mail.Address address : names) {
+            if (address.getPersonal().length() > 0) {
+                result += address.getPersonal() + ",";
             } else {
-                result += name + ",";
+                result += address.getAddress() + ",";
             }
         }
         if (result.length() > 0) {

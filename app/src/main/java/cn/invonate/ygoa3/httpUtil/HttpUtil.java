@@ -571,5 +571,33 @@ public class HttpUtil {
         toSubscribe(observable, subscriber);
     }
 
+    /**
+     * 获取个人随手拍
+     *
+     * @param subscriber
+     * @param page
+     * @param rows
+     * @param user_id
+     * @param userid
+     */
+    public void getMyLomoList(Subscriber subscriber, int page, int rows, String user_id, String userid) {
+        Observable observable = httpService.getMyLomoList(page, rows, user_id, userid);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 发布随手拍(图片)
+     *
+     * @param subscriber
+     * @param userid
+     * @param lomo_content
+     * @param is_anonymous
+     * @param lomo_images
+     */
+    public void addLomoImage(Subscriber subscriber, String userid, String lomo_content, int is_anonymous, String lomo_images) {
+        Observable observable = httpService.addLomoImage(userid, lomo_content, is_anonymous, lomo_images);
+        toSubscribe(observable, subscriber);
+    }
+
 
 }

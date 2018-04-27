@@ -256,5 +256,6 @@
     <string name="Move_into_the_blacklist_new">移入到黑名单</string>
     <string name="Change_the_group_name">改变群名称</string>
     <string name="The_dissolution_of_chatting_new">解散群聊</string>
+    <string name="title_activity_personal_cycle">PersonalCycleActivity</string>
 
 </resources>

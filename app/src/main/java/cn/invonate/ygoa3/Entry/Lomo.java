@@ -79,7 +79,7 @@ public class Lomo {
          * user_photo : personal/034488.jpg
          */
 
-        private String IS_ANONYMOUS;
+        private int IS_ANONYMOUS;
         private String LOMO_CONTENT;
         private String LOMO_ID;
         private String LOMO_IMAGES;
@@ -98,11 +98,11 @@ public class Lomo {
         private List<String> infoList;
         private ArrayList<String> list_imgs;
 
-        public String getIS_ANONYMOUS() {
+        public int getIS_ANONYMOUS() {
             return IS_ANONYMOUS;
         }
 
-        public void setIS_ANONYMOUS(String IS_ANONYMOUS) {
+        public void setIS_ANONYMOUS(int IS_ANONYMOUS) {
             this.IS_ANONYMOUS = IS_ANONYMOUS;
         }
 

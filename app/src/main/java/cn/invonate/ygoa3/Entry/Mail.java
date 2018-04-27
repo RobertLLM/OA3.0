@@ -13,9 +13,9 @@ public class Mail implements Serializable {
     private String messageID; // 邮件id
     private String subject;//主题
     private String from;//发件人
-    private String personal;//收件人名字
-    private ArrayList<String> receiver;//收件人
-    private ArrayList<String> copy;
+    private String personal;//发件人名字
+    private ArrayList<Address> receiver;//收件人
+    private ArrayList<Address> copy;
     private String send_date;//发送时间
     private boolean seen;//是否已读
     private int size;//邮件大小
@@ -93,11 +93,11 @@ public class Mail implements Serializable {
         this.from = from;
     }
 
-    public ArrayList<String> getReceiver() {
+    public ArrayList<Address> getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(ArrayList<String> receiver) {
+    public void setReceiver(ArrayList<Address> receiver) {
         this.receiver = receiver;
     }
 
@@ -157,16 +157,38 @@ public class Mail implements Serializable {
         this.personal = personal;
     }
 
-    public ArrayList<String> getCopy() {
+    public ArrayList<Address> getCopy() {
         return copy;
     }
 
-    public void setCopy(ArrayList<String> copy) {
+    public void setCopy(ArrayList<Address> copy) {
         this.copy = copy;
     }
 
     @Override
     public String toString() {
         return JSON.toJSONString(this);
+    }
+
+
+    public static class Address implements Serializable{
+        private String address;
+        private String personal;
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getPersonal() {
+            return personal;
+        }
+
+        public void setPersonal(String personal) {
+            this.personal = personal;
+        }
     }
 }

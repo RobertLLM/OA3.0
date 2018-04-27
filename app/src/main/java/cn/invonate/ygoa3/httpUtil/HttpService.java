@@ -303,11 +303,42 @@ public interface HttpService {
             @Field("lomo_id") String lomo_id
     );
 
+    // 发送评论
     @POST("/ygoa/ydptlomo/comment.action")
     @FormUrlEncoded
     Observable<String> sendComments(
             @Field("userid") String userid,
             @Field("comm_cont") String comm_cont,
             @Field("lomo_id") String lomo_id
+    );
+
+    // 个人随手拍列表
+    @POST("/ygoa/ydptlomo/queryLomo.action")
+    @FormUrlEncoded
+    Observable<Lomo> getMyLomoList(
+            @Field("page") int page,
+            @Field("rows") int rows,
+            @Field("user_id") String user_id,
+            @Field("userid") String userid
+    );
+
+    // 发布随手拍(图片)
+    @POST("/ygoa/ydptlomo/releaseLomo.action")
+    @FormUrlEncoded
+    Observable<Like> addLomoImage(
+            @Field("userid") String userid,
+            @Field("lomo_content") String lomo_content,
+            @Field("is_anonymous") int is_anonymous,
+            @Field("lomo_images") String lomo_images
+    );
+
+    // 发布随手拍(图片)
+    @POST("/ygoa/ydptlomo/releaseLomo.action")
+    @FormUrlEncoded
+    Observable<Like> addLomoVideo(
+            @Field("userid") String userid,
+            @Field("lomo_content") String lomo_content,
+            @Field("is_anonymous") int is_anonymous,
+            @Field("lomo_video") String lomo_video
     );
 }

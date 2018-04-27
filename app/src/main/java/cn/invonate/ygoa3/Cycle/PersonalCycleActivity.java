@@ -1,4 +1,4 @@
-package cn.invonate.ygoa3.main;
+package cn.invonate.ygoa3.Cycle;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,10 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
-import cn.invonate.ygoa3.Cycle.AddCycleActivity;
-import cn.invonate.ygoa3.Cycle.CycleDetailActivity;
-import cn.invonate.ygoa3.Cycle.PersonalCycleActivity;
+import cn.invonate.ygoa3.BaseActivity;
 import cn.invonate.ygoa3.Entry.Like;
 import cn.invonate.ygoa3.Entry.Lomo;
 import cn.invonate.ygoa3.Entry.User;
@@ -45,20 +41,20 @@ import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
 import cn.invonate.ygoa3.httpUtil.ProgressSubscriber;
 import cn.invonate.ygoa3.httpUtil.SubscriberOnNextListener;
+import cn.invonate.ygoa3.main.BasePicActivity;
+import cn.invonate.ygoa3.main.VideoActivity;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by liyangyang on 2018/2/22.
- */
+public class PersonalCycleActivity extends BaseActivity {
 
-public class PicFragment extends Fragment {
+    @BindView(R.id.title)
+    TextView title;
     @BindView(R.id.list_news)
     LYYPullToRefreshListView listNews;
-    Unbinder unbinder;
 
     private LomoAdapter adapter;
 
@@ -68,16 +64,24 @@ public class PicFragment extends Fragment {
 
     private YGApplication app;
 
-    @Nullable
+    private String user_id;
+    private String user_pic;
+    private String user_name;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_fragment_pic, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        app = (YGApplication) getActivity().getApplication();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_personal_cycle);
+        ButterKnife.bind(this);
+        user_id = getIntent().getExtras().getString("user_id");
+        user_pic = getIntent().getExtras().getString("user_pic");
+        user_name = getIntent().getExtras().getString("user_name");
+        title.setText(user_name + "的随手拍");
+        app = (YGApplication) getApplication();
         listNews.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getLomoList(1);
+                getMyLomoList(1);
             }
 
             @Override
@@ -85,14 +89,13 @@ public class PicFragment extends Fragment {
 
             }
         });
-        getLomoList(1);
-        return view;
+        getMyLomoList(1);
     }
 
     /**
      * @param page
      */
-    private void getLomoList(final int page) {
+    private void getMyLomoList(final int page) {
         Subscriber subscriber = new Subscriber<Lomo>() {
             @Override
             public void onCompleted() {
@@ -111,13 +114,13 @@ public class PicFragment extends Fragment {
                 Log.i("getLomoList", data.toString());
                 if (page == 1) {
                     list_lomo = data.getRows();
-                    adapter = new LomoAdapter(list_lomo, getActivity(), app.getUser());
+                    adapter = new LomoAdapter(list_lomo, PersonalCycleActivity.this, app.getUser());
                     listNews.setAdapter(adapter);
                     listNews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             if (position > 1) {
-                                Intent intent = new Intent(getActivity(), CycleDetailActivity.class);
+                                Intent intent = new Intent(PersonalCycleActivity.this, CycleDetailActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("cycle", data.getRows().get(position - 2));
                                 intent.putExtras(bundle);
@@ -137,20 +140,12 @@ public class PicFragment extends Fragment {
                 }
             }
         };
-        HttpUtil.getInstance(getActivity(), false).getLomoList(subscriber, page, 20, app.getUser().getUser_id());
+        HttpUtil.getInstance(this, false).getMyLomoList(subscriber, page, 20, app.getUser().getUser_id(), user_id);
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @OnClick(R.id.add)
+    @OnClick(R.id.pic_back)
     public void onViewClicked() {
-        Intent intent = new Intent(getActivity(), AddCycleActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     /**
@@ -192,50 +187,17 @@ public class PicFragment extends Fragment {
             }
             holder = new ViewHolder(convertView);
             if (position == 0) {
-                holder.user.setText(user.getUser_name());
+                holder.user.setText(user_name);
                 Glide.with(context)
-                        .load(HttpUtil.URL_FILE + user.getUser_photo())
+                        .load(HttpUtil.URL_FILE + user_pic)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)//禁用磁盘缓存
                         .skipMemoryCache(true).into(holder.img_user);
-                holder.img_user.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), PersonalCycleActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("user_id", app.getUser().getUser_id());
-                        bundle.putString("user_pic", app.getUser().getUser_photo());
-                        bundle.putString("user_name", app.getUser().getUser_name());
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-                });
             } else {
-                if (data.get(position-1).getIS_ANONYMOUS() == 1) {
-                    holder.head.setImageResource(R.mipmap.pic_head);
-                    holder.head.setOnClickListener(null);
-                } else {
-                    Glide.with(context)
-                            .load(HttpUtil.URL_FILE + data.get(position - 1).getUser_photo())
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)//禁用磁盘缓存
-                            .dontAnimate().skipMemoryCache(true).into(holder.head);
-                    holder.head.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), PersonalCycleActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("user_id", data.get(position - 1).getUSER_ID());
-                            bundle.putString("user_pic", data.get(position - 1).getUser_photo());
-                            bundle.putString("user_name", data.get(position - 1).getUSER_NAME());
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                        }
-                    });
-                }
-                if (data.get(position-1).getIS_ANONYMOUS() == 1) {
-                    holder.name.setText("匿名");
-                } else {
-                    holder.name.setText(data.get(position - 1).getUSER_NAME());
-                }
+                Glide.with(context)
+                        .load(HttpUtil.URL_FILE + data.get(position - 1).getUser_photo())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)//禁用磁盘缓存
+                        .dontAnimate().skipMemoryCache(true).into(holder.head);
+                holder.name.setText(data.get(position - 1).getUSER_NAME());
                 holder.time.setText(data.get(position - 1).getPUBLISH_TIME());
                 try {
                     holder.content.setText(new String(Base64.decode(data.get(position - 1).getLOMO_CONTENT(), Base64.DEFAULT), "UTF-8"));
@@ -249,6 +211,8 @@ public class PicFragment extends Fragment {
                     holder.img_play.setVisibility(View.VISIBLE);
                     holder.newsPic.setImageResource(R.drawable.image_init);
                     setVideoImage(holder.newsPic, HttpUtil.URL_FILE + data.get(position - 1).getLOMO_VIDEO());
+//                    new Thread(new ImageThread(holder.newsPic, HttpUtil.URL_FILE + data.get(position - 1).getLOMO_VIDEO())).start();
+//                    holder.newsPic.setImageBitmap(getNetVideoBitmap(HttpUtil.URL_FILE + data.get(position - 1).getLOMO_VIDEO()));
                     holder.newsPic2.setVisibility(View.INVISIBLE);
                     holder.newsPic3.setVisibility(View.INVISIBLE);
                     holder.newsPic4.setVisibility(View.INVISIBLE);
@@ -260,7 +224,7 @@ public class PicFragment extends Fragment {
                     holder.newsPic.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), VideoActivity.class);
+                            Intent intent = new Intent(PersonalCycleActivity.this, VideoActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("url", data.get(position - 1).getLOMO_VIDEO());
                             intent.putExtras(bundle);
@@ -502,7 +466,7 @@ public class PicFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), BasePicActivity.class);
+                Intent intent = new Intent(PersonalCycleActivity.this, BasePicActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("index", index);
                 bundle.putStringArrayList("imgs", list_imgs);
@@ -608,9 +572,8 @@ public class PicFragment extends Fragment {
                 ButterKnife.bind(this, view);
             }
         }
-
-
     }
+
 
     /**
      * 获取视频第一帧
@@ -686,7 +649,7 @@ public class PicFragment extends Fragment {
                 }
             }
         };
-        HttpUtil.getInstance(getActivity(), false).setLike(new ProgressSubscriber(onNextListener, getActivity()), app.getUser().getUser_id(), lomo_id);
+        HttpUtil.getInstance(this, false).setLike(new ProgressSubscriber(onNextListener, this), app.getUser().getUser_id(), lomo_id);
     }
 
     /**
@@ -709,8 +672,6 @@ public class PicFragment extends Fragment {
                 }
             }
         };
-        HttpUtil.getInstance(getActivity(), false).cancelLike(new ProgressSubscriber(onNextListener, getActivity()), thumb_id);
+        HttpUtil.getInstance(this, false).cancelLike(new ProgressSubscriber(onNextListener, this), thumb_id);
     }
-
-
 }

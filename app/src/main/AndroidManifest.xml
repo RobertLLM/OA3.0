@@ -293,8 +293,11 @@
         <activity android:name=".Permission.PermissionsActivity" />
         <activity android:name=".main.LocalViewActivity" />
         <activity android:name=".login.AboutUsActivity" />
-        <activity android:name=".Cycle.CycleDetailActivity"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+        <activity
+            android:name=".Cycle.CycleDetailActivity"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
+        <activity android:name=".Cycle.PersonalCycleActivity" />
+        <activity android:name=".Cycle.AddCycleActivity"></activity>
     </application>
 
 </manifest>

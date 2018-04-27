@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.invonate.ygoa3.Adapter.ToListAdapter;
+import cn.invonate.ygoa3.Entry.Mail;
 import cn.invonate.ygoa3.R;
 
 /**
@@ -28,12 +29,12 @@ public class ToListFragment extends Fragment {
     ListView listCc;
     Unbinder unbinder;
 
-    List<String> data;
+    List<Mail.Address> data;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        data = getArguments().getStringArrayList("list");
+        data = (List<Mail.Address>) getArguments().getSerializable("list");
         Log.i("list", JSON.toJSONString(data));
     }
 

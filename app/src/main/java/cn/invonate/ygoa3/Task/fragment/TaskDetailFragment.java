@@ -191,7 +191,6 @@ public class TaskDetailFragment extends Fragment implements LazyFragmentPagerAda
                         holder.text.setFocusable(true);
                         holder.text.requestFocus();
                     }
-
                     holder.text.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {

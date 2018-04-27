@@ -280,10 +280,10 @@ public class MailDetailActivity extends BaseActivity {
                 break;
             case R.id.txt_info:
                 Bundle bundle = new Bundle();
-                ArrayList<String> receiver = MailHolder.mail_model.get(position).getReceiver();
-                ArrayList<String> copy = MailHolder.mail_model.get(position).getCopy();
-                bundle.putStringArrayList("receiver", receiver);
-                bundle.putStringArrayList("copy", copy);
+                ArrayList<Mail.Address> receiver = MailHolder.mail_model.get(position).getReceiver();
+                ArrayList<Mail.Address> copy = MailHolder.mail_model.get(position).getCopy();
+                bundle.putSerializable("receiver", receiver);
+                bundle.putSerializable("copy", copy);
                 stepActivity(bundle, ContactsListActivity.class);
                 break;
         }

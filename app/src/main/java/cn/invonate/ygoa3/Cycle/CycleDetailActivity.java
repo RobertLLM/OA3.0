@@ -106,11 +106,32 @@ public class CycleDetailActivity extends BaseActivity {
     }
 
     private void initValue() {
-        Glide.with(getApplicationContext())
-                .load(HttpUtil.URL_FILE + bean.getUser_photo())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)//禁用磁盘缓存
-                .skipMemoryCache(true).into(head);
-        name.setText(bean.getUSER_NAME());
+        if (bean.getIS_ANONYMOUS() == 1) {
+            head.setImageResource(R.mipmap.pic_head);
+            head.setOnClickListener(null);
+        } else {
+            Glide.with(this)
+                    .load(HttpUtil.URL_FILE + bean.getUser_photo())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)//禁用磁盘缓存
+                    .dontAnimate().skipMemoryCache(true).into(head);
+            head.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CycleDetailActivity.this, PersonalCycleActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("user_id", bean.getUSER_ID());
+                    bundle.putString("user_pic", bean.getUser_photo());
+                    bundle.putString("user_name", bean.getUSER_NAME());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
+        }
+        if (bean.getIS_ANONYMOUS() == 1) {
+            name.setText("匿名");
+        } else {
+            name.setText(bean.getUSER_NAME());
+        }
         time.setText(bean.getPUBLISH_TIME());
         try {
             content.setText(new String(Base64.decode(bean.getLOMO_CONTENT(), Base64.DEFAULT), "UTF-8"));

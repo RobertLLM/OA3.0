@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.invonate.ygoa3.BaseActivity;
+import cn.invonate.ygoa3.Entry.Mail;
 import cn.invonate.ygoa3.R;
 
 public class ContactsListActivity extends BaseActivity {
@@ -32,8 +33,8 @@ public class ContactsListActivity extends BaseActivity {
 
     private Fragment[] fragments = new Fragment[2];
 
-    private ArrayList<String> List_receiver;
-    private ArrayList<String> list_copy;
+    private ArrayList<Mail.Address> List_receiver;
+    private ArrayList<Mail.Address> list_copy;
 
     private int position = 0;
 
@@ -42,18 +43,18 @@ public class ContactsListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
         ButterKnife.bind(this);
-        List_receiver = getIntent().getExtras().getStringArrayList("receiver");
-        list_copy = getIntent().getExtras().getStringArrayList("copy");
+        List_receiver = (ArrayList<Mail.Address>) getIntent().getExtras().getSerializable("receiver");
+        list_copy = (ArrayList<Mail.Address>) getIntent().getExtras().getSerializable("copy");
 
         ToListFragment f1 = new ToListFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putStringArrayList("list", List_receiver);
+        bundle1.putSerializable("list", List_receiver);
         f1.setArguments(bundle1);
         fragments[0] = f1;
 
         ToListFragment f2 = new ToListFragment();
         Bundle bundle2 = new Bundle();
-        bundle2.putStringArrayList("list", list_copy);
+        bundle2.putSerializable("list", list_copy);
         f2.setArguments(bundle2);
         fragments[1] = f2;
 

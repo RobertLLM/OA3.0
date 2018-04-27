@@ -164,17 +164,19 @@ public class POP3ReceiveMailTest {
      * @return 收件人1 <邮件地址1>, 收件人2 <邮件地址2>, ...
      * @throws MessagingException
      */
-    public static ArrayList<String> getReceiveAddress(MimeMessage msg, Message.RecipientType type) throws MessagingException {
-        ArrayList<String> receiveAddresses = new ArrayList<>();
+    public static ArrayList<Mail.Address> getReceiveAddress(MimeMessage msg, Message.RecipientType type) throws MessagingException {
+        ArrayList<Mail.Address> receiveAddresses = new ArrayList<>();
         Address[] addresss = null;
         addresss = msg.getRecipients(type);
         if (addresss == null || addresss.length < 1) {
 
         } else {
             for (Address address : addresss) {
+                Mail.Address ad = new Mail.Address();
                 InternetAddress internetAddress = (InternetAddress) address;
-                internetAddress.getPersonal();
-                receiveAddresses.add(internetAddress.toUnicodeString());
+                ad.setPersonal(internetAddress.getPersonal());
+                ad.setAddress(internetAddress.toUnicodeString());
+                receiveAddresses.add(ad);
             }
         }
         return receiveAddresses;

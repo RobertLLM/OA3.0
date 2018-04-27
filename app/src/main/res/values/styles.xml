@@ -9,9 +9,9 @@
     </style>
 
     <declare-styleable name="MdStyleProgress">
-        <attr name="progress_color" format="color"/>
-        <attr name="progress_width" format="dimension"/>
-        <attr name="radius" format="dimension"/>
+        <attr name="progress_color" format="color" />
+        <attr name="progress_width" format="dimension" />
+        <attr name="radius" format="dimension" />
     </declare-styleable>
 
     <style name="Animation.SlidingBack" parent="@android:style/Animation.Activity">
@@ -44,6 +44,7 @@
         <item name="tabSelectedTextColor">#398EDF</item>
         <item name="tabBackground">@color/white</item>
     </style>
+
     <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">40px</item>
         <item name="android:textColor">#666666</item>

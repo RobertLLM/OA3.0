@@ -11,6 +11,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.invonate.ygoa3.Entry.Mail;
 import cn.invonate.ygoa3.R;
 
 /**
@@ -19,10 +20,10 @@ import cn.invonate.ygoa3.R;
 
 public class ToListAdapter extends BaseAdapter {
 
-    private List<String> data;
+    private List<Mail.Address> data;
     private Context context;
 
-    public ToListAdapter(List<String> data, Context context) {
+    public ToListAdapter(List<Mail.Address> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -52,14 +53,11 @@ public class ToListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        String address = data.get(position);
-        if (address.contains("<")) {
-            String name = address.substring(address.indexOf("<") + 1, address.lastIndexOf("@"));
-            holder.name.setText(name);
+        holder.name.setText(data.get(position).getPersonal());
+        String address = data.get(position).getAddress();
+        if (address.contains("<") && address.contains(">")) {
             holder.address.setText(address.substring(address.indexOf("<") + 1, address.indexOf(">")));
         } else {
-            String[] names = address.split("@");
-            holder.name.setText(names[0]);
             holder.address.setText(address);
         }
         return convertView;

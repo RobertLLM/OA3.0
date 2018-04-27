@@ -147,6 +147,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                 case MESSAGE_MAIL_ERROR:
                     //Toast.makeText(MailActivity.this, "获取邮件失败，请检查网络连接", Toast.LENGTH_SHORT).show();
                     refresh.finishRefresh();
+                    refresh.finishLoadMore();
                     break;
                 case 4:
                     getMails(0);
@@ -173,6 +174,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
         refresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
+                listMail.setOnItemClickListener(null);
                 getMails(0);
             }
 
