@@ -75,6 +75,7 @@ public class TaskListActivity extends BaseActivity {
             @Override
             public void onError(Throwable e) {
                 Log.i("error", e.toString());
+                Toast.makeText(TaskListActivity.this, "请求超时，请检查网络后重新尝试", Toast.LENGTH_SHORT).show();
                 refresh.finishRefresh();
             }
 

@@ -82,7 +82,9 @@ public class PicFragment extends Fragment {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-
+                if (list_lomo.size() < total) {
+                    getLomoList(list_lomo.size() / 20 + 1);
+                }
             }
         });
         getLomoList(1);
@@ -102,6 +104,7 @@ public class PicFragment extends Fragment {
             @Override
             public void onError(Throwable e) {
                 Log.i("error", e.toString());
+                listNews.onRefreshComplete();
             }
 
             @Override
@@ -202,6 +205,7 @@ public class PicFragment extends Fragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), PersonalCycleActivity.class);
                         Bundle bundle = new Bundle();
+                        bundle.putString("user_code", app.getUser().getUser_code());
                         bundle.putString("user_id", app.getUser().getUser_id());
                         bundle.putString("user_pic", app.getUser().getUser_photo());
                         bundle.putString("user_name", app.getUser().getUser_name());
@@ -210,7 +214,7 @@ public class PicFragment extends Fragment {
                     }
                 });
             } else {
-                if (data.get(position-1).getIS_ANONYMOUS() == 1) {
+                if (data.get(position - 1).getIS_ANONYMOUS() == 1) {
                     holder.head.setImageResource(R.mipmap.pic_head);
                     holder.head.setOnClickListener(null);
                 } else {
@@ -226,12 +230,13 @@ public class PicFragment extends Fragment {
                             bundle.putString("user_id", data.get(position - 1).getUSER_ID());
                             bundle.putString("user_pic", data.get(position - 1).getUser_photo());
                             bundle.putString("user_name", data.get(position - 1).getUSER_NAME());
+                            bundle.putString("user_code", data.get(position - 1).getUSER_CODE());
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }
                     });
                 }
-                if (data.get(position-1).getIS_ANONYMOUS() == 1) {
+                if (data.get(position - 1).getIS_ANONYMOUS() == 1) {
                     holder.name.setText("匿名");
                 } else {
                     holder.name.setText(data.get(position - 1).getUSER_NAME());

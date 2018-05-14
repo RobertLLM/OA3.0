@@ -192,11 +192,6 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
         dialog = new ProgressDialog(this);
         dialog.setTitle("删除中");
 //        getMails(0);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         refresh.autoRefresh();
     }
 

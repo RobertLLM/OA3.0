@@ -6,8 +6,8 @@ android {
         applicationId "cn.invonate.ygoa3"
         minSdkVersion 17
         targetSdkVersion 26
-        versionCode 15
-        versionName "1.4.1"
+        versionCode 17
+        versionName "1.4.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -90,5 +90,3 @@ dependencies {
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'
     compile 'com.drawthink:expandable-recyclerview:0.0.3'
 }
-
-

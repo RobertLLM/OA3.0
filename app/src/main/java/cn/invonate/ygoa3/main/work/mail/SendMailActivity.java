@@ -246,17 +246,18 @@ public class SendMailActivity extends BaseActivity {
 //                        .start();
                 ActionSheetDialog action = new ActionSheetDialog(this).builder();
                 action.setTitle("请选择方式")
-                        .addSheetItem("按路径选择", ActionSheetDialog.SheetItemColor.Black, new ActionSheetDialog.OnSheetItemClickListener() {
-                            @Override
-                            public void onClick(int which) {
-                                FilePicker
-                                        .from(SendMailActivity.this)
-                                        .chooseForBrowser()
-                                        .setMaxCount(1)
-                                        .requestCode(0x999)
-                                        .start();
-                            }
-                        })
+//                        .addSheetItem("按路径选择", ActionSheetDialog.SheetItemColor.Black, new ActionSheetDialog.OnSheetItemClickListener() {
+//                            @Override
+//                            public void onClick(int which) {
+//                                FilePicker
+//                                        .from(SendMailActivity.this)
+//                                        .chooseForBrowser()
+//                                        .setMaxCount(1)
+//                                        .setFileTypes("doc", "xls", "ppt", "pdf", "apk", "mp3", "gif", "txt", "mp4", "zip", "rar")
+//                                        .requestCode(0x999)
+//                                        .start();
+//                            }
+//                        })
                         .addSheetItem("按文件类型选择", ActionSheetDialog.SheetItemColor.Black, new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {
@@ -318,7 +319,12 @@ public class SendMailActivity extends BaseActivity {
         } else if (requestCode == 0x999 && resultCode == RESULT_OK) {
             ArrayList<EssFile> files = data.getParcelableArrayListExtra(Const.EXTRA_RESULT_SELECTION);
             Log.i("files", JSON.toJSONString(files));
-            photoPaths.add(files.get(0).getAbsolutePath());
+            if (!files.isEmpty()) {
+                photoPaths.add(files.get(0).getAbsolutePath());
+            } else {
+                Toast.makeText(app, "未找到该文件", Toast.LENGTH_SHORT).show();
+            }
+
             adapter.notifyDataSetChanged();
         }
 

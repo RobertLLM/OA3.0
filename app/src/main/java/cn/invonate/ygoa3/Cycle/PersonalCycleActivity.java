@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -55,6 +56,8 @@ public class PersonalCycleActivity extends BaseActivity {
     TextView title;
     @BindView(R.id.list_news)
     LYYPullToRefreshListView listNews;
+    @BindView(R.id.message)
+    TextView message;
 
     private LomoAdapter adapter;
 
@@ -64,6 +67,7 @@ public class PersonalCycleActivity extends BaseActivity {
 
     private YGApplication app;
 
+    private String user_code;
     private String user_id;
     private String user_pic;
     private String user_name;
@@ -73,11 +77,15 @@ public class PersonalCycleActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_cycle);
         ButterKnife.bind(this);
-        user_id = getIntent().getExtras().getString("user_id");
-        user_pic = getIntent().getExtras().getString("user_pic");
-        user_name = getIntent().getExtras().getString("user_name");
+        user_code = getIntent().getExtras().getString("user_code","");
+        user_id = getIntent().getExtras().getString("user_id","");
+        user_pic = getIntent().getExtras().getString("user_pic","");
+        user_name = getIntent().getExtras().getString("user_name","");
         title.setText(user_name + "的随手拍");
         app = (YGApplication) getApplication();
+        if (user_code.equals(app.getUser().getUser_code())) {
+            message.setVisibility(View.VISIBLE);
+        }
         listNews.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -86,7 +94,9 @@ public class PersonalCycleActivity extends BaseActivity {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-
+                if (list_lomo.size() < total) {
+                    getMyLomoList(list_lomo.size() / 20 + 1);
+                }
             }
         });
         getMyLomoList(1);
@@ -143,9 +153,16 @@ public class PersonalCycleActivity extends BaseActivity {
         HttpUtil.getInstance(this, false).getMyLomoList(subscriber, page, 20, app.getUser().getUser_id(), user_id);
     }
 
-    @OnClick(R.id.pic_back)
-    public void onViewClicked() {
-        finish();
+    @OnClick({R.id.pic_back, R.id.message})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.pic_back:
+                finish();
+                break;
+            case R.id.message:
+                stepActivity(CycyleMessageActivity.class);
+                break;
+        }
     }
 
     /**
@@ -211,8 +228,6 @@ public class PersonalCycleActivity extends BaseActivity {
                     holder.img_play.setVisibility(View.VISIBLE);
                     holder.newsPic.setImageResource(R.drawable.image_init);
                     setVideoImage(holder.newsPic, HttpUtil.URL_FILE + data.get(position - 1).getLOMO_VIDEO());
-//                    new Thread(new ImageThread(holder.newsPic, HttpUtil.URL_FILE + data.get(position - 1).getLOMO_VIDEO())).start();
-//                    holder.newsPic.setImageBitmap(getNetVideoBitmap(HttpUtil.URL_FILE + data.get(position - 1).getLOMO_VIDEO()));
                     holder.newsPic2.setVisibility(View.INVISIBLE);
                     holder.newsPic3.setVisibility(View.INVISIBLE);
                     holder.newsPic4.setVisibility(View.INVISIBLE);
@@ -423,11 +438,6 @@ public class PersonalCycleActivity extends BaseActivity {
                     holder.layout_imgs3.setVisibility(View.GONE);
                 }
                 int sum_zan = data.get(position - 1).getTh_num();
-//                if (sum_zan > 0) {
-//                    holder.imgZan.setImageResource(R.mipmap.heat1);
-//                } else {
-//                    holder.imgZan.setImageResource(R.mipmap.heat0);
-//                }
                 holder.sumZan.setText(sum_zan + "");
 
                 String thum_up = data.get(position - 1).getThumb_up();
@@ -447,6 +457,33 @@ public class PersonalCycleActivity extends BaseActivity {
                             cancelLike(position - 1, data.get(position - 1).getThumb_up());
                         }
                     });
+                }
+                if (user.getUser_code().equals(user_code)) {
+                    holder.imgContent.setImageResource(R.mipmap.delete);
+                    holder.sumContent.setVisibility(View.GONE);
+                    holder.imgContent.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertDialog dialog = new AlertDialog(PersonalCycleActivity.this).builder();
+                            dialog.setTitle("提示")
+                                    .setMsg("是否删除？")
+                                    .setPositiveButton("确定", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            delete_lomo(data.get(position - 1).getLOMO_ID(), position - 1);
+                                        }
+                                    })
+                                    .setNegativeButton("取消", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                        }
+                                    }).show();
+                        }
+                    });
+                } else {
+                    holder.imgContent.setImageResource(R.mipmap.content);
+                    holder.sumContent.setVisibility(View.GONE);
                 }
                 holder.sumContent.setText(data.get(position - 1).getInfo_num() + "");
 
@@ -673,5 +710,25 @@ public class PersonalCycleActivity extends BaseActivity {
             }
         };
         HttpUtil.getInstance(this, false).cancelLike(new ProgressSubscriber(onNextListener, this), thumb_id);
+    }
+
+
+    /**
+     * 删除随手拍
+     *
+     * @param lomo_id
+     */
+    private void delete_lomo(String lomo_id, final int position) {
+        SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<Like>() {
+            @Override
+            public void onNext(Like data) {
+                Log.i("delete_lomo", data.toString());
+                if (data.getResult() == 0) {
+                    list_lomo.remove(position - 1);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        };
+        HttpUtil.getInstance(this, false).deleteLomo(new ProgressSubscriber(onNextListener, this), lomo_id);
     }
 }

@@ -599,5 +599,28 @@ public class HttpUtil {
         toSubscribe(observable, subscriber);
     }
 
+    /**
+     * 删除随手拍
+     *
+     * @param subscriber
+     * @param lomo_id
+     */
+    public void deleteLomo(Subscriber subscriber, String lomo_id) {
+        Observable observable = httpService.deleteLomo(lomo_id);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 我的消息
+     *
+     * @param subscriber
+     * @param page
+     * @param rows
+     * @param user_id
+     */
+    public void getMessageList(Subscriber subscriber, int page, int rows, String user_id) {
+        Observable observable = httpService.getMessageList(page, rows, user_id);
+        toSubscribe(observable, subscriber);
+    }
 
 }

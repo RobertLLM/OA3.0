@@ -98,7 +98,8 @@ public class MailDetailActivity extends BaseActivity {
                     finish();
                     break;
                 case DELETE_FAIL:
-                    Toast.makeText(MailDetailActivity.this, "删除失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                    finish();
+                    Toast.makeText(MailDetailActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
                     break;
             }
         }

@@ -297,7 +297,8 @@
             android:name=".Cycle.CycleDetailActivity"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity android:name=".Cycle.PersonalCycleActivity" />
-        <activity android:name=".Cycle.AddCycleActivity"></activity>
+        <activity android:name=".Cycle.AddCycleActivity" />
+        <activity android:name=".Cycle.CycyleMessageActivity"></activity>
     </application>
 
 </manifest>

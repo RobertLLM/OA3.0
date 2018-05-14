@@ -21,8 +21,8 @@ android {
         }
 
         manifestPlaceholders = [
-                XG_ACCESS_ID : "2100281613",
-                XG_ACCESS_KEY: "AL758SU7N1SI",
+                XG_ACCESS_ID : "2100281612",
+                XG_ACCESS_KEY: "A6WP2IN865TN",
         ]
 
     }

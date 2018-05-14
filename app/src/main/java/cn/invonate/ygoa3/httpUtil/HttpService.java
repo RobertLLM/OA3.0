@@ -10,6 +10,7 @@ import cn.invonate.ygoa3.Entry.ChangePass;
 import cn.invonate.ygoa3.Entry.Comment;
 import cn.invonate.ygoa3.Entry.Contacts;
 import cn.invonate.ygoa3.Entry.CyContacts;
+import cn.invonate.ygoa3.Entry.CycleMessage;
 import cn.invonate.ygoa3.Entry.Department;
 import cn.invonate.ygoa3.Entry.Friend;
 import cn.invonate.ygoa3.Entry.Fund;
@@ -340,5 +341,21 @@ public interface HttpService {
             @Field("lomo_content") String lomo_content,
             @Field("is_anonymous") int is_anonymous,
             @Field("lomo_video") String lomo_video
+    );
+
+    // 删除随手拍
+    @POST("/ygoa/ydptlomo/deleteLomo.action")
+    @FormUrlEncoded
+    Observable<Like> deleteLomo(
+            @Field("lomo_id") String lomo_id
+    );
+
+    //  我的消息
+    @POST("/ygoa/ydptlomo/getMessageList.action")
+    @FormUrlEncoded
+    Observable<CycleMessage> getMessageList(
+            @Field("page") int page,
+            @Field("rows") int rows,
+            @Field("userid") String userid
     );
 }

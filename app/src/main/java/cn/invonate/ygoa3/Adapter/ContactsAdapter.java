@@ -26,8 +26,6 @@ public class ContactsAdapter extends BaseAdapter {
     private List<Contacts> data;
     private Context context;
 
-
-
     public ContactsAdapter(List<Contacts> data, Context context) {
         this.data = data;
         this.context = context;
