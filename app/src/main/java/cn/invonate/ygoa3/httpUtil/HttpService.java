@@ -19,6 +19,7 @@ import cn.invonate.ygoa3.Entry.Group_member;
 import cn.invonate.ygoa3.Entry.InitPassMessage;
 import cn.invonate.ygoa3.Entry.Like;
 import cn.invonate.ygoa3.Entry.Lomo;
+import cn.invonate.ygoa3.Entry.Meeting;
 import cn.invonate.ygoa3.Entry.Member;
 import cn.invonate.ygoa3.Entry.Mission;
 import cn.invonate.ygoa3.Entry.MyApplicationList;
@@ -36,6 +37,8 @@ import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -358,4 +361,29 @@ public interface HttpService {
             @Field("rows") int rows,
             @Field("userid") String userid
     );
+
+    @Headers("X-Innovate-Application:OA")
+    @GET("innovate-api/v1/oa/meeting/pageList/unfinish")
+    Observable<Meeting> getUnfinishMetting(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Query("pageNum") int pageNum,
+            @Query("pageSize") int pageSize
+    );
+
+    @Headers("X-Innovate-Application:OA")
+    @GET("innovate-api/v1/oa/meeting/pageList/myAll")
+    Observable<Meeting> getAllMetting(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Query("pageNum") int pageNum,
+            @Query("pageSize") int pageSize
+    );
+
+    @Headers("X-Innovate-Application:OA")
+    @GET("innovate-api/v1/oa/meeting/pageList/myCreate")
+    Observable<Meeting> getMyMetting(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Query("pageNum") int pageNum,
+            @Query("pageSize") int pageSize
+    );
+
 }
