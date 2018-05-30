@@ -1,37 +1,37 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
-INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
-INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
-INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
-INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
-INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
-INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
+ADDED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:2:1-11:12
 	package
-		ADDED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:3:5-50
-		INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml
-		INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml
+		ADDED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:3:5-50
+		INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml
+		INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml
 	android:versionName
-		ADDED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:5:5-30
-		INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml
-		INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml
+		ADDED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:5:5-30
+		INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml
+		INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:2:11-69
+		ADDED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:2:11-69
 	android:versionCode
-		ADDED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:4:5-28
-		INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml
-		INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml
+		ADDED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:4:5-28
+		INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml
+		INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml
 uses-sdk
-ADDED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:7:5-9:41
-INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:7:5-9:41
-INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:7:5-9:41
-INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:7:5-9:41
-INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:7:5-9:41
+ADDED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:7:5-9:41
+INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:7:5-9:41
+INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:7:5-9:41
+INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:7:5-9:41
+INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:7:5-9:41
 	android:targetSdkVersion
-		ADDED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:9:9-38
-		INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml
-		INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml
+		ADDED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:9:9-38
+		INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml
+		INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml
 	android:minSdkVersion
-		ADDED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml:8:9-34
-		INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml
-		INJECTED from /Users/liyangyang/Documents/Android project/OA/SlidingMenulibrary/AndroidManifest.xml
+		ADDED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml:8:9-34
+		INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml
+		INJECTED from /Users/liyangyang/Documents/ASWorkspace/OA/SlidingMenulibrary/AndroidManifest.xml

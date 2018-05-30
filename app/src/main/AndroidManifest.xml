@@ -298,7 +298,12 @@
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity android:name=".Cycle.PersonalCycleActivity" />
         <activity android:name=".Cycle.AddCycleActivity" />
-        <activity android:name=".Cycle.CycyleMessageActivity"></activity>
+        <activity android:name=".Cycle.CycyleMessageActivity" />
+        <activity android:name=".Meeting.MeetListActivity" />
+        <activity
+            android:name=".Meeting.MeetingActivity"
+            android:label="@string/title_activity_meeting"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

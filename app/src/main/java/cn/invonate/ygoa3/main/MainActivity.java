@@ -266,6 +266,8 @@ public class MainActivity extends BaseActivity {
                                 @Override
                                 public void onClick(View v) {
                                     String url = data.getVersion_url();
+                                    if (url.startsWith("/"))
+                                        url = url.substring(1);
                                     new Thread(new DownLoadRunnable(MainActivity.this, HttpUtil.URL_FILE + url, "永钢办公v3", 0, handler)).start();
                                 }
                             }).setNegativeButton("取消", null)

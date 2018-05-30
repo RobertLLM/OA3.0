@@ -32,6 +32,7 @@ import butterknife.Unbinder;
 import cn.invonate.ygoa3.Entry.Mission;
 import cn.invonate.ygoa3.Entry.Sum;
 import cn.invonate.ygoa3.Entry.TaskCopy;
+import cn.invonate.ygoa3.Meeting.MeetingActivity;
 import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.Task.TaskApprovedActivity;
 import cn.invonate.ygoa3.Task.TaskCopyActivity;
@@ -139,7 +140,7 @@ public class WorkFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.layout_process, R.id.layout_process_added, R.id.layout_process_down, R.id.layout_process_copy, R.id.layout_mail, R.id.layout_work, R.id.layout_allow, R.id.layout_news, R.id.layout_notice, R.id.layout_meting, R.id.layout_meal})
+    @OnClick({R.id.layout_process, R.id.layout_process_added, R.id.layout_process_down, R.id.layout_process_copy, R.id.layout_mail, R.id.layout_work, R.id.layout_allow, R.id.layout_news, R.id.layout_notice, R.id.layout_meting, R.id.layout_meal, R.id.layout_warning})
     public void onViewClicked(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -181,15 +182,20 @@ public class WorkFragment extends Fragment {
                         + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=7");
                 break;
             case R.id.layout_meting:
-                intent = new Intent(getActivity(), WebViewActivity.class);
-                intent.putExtra("name", "会议管理");
-                intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
-                        + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=5");
+                intent = new Intent(getActivity(), MeetingActivity.class);
+//                intent.putExtra("name", "会议管理");
+//                intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
+//                        + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=5");
                 break;
             case R.id.layout_meal:
                 intent = new Intent(getActivity(), WebViewActivity.class);
                 intent.putExtra("name", "在线点餐");
                 intent.putExtra("url", "http://dc.yong-gang.com/members/oa_login?pk=" + app.getUser().getRsbm_pk());
+                break;
+            case R.id.layout_warning:
+                intent = new Intent(getActivity(), WebViewActivity.class);
+                intent.putExtra("name", "安全预警");
+                intent.putExtra("url", "http://ahb.yong-gang.com/Members/login?pid=" + app.getUser().getUser_code() + "&pk=" + app.getUser().getRsbm_pk());
                 break;
         }
         if (intent != null) {

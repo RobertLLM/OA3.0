@@ -162,7 +162,7 @@ public class MailDetailActivity extends BaseActivity {
 //            webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
 //            webSettings.setTextSize(WebSettings.TextSize.LARGER);
 //        } else {
-            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+        webSettings.setTextSize(WebSettings.TextSize.LARGER);
 //        }
         /**
          * 用WebView显示图片，可使用这个参数 设置网页布局类型： 1、LayoutAlgorithm.NARROW_COLUMNS ： 适应内容大小 2、LayoutAlgorithm.SINGLE_COLUMN:适应屏幕，内容将自动缩放
@@ -367,20 +367,18 @@ public class MailDetailActivity extends BaseActivity {
 //                    File file = MyUtils.getCacheFile(name, MailDetailActivity.this);
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), name);
                     if (file.exists()) {
-                        bundle.putString("path", name);
-                        stepActivity(bundle, LocalViewActivity.class);
-                    } else {
-                        OutputStream output = null;
-                        try {
-                            output = new FileOutputStream(file);
-                            BufferedOutputStream bufferedOutput = new BufferedOutputStream(output);
-                            bufferedOutput.write(files.get(position).getIs());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        bundle.putString("path", name);
-                        stepActivity(bundle, LocalViewActivity.class);
+                        file.delete();
                     }
+                    OutputStream output = null;
+                    try {
+                        output = new FileOutputStream(file);
+                        BufferedOutputStream bufferedOutput = new BufferedOutputStream(output);
+                        bufferedOutput.write(files.get(position).getIs());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    bundle.putString("path", name);
+                    stepActivity(bundle, LocalViewActivity.class);
                 }
 
             }

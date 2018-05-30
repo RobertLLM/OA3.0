@@ -24,15 +24,15 @@ public class MyUtils {
      * @return
      */
     public static File getCacheFile(String name, Context context) {
-//        String cachePath;
-//        if (Environment.MEDIA_MOUNTED.equals(Environment
-//                .getExternalStorageState())
-//                || !Environment.isExternalStorageRemovable()) {
-//
-//            cachePath = context.getExternalCacheDir().getPath();
-//        } else {
-//            cachePath = context.getCacheDir().getPath();
-//        }
+        String cachePath;
+        if (Environment.MEDIA_MOUNTED.equals(Environment
+                .getExternalStorageState())
+                || !Environment.isExternalStorageRemovable()) {
+
+            cachePath = context.getExternalCacheDir().getPath();
+        } else {
+            cachePath = context.getCacheDir().getPath();
+        }
         return new File(Environment.getExternalStorageDirectory() + "/" + MyUtils.PACKAGE_NAME + "/" + MyUtils.APP_NAME);
     }
 
