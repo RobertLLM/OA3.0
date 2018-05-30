@@ -303,7 +303,8 @@
         <activity
             android:name=".Meeting.MeetingActivity"
             android:label="@string/title_activity_meeting"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Meeting.AddMeetingActivity"></activity>
     </application>
 
 </manifest>
