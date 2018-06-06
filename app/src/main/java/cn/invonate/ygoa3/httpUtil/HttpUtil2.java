@@ -3,8 +3,14 @@ package cn.invonate.ygoa3.httpUtil;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import cn.invonate.ygoa3.Entry.AddMeeting;
+import cn.invonate.ygoa3.Entry.DeletePerson;
+import cn.invonate.ygoa3.Entry.EditMeeting;
+import cn.invonate.ygoa3.Entry.MeetingDetail;
+import cn.invonate.ygoa3.Entry.Reason;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -16,7 +22,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class HttpUtil2 {
-    public static final String BASE_URL = "http://192.168.2.21:8080/";
+            public static final String BASE_URL = "http://192.168.2.21:8080/innovate-api/";
+//    public static final String BASE_URL = "http://10.181.5.181:8080/innovate-api/";
 
     private HttpService httpService;
 
@@ -117,6 +124,153 @@ public class HttpUtil2 {
      */
     public void getMyMeeting(Subscriber subscriber, String pk, int pageNum, int pageSize) {
         Observable observable = httpService.getMyMetting(pk, pageNum, pageSize);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 删除会议
+     *
+     * @param subscriber
+     * @param url
+     * @param pk
+     */
+    public void deleteMeet(Subscriber subscriber, String url, String pk) {
+        Observable observable = httpService.deleteMeet(url, pk);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 会议详情
+     *
+     * @param subscriber
+     * @param url
+     * @param pk
+     */
+    public void getMeetingDetail(Subscriber subscriber, String url, String pk) {
+        Observable observable = httpService.getMeetingDetail(url, pk);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 会议动态
+     *
+     * @param subscriber
+     * @param url
+     * @param pk
+     */
+    public void getDynamic(Subscriber subscriber, String url, String pk) {
+        Observable observable = httpService.getDynamic(url, pk);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 会议动态
+     *
+     * @param subscriber
+     * @param url
+     * @param pk
+     */
+    public void getRepeat(Subscriber subscriber, String url, String pk) {
+        Observable observable = httpService.getRepeat(url, pk);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 确认参加
+     *
+     * @param subscriber
+     * @param url
+     * @param pk
+     */
+    public void attend_sure(Subscriber subscriber, String url, String pk) {
+        Observable observable = httpService.attend_sure(url, pk);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 不参加
+     *
+     * @param subscriber
+     * @param url
+     * @param pk
+     */
+    public void attend_not(Subscriber subscriber, String url, String pk, Reason reason) {
+        Observable observable = httpService.attend_not(url, pk, reason);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 修改参会人
+     *
+     * @param subscriber
+     * @param url
+     * @param pk
+     * @param list
+     */
+    public void attend_join(Subscriber subscriber, String url, String pk, List<MeetingDetail.ResultBean.AttendListBean> list) {
+        Observable observable = httpService.attend_Join(url, pk, list);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 删除参会人
+     *
+     * @param subscriber
+     * @param pk
+     * @param person
+     */
+    public void delete_join(Subscriber subscriber, String pk, DeletePerson person) {
+        Observable observable = httpService.delete_Join(pk, person);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 修改会议
+     *
+     * @param subscriber
+     * @param pk
+     * @param meet
+     */
+    public void edit_meet(Subscriber subscriber, String pk, EditMeeting meet) {
+        Observable observable = httpService.edit_meeting(pk, meet);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 获取会议地点
+     *
+     * @param subscriber
+     * @param pk
+     */
+    public void getLocation(Subscriber subscriber, String pk) {
+        Observable observable = httpService.getLocation(pk);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 获取会议室
+     *
+     * @param subscriber
+     * @param pk
+     * @param pageNum
+     * @param pageSize
+     * @param meetingDate
+     * @param districtId
+     */
+    public void getRoom(Subscriber subscriber, String pk, int pageNum, int pageSize, String meetingDate, String districtId) {
+        Observable observable = httpService.getRoom(pk, pageNum, pageSize, meetingDate, districtId);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 预约会议
+     *
+     * @param subscriber
+     * @param pk
+     * @param meet
+     */
+    public void add_meet(Subscriber subscriber, String pk, AddMeeting meet) {
+        Observable observable = httpService.add_meeting(pk, meet);
         toSubscribe(observable, subscriber);
     }
 }

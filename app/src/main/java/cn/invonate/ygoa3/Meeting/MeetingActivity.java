@@ -1,14 +1,13 @@
 package cn.invonate.ygoa3.Meeting;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -20,13 +19,15 @@ import butterknife.OnClick;
 import cn.invonate.ygoa3.BaseActivity;
 import cn.invonate.ygoa3.Meeting.Fragment.MeetingFragment;
 import cn.invonate.ygoa3.R;
+import cn.invonate.ygoa3.View.CustomViewPager;
+import cn.invonate.ygoa3.View.FloatingDraftButton;
 
 public class MeetingActivity extends BaseActivity {
 
     @BindView(R.id.tl_tab)
     TabLayout tlTab;
     @BindView(R.id.vp_content)
-    ViewPager vpContent;
+    CustomViewPager vpContent;
 
     private List<String> tabIndicators;
     private List<Fragment> tabFragments;
@@ -39,11 +40,12 @@ public class MeetingActivity extends BaseActivity {
         setContentView(R.layout.activity_meeting);
         ButterKnife.bind(this);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingDraftButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View iew) {
+                Intent intent=new Intent(MeetingActivity.this,AddMeetingActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -58,6 +60,7 @@ public class MeetingActivity extends BaseActivity {
             tabFragments.add(MeetingFragment.newInstance(i));
         }
         vpContent.setOffscreenPageLimit(3);
+        vpContent.setScanScroll(false);
         tlTab.setTabMode(TabLayout.MODE_FIXED);
         tlTab.setTabTextColors(ContextCompat.getColor(this, R.color.black), ContextCompat.getColor(this, R.color.colorPrimary));
         tlTab.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.colorPrimary));
@@ -75,7 +78,7 @@ public class MeetingActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.pic_search:
-                finish();
+
                 break;
         }
     }

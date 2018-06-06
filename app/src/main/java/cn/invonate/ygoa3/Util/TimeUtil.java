@@ -25,7 +25,7 @@ public class TimeUtil {
 
     public static String timeFormatNoYear(long time) {
         StringBuffer pattern = new StringBuffer();
-        pattern.append("MM:mm EE HH:mm");
+        pattern.append("MM-dd EE HH:mm");
         return new SimpleDateFormat(pattern.toString()).format(new Date(time));
     }
 

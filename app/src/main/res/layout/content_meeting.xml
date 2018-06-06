@@ -10,6 +10,7 @@
     tools:context=".Meeting.MeetingActivity"
     tools:showIn="@layout/activity_meeting">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120px"
@@ -40,6 +41,7 @@
             android:layout_width="120px"
             android:layout_height="120px"
             android:padding="15px"
+            android:visibility="invisible"
             android:src="@mipmap/mail_search" />
 
     </LinearLayout>
@@ -58,11 +60,11 @@
 
     </android.support.design.widget.TabLayout>
 
-    <android.support.v4.view.ViewPager
+    <cn.invonate.ygoa3.View.CustomViewPager
         android:id="@+id/vp_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v4.view.ViewPager>
+    </cn.invonate.ygoa3.View.CustomViewPager>
 
 </LinearLayout>

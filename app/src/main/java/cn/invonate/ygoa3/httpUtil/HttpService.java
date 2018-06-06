@@ -4,6 +4,7 @@ package cn.invonate.ygoa3.httpUtil;
 import java.util.List;
 import java.util.Map;
 
+import cn.invonate.ygoa3.Entry.AddMeeting;
 import cn.invonate.ygoa3.Entry.Amount;
 import cn.invonate.ygoa3.Entry.Approved;
 import cn.invonate.ygoa3.Entry.ChangePass;
@@ -11,7 +12,9 @@ import cn.invonate.ygoa3.Entry.Comment;
 import cn.invonate.ygoa3.Entry.Contacts;
 import cn.invonate.ygoa3.Entry.CyContacts;
 import cn.invonate.ygoa3.Entry.CycleMessage;
+import cn.invonate.ygoa3.Entry.DeletePerson;
 import cn.invonate.ygoa3.Entry.Department;
+import cn.invonate.ygoa3.Entry.EditMeeting;
 import cn.invonate.ygoa3.Entry.Friend;
 import cn.invonate.ygoa3.Entry.Fund;
 import cn.invonate.ygoa3.Entry.Group;
@@ -19,12 +22,20 @@ import cn.invonate.ygoa3.Entry.Group_member;
 import cn.invonate.ygoa3.Entry.InitPassMessage;
 import cn.invonate.ygoa3.Entry.Like;
 import cn.invonate.ygoa3.Entry.Lomo;
+import cn.invonate.ygoa3.Entry.MeetMessage;
+import cn.invonate.ygoa3.Entry.MeetRepeat;
+import cn.invonate.ygoa3.Entry.MeetResponse;
 import cn.invonate.ygoa3.Entry.Meeting;
+import cn.invonate.ygoa3.Entry.MeetingDetail;
+import cn.invonate.ygoa3.Entry.MeetingDynamic;
+import cn.invonate.ygoa3.Entry.MeetingLocation;
 import cn.invonate.ygoa3.Entry.Member;
 import cn.invonate.ygoa3.Entry.Mission;
 import cn.invonate.ygoa3.Entry.MyApplicationList;
 import cn.invonate.ygoa3.Entry.PersonGroup;
 import cn.invonate.ygoa3.Entry.Property;
+import cn.invonate.ygoa3.Entry.Reason;
+import cn.invonate.ygoa3.Entry.Room;
 import cn.invonate.ygoa3.Entry.Salary;
 import cn.invonate.ygoa3.Entry.Sum;
 import cn.invonate.ygoa3.Entry.Task;
@@ -33,13 +44,17 @@ import cn.invonate.ygoa3.Entry.TaskLine;
 import cn.invonate.ygoa3.Entry.User;
 import cn.invonate.ygoa3.Entry.Version;
 import cn.invonate.ygoa3.Entry.Welfare;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 import rx.Observable;
@@ -362,28 +377,131 @@ public interface HttpService {
             @Field("userid") String userid
     );
 
+    //  未开始会议
     @Headers("X-Innovate-Application:OA")
-    @GET("innovate-api/v1/oa/meeting/pageList/unfinish")
+    @GET("v1/oa/meeting/pageList/unfinish")
     Observable<Meeting> getUnfinishMetting(
             @Header("X-Innovate-Rsbm") String pk,
             @Query("pageNum") int pageNum,
             @Query("pageSize") int pageSize
     );
 
+    //  已结束等所有会议
     @Headers("X-Innovate-Application:OA")
-    @GET("innovate-api/v1/oa/meeting/pageList/myAll")
+    @GET("v1/oa/meeting/pageList/myAll")
     Observable<Meeting> getAllMetting(
             @Header("X-Innovate-Rsbm") String pk,
             @Query("pageNum") int pageNum,
             @Query("pageSize") int pageSize
     );
 
+    //  我的会议
     @Headers("X-Innovate-Application:OA")
-    @GET("innovate-api/v1/oa/meeting/pageList/myCreate")
+    @GET("v1/oa/meeting/pageList/myCreate")
     Observable<Meeting> getMyMetting(
             @Header("X-Innovate-Rsbm") String pk,
             @Query("pageNum") int pageNum,
             @Query("pageSize") int pageSize
     );
 
+    //  删除会议
+    @Headers("X-Innovate-Application:OA")
+    @DELETE()
+    Observable<MeetResponse> deleteMeet(
+            @Url() String url,
+            @Header("X-Innovate-Rsbm") String pk
+
+    );
+
+    //  会议详情
+    @Headers("X-Innovate-Application:OA")
+    @GET()
+    Observable<MeetingDetail> getMeetingDetail(
+            @Url() String url,
+            @Header("X-Innovate-Rsbm") String pk
+    );
+
+    //  会议动态
+    @Headers("X-Innovate-Application:OA")
+    @GET()
+    Observable<MeetingDynamic> getDynamic(
+            @Url() String url,
+            @Header("X-Innovate-Rsbm") String pk
+    );
+
+    //  会议回复
+    @Headers("X-Innovate-Application:OA")
+    @GET()
+    Observable<MeetRepeat> getRepeat(
+            @Url() String url,
+            @Header("X-Innovate-Rsbm") String pk
+    );
+
+    //  会议参加
+    @Headers("X-Innovate-Application:OA")
+    @POST()
+    Observable<MeetMessage> attend_sure(
+            @Url() String url,
+            @Header("X-Innovate-Rsbm") String pk
+    );
+
+    //  会议不参加
+    @Headers({"X-Innovate-Application:OA", "content-Type:application/json"})
+    @POST()
+    Observable<MeetMessage> attend_not(
+            @Url() String url,
+            @Header("X-Innovate-Rsbm") String pk,
+            @Body() Reason reason
+    );
+
+    //  修改参会人
+    @Headers({"X-Innovate-Application:OA", "content-Type:application/json"})
+    @POST()
+    Observable<MeetMessage> attend_Join(
+            @Url() String url,
+            @Header("X-Innovate-Rsbm") String pk,
+            @Body() List<MeetingDetail.ResultBean.AttendListBean> list
+    );
+
+    //  删除参会人
+    @Headers({"X-Innovate-Application:OA", "content-Type:application/json"})
+    @HTTP(method = "DELETE", path = "v1/oa/meetingJoin/removeOne", hasBody = true)
+    Observable<MeetMessage> delete_Join(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Body DeletePerson person
+    );
+
+    //  修改会议
+    @Headers({"X-Innovate-Application:OA", "content-Type:application/json"})
+    @PUT("v1/oa/meeting/updateMeeting")
+    Observable<String> edit_meeting(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Body EditMeeting edit
+    );
+
+    //  获取会议地点
+    @Headers({"X-Innovate-Application:OA"})
+    @GET("v1/oa/meetingDistrict/list")
+    Observable<MeetingLocation> getLocation(
+            @Header("X-Innovate-Rsbm") String pk
+    );
+
+    //  获取会议室
+    @Headers({"X-Innovate-Application:OA"})
+    @GET("v1/oa/meetingRoom/list")
+    Observable<Room> getRoom(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Query("pageNum") int pageNum,
+            @Query("pageSize") int pageSize,
+            @Query("meetingDate") String meetingDate,
+            @Query("districtId") String districtId
+    );
+
+    //  预约会议
+    @Headers({"X-Innovate-Application:OA", "content-Type:application/json"})
+    @POST("v1/oa/meeting/addMeeting")
+    Observable<MeetMessage> add_meeting(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Body() AddMeeting meet
+    );
 }

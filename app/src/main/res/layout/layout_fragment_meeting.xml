@@ -9,12 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
+        <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/list_meet"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </ListView>
+        </com.baoyz.swipemenulistview.SwipeMenuListView>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

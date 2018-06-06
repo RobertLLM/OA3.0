@@ -2,6 +2,8 @@ package cn.invonate.ygoa3.Entry;
 
 import com.alibaba.fastjson.JSON;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Meeting {
@@ -78,7 +80,7 @@ public class Meeting {
         private int size;
         private int startRow;
         private int total;
-        private List<MeetBean> list;
+        private ArrayList<MeetBean> list;
         private List<Integer> navigatepageNums;
 
         public int getEndRow() {
@@ -209,11 +211,11 @@ public class Meeting {
             this.total = total;
         }
 
-        public List<MeetBean> getList() {
+        public ArrayList<MeetBean> getList() {
             return list;
         }
 
-        public void setList(List<MeetBean> list) {
+        public void setList(ArrayList<MeetBean> list) {
             this.list = list;
         }
 
@@ -225,7 +227,7 @@ public class Meeting {
             this.navigatepageNums = navigatepageNums;
         }
 
-        public static class MeetBean {
+        public static class MeetBean implements Serializable{
             /**
              * addressId : b66114ef-3d05-46a8-8d05-664e02a2056d
              * attendNum : 0
@@ -256,13 +258,16 @@ public class Meeting {
             private long endTime;
             private String id;
             private String joinStatus;
-            private String meetingStatus;
+            private String meetingStatus;// 0正常 1取消
             private String recordPersonCode;
             private String recordPersonId;
             private String recordPersonName;
             private long startTime;
             private String title;
             private int totalNum;
+            private String meetingGoingStatus;// 0未进行，1已结束。2进行中
+            private String addressName;
+
 
             public String getAddressId() {
                 return addressId;
@@ -398,6 +403,22 @@ public class Meeting {
 
             public void setTotalNum(int totalNum) {
                 this.totalNum = totalNum;
+            }
+
+            public String getMeetingGoingStatus() {
+                return meetingGoingStatus;
+            }
+
+            public void setMeetingGoingStatus(String meetingGoingStatus) {
+                this.meetingGoingStatus = meetingGoingStatus;
+            }
+
+            public String getAddressName() {
+                return addressName;
+            }
+
+            public void setAddressName(String addressName) {
+                this.addressName = addressName;
             }
         }
     }

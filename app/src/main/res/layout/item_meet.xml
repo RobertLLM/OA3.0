@@ -25,27 +25,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="111"
-            android:textColor="#000000"
-            android:textSize="45px" />
+            android:background="@drawable/back_meet_grey"
+            android:paddingEnd="15px"
+            android:paddingStart="15px"
+            android:text="取消"
+            android:textColor="#A4A4A4"
+            android:textSize="40px" />
 
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/time"
-        android:layout_marginTop="20px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
         android:text="111111"
         android:textColor="#A4A4A4"
         android:textSize="48px" />
 
     <TextView
         android:id="@+id/locate"
-        android:layout_marginTop="20px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
         android:text="地点"
         android:textColor="#000000"
         android:textSize="45px" />
@@ -54,8 +57,8 @@
         android:id="@+id/person"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="111111"
         android:layout_marginTop="20px"
+        android:text="111111"
         android:textColor="#000000"
         android:textSize="48px" />
 
@@ -68,52 +71,81 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:layout_gravity="center_vertical"
-            android:layout_weight="3" >
+            android:layout_weight="3"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="40px"
                 android:layout_height="40px"
                 android:layout_gravity="center_vertical"
-                android:src="@mipmap/meet_message"/>
+                android:src="@mipmap/meet_message" />
 
             <TextView
                 android:id="@+id/dynamic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="45px"
                 android:layout_gravity="center_vertical"
-                android:textColor="#000000"
                 android:layout_marginStart="15px"
-                android:text="1111111"/>
+                android:text="1111111"
+                android:textColor="#000000"
+                android:textSize="45px" />
 
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="0dp"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
             android:layout_height="match_parent"
-            android:layout_weight="7" >
+            android:layout_gravity="center_vertical"
+            android:layout_weight="7"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="40px"
                 android:layout_height="40px"
                 android:layout_gravity="center_vertical"
-                android:src="@mipmap/meet_single"/>
+                android:src="@mipmap/meet_single" />
 
             <TextView
                 android:id="@+id/sum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="45px"
                 android:layout_gravity="center_vertical"
-                android:textColor="#000000"
                 android:layout_marginStart="15px"
-                android:text="1111111"/>
+                android:text="1111111"
+                android:textColor="#000000"
+                android:textSize="45px" />
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_attend"
+        android:layout_width="match_parent"
+        android:layout_height="120px"
+        android:layout_marginTop="30px"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/attend_sure"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="确认参加"
+            android:textColor="@color/colorPrimary"
+            android:textSize="50px" />
+
+        <TextView
+            android:id="@+id/attend_not"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="不参加"
+            android:textColor="@color/colorPrimary"
+            android:textSize="50px" />
 
     </LinearLayout>
 

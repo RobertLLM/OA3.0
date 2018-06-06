@@ -20,6 +20,7 @@ public class Contacts implements Serializable {
     private String sex_;
     private String name_all_spell;
     private String name_first_spell;
+    private String rsbm_pk;
     private String sortLetters;  //显示数据拼音的首字母
 
     public Contacts() {
@@ -135,6 +136,14 @@ public class Contacts implements Serializable {
 
     public void setIs_select(boolean is_select) {
         this.is_select = is_select;
+    }
+
+    public String getRsbm_pk() {
+        return rsbm_pk;
+    }
+
+    public void setRsbm_pk(String rsbm_pk) {
+        this.rsbm_pk = rsbm_pk;
     }
 
     @Override
