@@ -22,8 +22,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class HttpUtil2 {
-            public static final String BASE_URL = "http://192.168.2.21:8080/innovate-api/";
-//    public static final String BASE_URL = "http://10.181.5.181:8080/innovate-api/";
+    public static final String BASE_URL = "http://oaapi.yong-gang.cn:8080/innovate-api/";
+//    public static final String BASE_URL = "http://192.168.1.27:8080/innovate-api/";
+//    public static final String BASE_URL = "http://10.181.5.77:8080/innovate-api/";
 
     private HttpService httpService;
 
@@ -271,6 +272,29 @@ public class HttpUtil2 {
      */
     public void add_meet(Subscriber subscriber, String pk, AddMeeting meet) {
         Observable observable = httpService.add_meeting(pk, meet);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 会议签到
+     *
+     * @param subscriber
+     * @param url
+     * @param pk
+     */
+    public void sign(Subscriber subscriber, String url, String pk) {
+        Observable observable = httpService.sign(url, pk);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 获取待办会议数
+     *
+     * @param subscriber
+     * @param pk
+     */
+    public void getMeetingCount(Subscriber subscriber, String pk) {
+        Observable observable = httpService.getMeetingCount(pk);
         toSubscribe(observable, subscriber);
     }
 }

@@ -22,6 +22,7 @@ import cn.invonate.ygoa3.Entry.Group_member;
 import cn.invonate.ygoa3.Entry.InitPassMessage;
 import cn.invonate.ygoa3.Entry.Like;
 import cn.invonate.ygoa3.Entry.Lomo;
+import cn.invonate.ygoa3.Entry.MeetCount;
 import cn.invonate.ygoa3.Entry.MeetMessage;
 import cn.invonate.ygoa3.Entry.MeetRepeat;
 import cn.invonate.ygoa3.Entry.MeetResponse;
@@ -503,5 +504,19 @@ public interface HttpService {
     Observable<MeetMessage> add_meeting(
             @Header("X-Innovate-Rsbm") String pk,
             @Body() AddMeeting meet
+    );
+
+    //  会议签到
+    @Headers({"X-Innovate-Application:OA", "content-Type:application/json"})
+    @POST()
+    Observable<MeetMessage> sign(
+            @Url() String url,
+            @Header("X-Innovate-Rsbm") String pk
+    );
+
+    @Headers("X-Innovate-Application:OA")
+    @GET("v1/oa/meeting/getUnConfirm")
+    Observable<MeetCount> getMeetingCount(
+            @Header("X-Innovate-Rsbm") String pk
     );
 }

@@ -268,7 +268,6 @@ public class Meeting {
             private String meetingGoingStatus;// 0未进行，1已结束。2进行中
             private String addressName;
 
-
             public String getAddressId() {
                 return addressId;
             }

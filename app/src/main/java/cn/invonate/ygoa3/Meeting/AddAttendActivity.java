@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -68,8 +69,12 @@ public class AddAttendActivity extends AppCompatActivity {
             listPerson.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                    list.remove(position);
-                    adapter.notifyDataSetChanged();
+                    if (list.get(position).getUserCode().equals(app.getUser().getUser_code())) {
+                        Toast.makeText(app, "无法删除会议创建人", Toast.LENGTH_SHORT).show();
+                    } else {
+                        list.remove(position);
+                        adapter.notifyDataSetChanged();
+                    }
                     return false;
                 }
             });

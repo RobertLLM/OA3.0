@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.invonate.ygoa3.Entry.MeetCount;
 import cn.invonate.ygoa3.Entry.Mission;
 import cn.invonate.ygoa3.Entry.Sum;
 import cn.invonate.ygoa3.Entry.TaskCopy;
@@ -42,6 +43,7 @@ import cn.invonate.ygoa3.Util.Domain;
 import cn.invonate.ygoa3.WebView.WebViewActivity;
 import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
+import cn.invonate.ygoa3.httpUtil.HttpUtil2;
 import cn.invonate.ygoa3.main.work.application.MyApplicationActivity;
 import cn.invonate.ygoa3.main.work.mail.MailActivity;
 import rx.Subscriber;
@@ -237,7 +239,7 @@ public class WorkFragment extends Fragment {
      *
      */
     private void getMeet(final int task_sum) {
-        Subscriber subscriber = new Subscriber<Sum>() {
+        Subscriber subscriber = new Subscriber<MeetCount>() {
             @Override
             public void onCompleted() {
 
@@ -250,17 +252,17 @@ public class WorkFragment extends Fragment {
             }
 
             @Override
-            public void onNext(Sum data) {
+            public void onNext(MeetCount data) {
                 Log.i("getMeet", data.toString());
-                if (data.getSuccess() == 0) {
-                    int meet_sum = data.getData();
+                if ("0000".equals(data.getCode())) {
+                    int meet_sum = data.getResult().getCount();
                     getMession(task_sum, meet_sum);
                 } else {
                     refresh.onRefreshComplete();
                 }
             }
         };
-        HttpUtil.getInstance(getActivity(), false).queryPersonMeet(subscriber);
+        HttpUtil2.getInstance(getActivity(), false).getMeetingCount(subscriber,app.getUser().getRsbm_pk());
     }
 
     /**

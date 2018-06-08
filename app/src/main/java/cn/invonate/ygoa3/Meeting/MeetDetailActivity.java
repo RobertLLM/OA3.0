@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 
 import java.util.ArrayList;
@@ -52,6 +54,8 @@ public class MeetDetailActivity extends BaseActivity {
     TextView locate;
     @BindView(R.id.person)
     TextView person;
+    @BindView(R.id.create)
+    TextView create;
     @BindView(R.id.dynamic)
     TextView dynamic;
     @BindView(R.id.sum)
@@ -97,7 +101,7 @@ public class MeetDetailActivity extends BaseActivity {
         // 初始化标题数组
         tabIndicators = new ArrayList<>();
         tabIndicators.add("全部");
-        tabIndicators.add("回复");
+        tabIndicators.add("缺席理由");
 
         tabFragments = new ArrayList<>();
         for (int i = 0; i < tabIndicators.size(); i++) {
@@ -188,7 +192,16 @@ public class MeetDetailActivity extends BaseActivity {
 
                 break;
             case R.id.layout_sign:
-
+                if (app.getUser().getUser_code().equals(bean.getCreatorCode())) {
+                    Intent intent = new Intent(this, ShowCodeActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", bean.getId());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, CaptureActivity.class);
+                    startActivityForResult(intent, 0x666);
+                }
                 break;
             case R.id.attend_sure:
                 attend_sure(bean.getId());
@@ -245,6 +258,7 @@ public class MeetDetailActivity extends BaseActivity {
                     title.setText(data.getResult().getTitle());
                     time.setText(TimeUtil.timeFormatNoYear(data.getResult().getStartTime()) + " - " + TimeUtil.timeFormatJustMMHH(data.getResult().getEndTime()));
                     person.setText(data.getResult().getCreatorName());
+                    create.setText(TimeUtil.timeFormatNoYear(data.getResult().getCreateTime()));
                     locate.setText(data.getResult().getAddressName());
                     dynamic.setText(data.getResult().getDynamic() + "条动态");
                     sum.setText(data.getResult().getAttendNum() + "/" + data.getResult().getTotalNum() + "人确认参加");
@@ -363,15 +377,51 @@ public class MeetDetailActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 0x321) {
+        if (requestCode == 0x123 && resultCode == 0x321) {
             if (data != null) {
                 detail.getResult().setRecordPersonCode(data.getExtras().getString("code"));
                 detail.getResult().setRecordPersonId(data.getExtras().getString("id"));
                 detail.getResult().setRecordPersonName(data.getExtras().getString("name"));
                 personNote.setText(detail.getResult().getRecordPersonName());
             }
-        } else if (resultCode == 0x999) {
+        } else if (requestCode == 0x123 && resultCode == 0x999) {
             getMeetingDetail();
         }
+        if (requestCode == 0x666) {
+            //处理扫描结果（在界面上显示）
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    sign(result);
+//                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
+
+    /**
+     * 会议签到
+     */
+    private void sign(String url) {
+        SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<MeetMessage>() {
+            @Override
+            public void onNext(MeetMessage data) {
+                Log.i("sign", data.toString());
+                if ("0000".equals(data.getCode())) {
+                    Toast.makeText(app, "签到成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(app, data.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        HttpUtil2.getInstance(this, false).sign(new ProgressSubscriber(onNextListener, this, "签到中"), url, app.getUser().getRsbm_pk());
+    }
+
+
 }

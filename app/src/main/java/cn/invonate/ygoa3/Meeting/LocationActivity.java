@@ -16,6 +16,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -25,6 +28,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +41,7 @@ import cn.invonate.ygoa3.Adapter.RoomAdapter;
 import cn.invonate.ygoa3.BaseActivity;
 import cn.invonate.ygoa3.Entry.MeetingLocation;
 import cn.invonate.ygoa3.Entry.Room;
+import cn.invonate.ygoa3.Entry.TimePickerItem;
 import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil2;
@@ -67,7 +72,7 @@ public class LocationActivity extends BaseActivity {
 
     private ArrayList<Room.ResultBean.ListBean> list_room;
 
-    private int total;
+    private boolean isLastPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +107,10 @@ public class LocationActivity extends BaseActivity {
         refresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                if (list_room.size() < total) {
+                if (!isLastPage) {
                     getRoom(list_room.size() / 10 + 1);
+                } else {
+                    refresh.finishLoadMore();
                 }
             }
         });
@@ -195,8 +202,8 @@ public class LocationActivity extends BaseActivity {
      * @param page
      */
     private void getRoom(final int page) {
-        Date date = new Date(select_date.getYear(), select_date.getMonth(), select_date.getDay());
-
+        Date date = new Date(select_date.getYear() - 1900, select_date.getMonth(), select_date.getDay());
+        Log.i("select_date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
         Log.i("select_date", date.getTime() + "");
         Subscriber subscriber = new Subscriber<Room>() {
             @Override
@@ -214,11 +221,18 @@ public class LocationActivity extends BaseActivity {
             @Override
             public void onNext(Room data) {
                 Log.i("getRoom", data.toString());
-                total = data.getResult().getTotal();
+                isLastPage = data.getResult().isIsLastPage();
                 if (page == 1) {
                     list_room = data.getResult().getList();
                     adapter = new RoomAdapter(list_room, LocationActivity.this);
+                    adapter.setOnTimeClickListener(new RoomAdapter.OnTimeClickListener() {
+                        @Override
+                        public void onClick(View view, int position) {
+                            pickerStart(position);
+                        }
+                    });
                     listLocation.setAdapter(adapter);
+
                 } else {
                     list_room.addAll(data.getResult().getList());
                     adapter.notifyDataSetChanged();
@@ -235,5 +249,114 @@ public class LocationActivity extends BaseActivity {
             }
         };
         HttpUtil2.getInstance(this, false).getRoom(subscriber, app.getUser().getRsbm_pk(), page, 10, date.getTime() + "", districtId);
+    }
+
+    /**
+     * 选择开始时间
+     */
+    private void pickerStart(final int position) {
+        List<TimePickerItem> hour = new ArrayList<>();
+        for (int i = 8; i <= 20; i++) {
+            TimePickerItem item = new TimePickerItem();
+            item.setHour(i + "");
+            List<String> m = new ArrayList<>();
+            m.add("00");
+            if (i != 20) {
+                m.add("30");
+            }
+            item.setMinute(m);
+            hour.add(item);
+        }
+
+        List<List<String>> mm = new ArrayList<>();
+        for (TimePickerItem m : hour) {
+            mm.add(m.getMinute());
+        }
+        //条件选择器
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                if (option2 == 10) {
+                    Toast.makeText(app, "20点已为最晚时间，无法预约会议", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                pickerEnd(position, options1 * 2 + option2 + 1);
+            }
+        }).setLabels("点", "分", "")//设置选择的三级单位
+                .setContentTextSize(25)
+                .setOutSideCancelable(false)
+                .build();
+        pvOptions.setPicker(hour, mm);
+        pvOptions.setTitleText("请选择会议开始时间");
+        pvOptions.show();
+    }
+
+    /**
+     * 选择开始时间
+     */
+    private void pickerEnd(final int position, final int start) {
+        final List<TimePickerItem> hour = new ArrayList<>();
+        for (int i = start / 2 + 8; i <= 20; i++) {
+            TimePickerItem item = new TimePickerItem();
+            item.setHour(i + "");
+            List<String> m = new ArrayList<>();
+            if (i == start / 2 + 8 && start % 2 != 0) {
+                m.add("30");
+            } else {
+                if (i == 20) {
+                    m.add("00");
+                } else {
+                    m.add("00");
+                    m.add("30");
+                }
+            }
+            item.setMinute(m);
+            hour.add(item);
+        }
+
+        final List<List<String>> mm = new ArrayList<>();
+        for (TimePickerItem m : hour) {
+            mm.add(m.getMinute());
+        }
+        //条件选择器
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                int begin = start - 1;
+                int end = (Integer.parseInt(hour.get(options1).toString()) - 8) * 2 + (Integer.parseInt(mm.get(options1).get(option2)) / 30);
+                Log.i("end", "开始" + begin + "，结束" + end);
+                for (int i = begin; i < end; i++) {
+                    if (check(i, list_room.get(position).getIndexList())) {
+                        Toast.makeText(app, "会议时间被占用", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                List<Integer> list = new ArrayList<>();
+                for (int i = begin; i < end; i++) {
+                    list.add(i);
+                }
+                list_room.get(position).setSelectList(list);
+                list_room.get(position).setStart_h(begin / 2 + 8);
+                list_room.get(position).setStart_m(begin % 2 * 30);
+                list_room.get(position).setStart_s(0);
+                list_room.get(position).setEnd_h(end / 2 + 8);
+                list_room.get(position).setEnd_m(end % 2 * 30);
+                list_room.get(position).setEnd_s(0);
+                adapter.notifyDataSetChanged();
+            }
+        }).setLabels("点", "分", "")//设置选择的三级单位
+                .setOutSideCancelable(false)
+                .setContentTextSize(25)
+                .build();
+        pvOptions.setPicker(hour, mm);
+        pvOptions.setTitleText("请选择会议结束时间");
+        pvOptions.show();
+    }
+
+    private boolean check(int i, List<Integer> list) {
+        for (int index : list) {
+            if (i == index) return true;
+        }
+        return false;
     }
 }

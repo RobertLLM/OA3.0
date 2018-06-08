@@ -1,28 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="30px">
-
-    <CheckBox
-        android:id="@+id/check"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:focusable="false" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:text="111111"
             android:textColor="#000000"
             android:textSize="45px" />
@@ -31,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
@@ -53,9 +41,17 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:paddingStart="20px"
-                android:text="28人"
+                android:text="28人1111111111128人1111111111111111111111111111128人1111111111111111111111111111128人1111111111111111111111111111128人1111111111111111111111111111128人11111111111111111111111111111111111111111111111"
                 android:textColor="#A7A7A7"
                 android:textSize="45px" />
+
+            <CheckBox
+                android:id="@+id/check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/back_select"
+                android:clickable="false"
+                android:focusable="false" />
 
         </LinearLayout>
 
@@ -186,6 +182,30 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
+            <View
+                android:id="@+id/cell20"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <View
+                android:id="@+id/cell21"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <View
+                android:id="@+id/cell22"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <View
+                android:id="@+id/cell23"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
         </LinearLayout>
 
         <RelativeLayout
@@ -233,6 +253,12 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/checked_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:textColor="#000000"
+            android:textSize="45px" />
 
 </LinearLayout>

@@ -51,5 +51,9 @@
         <item name="textAllCaps">true</item>
     </style>
 
+    <style name="TabLayoutTextSizeStyle">
+        <item name="android:textSize">@dimen/tab_size</item>
+    </style>
+
 
 </resources>

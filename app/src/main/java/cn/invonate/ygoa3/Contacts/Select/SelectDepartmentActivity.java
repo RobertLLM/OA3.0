@@ -2,9 +2,12 @@ package cn.invonate.ygoa3.Contacts.Select;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -14,9 +17,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.invonate.ygoa3.Adapter.DepartmentAdapter;
+import cn.invonate.ygoa3.Adapter.MemberAdapter;
 import cn.invonate.ygoa3.BaseActivity;
 import cn.invonate.ygoa3.Entry.Contacts;
 import cn.invonate.ygoa3.Entry.Department;
+import cn.invonate.ygoa3.Entry.Member;
 import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.View.LYYPullToRefreshListView;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
@@ -28,6 +33,8 @@ public class SelectDepartmentActivity extends BaseActivity {
     TextView name;
     @BindView(R.id.list_connect)
     LYYPullToRefreshListView listConnect;
+    @BindView(R.id.code)
+    AutoCompleteTextView code;
 
     private DepartmentAdapter adapter;
 
@@ -50,6 +57,7 @@ public class SelectDepartmentActivity extends BaseActivity {
                 }
             });
         }
+        code.addTextChangedListener(new TextWatch(code));
     }
 
     /**
@@ -100,7 +108,7 @@ public class SelectDepartmentActivity extends BaseActivity {
                 }
             }
         };
-        HttpUtil.getInstance(this,false).getDepartment(subscriber, id);
+        HttpUtil.getInstance(this, false).getDepartment(subscriber, id);
     }
 
     @OnClick(R.id.pic_back)
@@ -112,7 +120,7 @@ public class SelectDepartmentActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("SelectDepartment", requestCode + "------" + resultCode);
-        if (data!= null) {
+        if (data != null) {
             ArrayList<Contacts> select = (ArrayList<Contacts>) data.getSerializableExtra("list");
             Intent intent = getIntent();
             intent.putExtras(data.getExtras());
@@ -120,5 +128,80 @@ public class SelectDepartmentActivity extends BaseActivity {
             finish();
         }
 
+    }
+
+    class TextWatch implements TextWatcher {
+        public AutoCompleteTextView textView;
+
+        public TextWatch(AutoCompleteTextView textView) {
+            this.textView = textView;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String text = textView.getText().toString().trim();
+            getPerson(text, textView);
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    }
+
+    /**
+     * 获取人员
+     *
+     * @param keyword
+     * @param textView
+     */
+    private void getPerson(String keyword, final AutoCompleteTextView textView) {
+        Subscriber subscriber = new Subscriber<Member>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("error", e.toString());
+            }
+
+            @Override
+            public void onNext(final Member data) {
+                Log.i("getPerson", data.toString());
+                final MemberAdapter adapter = new MemberAdapter(data.getRows(), SelectDepartmentActivity.this);
+                textView.setAdapter(adapter);
+                adapter.setOnItemClickListener(new MemberAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        Contacts contacts = data.getRows().get(position);
+                        ArrayList<Contacts> select = new ArrayList<>();
+                        select.add(contacts);
+                        Intent intent = getIntent();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("list", select);
+                        intent.putExtras(bundle);
+                        setResult(0x321, intent);
+                        finish();
+//                        if (check(contacts)) {
+//                            Toast.makeText(SelectDepartmentActivity.this, "该人员已添加", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            list_contacts.add(contacts);
+//                            mAdapter.notifyDataSetChanged();
+//                            taskSum.setText(list_contacts.size() + "");
+//                            textView.setText("");
+//                            Toast.makeText(SelectDepartmentActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+//                        }
+                    }
+                });
+            }
+        };
+        HttpUtil.getInstance(this, false).getMembers(subscriber, keyword, 1, 10000);
     }
 }

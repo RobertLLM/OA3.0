@@ -57,7 +57,7 @@ public class MeetingFragment extends Fragment {
 
     ArrayList<Meeting.ResultBean.MeetBean> list_meet;
 
-    private int total;
+    private boolean isLastPage;
 
     public static MeetingFragment newInstance(int index) {
         MeetingFragment fragment = new MeetingFragment();
@@ -82,7 +82,7 @@ public class MeetingFragment extends Fragment {
         refresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                if (list_meet.size() < total) {
+                if (!isLastPage) {
                     getData(list_meet.size() / 10 + 1);
                 } else {
                     refresh.finishLoadMore();
@@ -147,7 +147,7 @@ public class MeetingFragment extends Fragment {
             public void onNext(final Meeting data) {
                 Log.i("getUnfinishMetting", data.toString());
                 if ("0000".equals(data.getCode())) {
-                    total = data.getResult().getTotal();
+                    isLastPage = data.getResult().isIsLastPage();
                     if (page == 1) {
                         list_meet = data.getResult().getList();
                         adapter = new MeetAdapter(list_meet, getActivity());
@@ -208,7 +208,7 @@ public class MeetingFragment extends Fragment {
             public void onNext(Meeting data) {
                 Log.i("getAllMetting", data.toString());
                 if ("0000".equals(data.getCode())) {
-                    total = data.getResult().getTotal();
+                    isLastPage = data.getResult().isIsLastPage();
                     if (page == 1) {
                         list_meet = data.getResult().getList();
                         adapter = new MeetAdapter(list_meet, getActivity());
@@ -247,9 +247,9 @@ public class MeetingFragment extends Fragment {
 
             @Override
             public void onNext(Meeting data) {
-                Log.i("getMyMetting", data.toString());
+                Log.i("getMyMeeting", data.toString());
                 if ("0000".equals(data.getCode())) {
-                    total = data.getResult().getTotal();
+                    isLastPage = data.getResult().isIsLastPage();
                     if (page == 1) {
                         list_meet = data.getResult().getList();
                         adapter = new MeetAdapter(list_meet, getActivity());
@@ -270,7 +270,7 @@ public class MeetingFragment extends Fragment {
                         delete.setTitleColor(Color.WHITE);
                         delete.setBackground(new ColorDrawable(Color.rgb(0xF9,
                                 0x3F, 0x25)));
-                        delete.setTitle("删除");
+                        delete.setTitle("取消会议");
                         menu.addMenuItem(delete);
                     }
                 };
@@ -301,22 +301,17 @@ public class MeetingFragment extends Fragment {
      * @param position
      */
     private void delete_meet(final int position) {
-        String url = String.format("oa/meeting/deleteMeetingById/%s", list_meet.get(position).getId());
+        String url = String.format("v1/oa/meeting/deleteMeetingById/%s", list_meet.get(position).getId());
         SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<MeetResponse>() {
             @Override
             public void onNext(MeetResponse data) {
                 Log.i("delete_meet", data.toString());
                 if (data.getCode().equals("0000")) {
-                    String msg = data.getMessage();
-                    if ("取消成功".equals(msg)) {
-                        list_meet.remove(position);
-                        adapter.notifyDataSetChanged();
-                    }
-                    if (msg != null) {
-                        Toast.makeText(app, msg, Toast.LENGTH_SHORT).show();
-                    }
+                    list_meet.remove(position);
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(app, "取消成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(app, "请求失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(app, data.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         };

@@ -4,11 +4,14 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "cn.invonate.ygoa3"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 21
         versionName "1.4.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Enabling multidex support.
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -89,4 +92,8 @@ dependencies {
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'
     compile 'com.drawthink:expandable-recyclerview:0.0.3'
+    implementation 'com.prolificinteractive:material-calendarview:1.4.0'
+
+    implementation 'com.contrarywind:Android-PickerView:4.1.4'
+    implementation 'cn.yipianfengye.android:zxing-library:2.2'
 }

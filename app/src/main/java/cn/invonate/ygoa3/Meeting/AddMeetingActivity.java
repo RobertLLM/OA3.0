@@ -1,15 +1,11 @@
 package cn.invonate.ygoa3.Meeting;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -73,10 +69,8 @@ public class AddMeetingActivity extends BaseActivity {
         room.setEnd_h(10);
         room.setEnd_m(0);
         room.setEnd_s(0);
-        startTime.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(0, 0, 0, room.getStart_h(), room.getStart_m(), room.getStart_s())));
-        endTime.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(0, 0, 0, room.getEnd_h(), room.getEnd_m(), room.getEnd_s())));
-
-
+        startTime.setText(new SimpleDateFormat("HH:mm").format(new Date(0, 0, 0, room.getStart_h(), room.getStart_m(), room.getStart_s())));
+        endTime.setText(new SimpleDateFormat("HH:mm").format(new Date(0, 0, 0, room.getEnd_h(), room.getEnd_m(), room.getEnd_s())));
     }
 
     @OnClick({R.id.pic_back, R.id.layout_time, R.id.pic_search, R.id.layout_address, R.id.layout_in, R.id.layout_note})
@@ -147,8 +141,8 @@ public class AddMeetingActivity extends BaseActivity {
                 date = new Date(data.getExtras().getInt("date_y"), data.getExtras().getInt("date_m"), data.getExtras().getInt("date_d"));
                 startDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
                 endDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
-                startTime.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(0, 0, 0, room.getStart_h(), room.getStart_m(), room.getStart_s())));
-                endTime.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(0, 0, 0, room.getEnd_h(), room.getEnd_m(), room.getEnd_s())));
+                startTime.setText(new SimpleDateFormat("HH:mm").format(new Date(0, 0, 0, room.getStart_h(), room.getStart_m(), room.getStart_s())));
+                endTime.setText(new SimpleDateFormat("HH:mm").format(new Date(0, 0, 0, room.getEnd_h(), room.getEnd_m(), room.getEnd_s())));
             }
         }
     }
@@ -167,6 +161,13 @@ public class AddMeetingActivity extends BaseActivity {
      * 跳转至选择参会人
      */
     private void stepToAttend() {
+        if (list_attend.isEmpty()) {
+            MeetingDetail.ResultBean.AttendListBean bean = new MeetingDetail.ResultBean.AttendListBean();
+            bean.setUserCode(app.getUser().getUser_code());
+            bean.setUserId(app.getUser().getRsbm_pk());
+            bean.setUserName(app.getUser().getUser_name());
+            list_attend.add(bean);
+        }
         Intent intent = new Intent(this, AddAttendActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("list", list_attend);
@@ -214,8 +215,10 @@ public class AddMeetingActivity extends BaseActivity {
         AddMeeting meet = new AddMeeting();
         meet.setMeetingContent(t);
         Date start = new Date(date.getYear(), date.getMonth(), date.getDate(), room.getStart_h(), room.getStart_m(), room.getStart_s());
+        Log.i("start_date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(start));
         meet.setStartTime(start.getTime() + "");
         Date end = new Date(date.getYear(), date.getMonth(), date.getDate(), room.getEnd_h(), room.getEnd_m(), room.getEnd_s());
+        Log.i("end_date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(end));
         meet.setEndTime(end.getTime() + "");
         meet.setRoomId(room.getRoomId());
         meet.setRecordPersonId(recorder.getUserId());
@@ -236,34 +239,5 @@ public class AddMeetingActivity extends BaseActivity {
             }
         };
         HttpUtil2.getInstance(this, false).add_meet(new ProgressSubscriber(onNextListener, this, "预约中"), app.getUser().getRsbm_pk(), meet);
-    }
-
-    private void test() {
-        View view = LayoutInflater.from(this).inflate(R.layout.item_time_picker, null);
-        final TimePicker start = view.findViewById(R.id.start);
-        final TimePicker end = view.findViewById(R.id.end);
-        start.setIs24HourView(true);
-        end.setIs24HourView(true);
-        start.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-
-            }
-        });
-        end.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-
-            }
-        });
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("请选择时间")
-                .setView(view)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).create().show();
     }
 }

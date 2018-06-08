@@ -2,6 +2,7 @@ package cn.invonate.ygoa3;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -13,6 +14,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.tencent.smtt.sdk.QbSdk;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import cn.invonate.ygoa3.Entry.User;
 import cn.invonate.ygoa3.Util.KLog;
@@ -53,6 +55,7 @@ public class YGApplication extends Application {
         initTbs();
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+        ZXingLibrary.initDisplayOpinion(this);
     }
 
     public User getUser() {
@@ -84,6 +87,12 @@ public class YGApplication extends Application {
         };
         //x5内核初始化接口
         QbSdk.initX5Environment(getApplicationContext(), cb);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
 }

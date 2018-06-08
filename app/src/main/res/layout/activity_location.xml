@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:orientation="vertical"
     tools:context=".Meeting.LocationActivity">
 
@@ -40,7 +41,7 @@
             android:layout_marginEnd="20px"
             android:gravity="center"
             android:src="@mipmap/mail_search"
-            android:text="变更"
+            android:text="确认"
             android:textColor="@color/colorPrimary"
             android:textSize="50px" />
 
@@ -62,17 +63,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#efefef"
+        android:background="#ffffff"
         android:orientation="vertical">
-
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mcv_calendarMode="week"
-            app:mcv_selectionColor="#e85d4f"
-            app:mcv_showOtherDates="all" />
-
         <TextView
             android:id="@+id/txt_date"
             android:layout_width="match_parent"
@@ -82,6 +74,14 @@
             android:gravity="center"
             android:text="2018-06-05"
             android:textColor="#000000" />
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mcv_calendarMode="week"
+            app:mcv_selectionColor="#0099ff"
+            app:mcv_showOtherDates="all" />
 
     </LinearLayout>
 

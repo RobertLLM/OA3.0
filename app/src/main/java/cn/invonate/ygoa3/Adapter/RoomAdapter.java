@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -16,10 +18,20 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import cn.invonate.ygoa3.Entry.Room;
 import cn.invonate.ygoa3.R;
+import cn.invonate.ygoa3.Util.TimeUtil;
 
 public class RoomAdapter extends BaseAdapter {
     private List<Room.ResultBean.ListBean> data;
     private LayoutInflater inflater;
+    private OnTimeClickListener onTimeClickListener;
+
+    public OnTimeClickListener getOnTimeClickListener() {
+        return onTimeClickListener;
+    }
+
+    public void setOnTimeClickListener(OnTimeClickListener onTimeClickListener) {
+        this.onTimeClickListener = onTimeClickListener;
+    }
 
     private int index = -1;
 
@@ -52,7 +64,7 @@ public class RoomAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_room, parent, false);
@@ -77,20 +89,54 @@ public class RoomAdapter extends BaseAdapter {
         holder.sum.setText(data.get(position).getRoomSize() == null ? "" : data.get(position).getRoomSize() + "人");
         holder.device.setText(data.get(position).getLayout());
         for (int i = 0; i < holder.cells.length; i++) {
-            for (int j = 0; j < data.get(position).getIndexList().size(); j++) {
-                if (i == data.get(position).getIndexList().get(j)) {
+            if (check(i, data.get(position).getIndexList())) {
+                holder.cells[i].setBackgroundColor(Color.parseColor("#638ec5"));
+            } else {
+                if (data.get(position).getSelectList() != null && check(i, data.get(position).getSelectList())) {
                     holder.cells[i].setBackgroundColor(Color.parseColor("#FF0000"));
-                    continue;
+                } else {
+                    holder.cells[i].setBackgroundColor(Color.parseColor("#e5effd"));
                 }
-                holder.cells[i].setBackgroundColor(Color.parseColor("#e5effd"));
             }
         }
+        if (data.get(position).getTimeList() != null && !data.get(position).getTimeList().isEmpty()) {
+            StringBuffer checked_time = new StringBuffer();
+            for (Room.ResultBean.ListBean.TimeListBean bean : data.get(position).getTimeList()) {
+                checked_time.append(TimeUtil.timeFormatJustMMHH(bean.getStartTime()));
+                checked_time.append("-");
+                checked_time.append(TimeUtil.timeFormatJustMMHH(bean.getEndTime()));
+                checked_time.append("，");
+            }
+            holder.checked_time.setVisibility(View.VISIBLE);
+            holder.checked_time.setText("会议占用：" + checked_time.substring(0, checked_time.length() - 1));
+        } else {
+            holder.checked_time.setVisibility(View.GONE);
+        }
+
         if (position == index) {
             holder.check.setChecked(true);
         } else {
             holder.check.setChecked(false);
         }
+        holder.time.setText(new SimpleDateFormat("HH:mm").format(new Date(0, 0, 0, data.get(position).getStart_h(), data.get(position).getStart_m(), data.get(position).getStart_s())) + "-"
+                + new SimpleDateFormat("HH:mm").format(new Date(0, 0, 0, data.get(position).getEnd_h(), data.get(position).getEnd_m(), data.get(position).getEnd_s())));
+        holder.time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onTimeClickListener != null) {
+                    onTimeClickListener.onClick(v, position);
+                }
+            }
+        });
         return convertView;
+    }
+
+    private boolean check(int i, List<Integer> check) {
+        for (int index : check) {
+            if (i == index)
+                return true;
+        }
+        return false;
     }
 
     static class ViewHolder {
@@ -103,13 +149,20 @@ public class RoomAdapter extends BaseAdapter {
         @BindView(R.id.device)
         TextView device;
         @BindViews({R.id.cell0, R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell6, R.id.cell7, R.id.cell8, R.id.cell9,
-                R.id.cell10, R.id.cell11, R.id.cell12, R.id.cell13, R.id.cell14, R.id.cell15, R.id.cell16, R.id.cell17, R.id.cell18, R.id.cell19})
+                R.id.cell10, R.id.cell11, R.id.cell12, R.id.cell13, R.id.cell14, R.id.cell15, R.id.cell16, R.id.cell17, R.id.cell18, R.id.cell19,
+                R.id.cell20, R.id.cell21, R.id.cell22, R.id.cell23})
         View[] cells;
         @BindView(R.id.time)
         TextView time;
+        @BindView(R.id.checked_time)
+        TextView checked_time;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    public interface OnTimeClickListener {
+        void onClick(View view, int position);
     }
 }

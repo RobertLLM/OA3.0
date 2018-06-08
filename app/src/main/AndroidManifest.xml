@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <!-- Required -->
     <permission
@@ -281,7 +282,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".main.BasePicActivity" />
         <activity android:name=".main.VideoActivity" />
@@ -304,19 +304,15 @@
             android:name=".Meeting.MeetingActivity"
             android:label="@string/title_activity_meeting"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Meeting.AddMeetingActivity" >
-
-        </activity>
+        <activity android:name=".Meeting.AddMeetingActivity"></activity>
         <activity
             android:name=".Meeting.MeetDetailActivity"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity android:name=".Meeting.AttendActivity" />
         <activity android:name=".Meeting.ReportManActivity" />
-        <activity android:name=".Meeting.LocationActivity">
-
-        </activity>
-
+        <activity android:name=".Meeting.LocationActivity"></activity>
         <activity android:name=".Meeting.AddAttendActivity" />
+        <activity android:name=".Meeting.ShowCodeActivity"></activity>
     </application>
 
 </manifest>

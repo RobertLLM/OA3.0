@@ -3,120 +3,169 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20px">
+    android:padding="40px">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/title"
+        <ImageView
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:src="@mipmap/pic_meet"
+            android:layout_marginEnd="20px"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:text="11111111111"
-            android:textColor="#000000"
-            android:textSize="50px" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/back_meet_grey"
-            android:paddingEnd="15px"
-            android:paddingStart="15px"
-            android:text="取消"
-            android:textColor="#A4A4A4"
-            android:textSize="40px" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="11111111111"
+                    android:textColor="#000000"
+                    android:textSize="50px" />
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/back_meet_grey"
+                    android:paddingEnd="15px"
+                    android:paddingStart="15px"
+                    android:text="取消"
+                    android:textColor="#A4A4A4"
+                    android:textSize="40px" />
 
 
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20px"
-        android:text="111111"
-        android:textColor="#A4A4A4"
-        android:textSize="48px" />
-
-    <TextView
-        android:id="@+id/locate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20px"
-        android:text="地点"
-        android:textColor="#000000"
-        android:textSize="45px" />
-
-    <TextView
-        android:id="@+id/person"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20px"
-        android:text="111111"
-        android:textColor="#000000"
-        android:textSize="48px" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20px"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="3"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="40px"
-                android:layout_height="40px"
-                android:layout_gravity="center_vertical"
-                android:src="@mipmap/meet_message" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/dynamic"
-                android:layout_width="wrap_content"
+                android:id="@+id/time"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="15px"
-                android:text="1111111"
-                android:textColor="#000000"
+                android:layout_marginTop="20px"
+                android:text="111111"
+                android:textColor="#A7A7A7"
+                android:textSize="48px" />
+
+            <TextView
+                android:id="@+id/locate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
+                android:text="地点"
+                android:textColor="#A7A7A7"
                 android:textSize="45px" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px">
+
+                <TextView
+                    android:id="@+id/person"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:text="111111"
+                    android:textColor="#A7A7A7"
+                    android:textSize="48px" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10px"
+                    android:layout_marginTop="10px"
+                    android:background="#A7A7A7" />
+
+                <TextView
+                    android:id="@+id/create"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:paddingStart="20px"
+                    android:text="111111"
+                    android:textColor="#A7A7A7"
+                    android:textSize="48px" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="40px"
+                        android:layout_height="40px"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/meet_message" />
+
+                    <TextView
+                        android:id="@+id/dynamic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15px"
+                        android:text="1111111"
+                        android:textColor="#A7A7A7"
+                        android:textSize="45px" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="7"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="40px"
+                        android:layout_height="40px"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/meet_single" />
+
+                    <TextView
+                        android:id="@+id/sum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15px"
+                        android:text="1111111"
+                        android:textColor="#A7A7A7"
+                        android:textSize="45px" />
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="7"
-            android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="40px"
-                android:layout_height="40px"
-                android:layout_gravity="center_vertical"
-                android:src="@mipmap/meet_single" />
-
-            <TextView
-                android:id="@+id/sum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="15px"
-                android:text="1111111"
-                android:textColor="#000000"
-                android:textSize="45px" />
-        </LinearLayout>
 
     </LinearLayout>
 
@@ -125,11 +174,11 @@
         android:layout_width="match_parent"
         android:layout_height="120px"
         android:layout_marginTop="30px"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/attend_sure"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
@@ -139,7 +188,7 @@
 
         <TextView
             android:id="@+id/attend_not"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"

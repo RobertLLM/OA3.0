@@ -65,6 +65,7 @@ public class MeetAdapter extends BaseAdapter {
         holder.title.setText(data.get(position).getTitle());
         holder.time.setText(TimeUtil.timeFormatNoYear(data.get(position).getStartTime()) + " - " + TimeUtil.timeFormatJustMMHH(data.get(position).getEndTime()));
         holder.person.setText(data.get(position).getCreatorName());
+        holder.create.setText(TimeUtil.timeFormatNoYear(data.get(position).getCreateTime()));
         holder.locate.setText(data.get(position).getAddressName());
         holder.dynamic.setText(data.get(position).getDynamic() + "条动态");
         holder.sum.setText(data.get(position).getAttendNum() + "/" + data.get(position).getTotalNum() + "人参加");
@@ -136,6 +137,8 @@ public class MeetAdapter extends BaseAdapter {
         TextView locate;
         @BindView(R.id.person)
         TextView person;
+        @BindView(R.id.create)
+        TextView create;
         @BindView(R.id.dynamic)
         TextView dynamic;
         @BindView(R.id.sum)
