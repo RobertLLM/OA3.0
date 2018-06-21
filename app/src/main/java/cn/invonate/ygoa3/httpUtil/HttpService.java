@@ -22,6 +22,8 @@ import cn.invonate.ygoa3.Entry.Group_member;
 import cn.invonate.ygoa3.Entry.InitPassMessage;
 import cn.invonate.ygoa3.Entry.Like;
 import cn.invonate.ygoa3.Entry.Lomo;
+import cn.invonate.ygoa3.Entry.MailMessage;
+import cn.invonate.ygoa3.Entry.MailNew;
 import cn.invonate.ygoa3.Entry.MeetCount;
 import cn.invonate.ygoa3.Entry.MeetMessage;
 import cn.invonate.ygoa3.Entry.MeetRepeat;
@@ -31,6 +33,7 @@ import cn.invonate.ygoa3.Entry.MeetingDetail;
 import cn.invonate.ygoa3.Entry.MeetingDynamic;
 import cn.invonate.ygoa3.Entry.MeetingLocation;
 import cn.invonate.ygoa3.Entry.Member;
+import cn.invonate.ygoa3.Entry.MessageContent;
 import cn.invonate.ygoa3.Entry.Mission;
 import cn.invonate.ygoa3.Entry.MyApplicationList;
 import cn.invonate.ygoa3.Entry.PersonGroup;
@@ -45,6 +48,8 @@ import cn.invonate.ygoa3.Entry.TaskLine;
 import cn.invonate.ygoa3.Entry.User;
 import cn.invonate.ygoa3.Entry.Version;
 import cn.invonate.ygoa3.Entry.Welfare;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -54,8 +59,10 @@ import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 import rx.Observable;
@@ -514,9 +521,90 @@ public interface HttpService {
             @Header("X-Innovate-Rsbm") String pk
     );
 
+    // 获取未处理邮件数
     @Headers("X-Innovate-Application:OA")
     @GET("v1/oa/meeting/getUnConfirm")
     Observable<MeetCount> getMeetingCount(
             @Header("X-Innovate-Rsbm") String pk
+    );
+
+    // 发送邮件
+    @Headers({"X-Innovate-Application:OA"})
+    @POST("v1/mail/send")
+    @Multipart
+    Observable<MailMessage> sendMail(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Part("account") RequestBody account,
+            @Part("address") RequestBody address,
+            @Part("subject") RequestBody subject,
+            @Part("context") RequestBody context,
+            @Part("cc") RequestBody cc,
+            @Part("ref") RequestBody ref,
+            @Part("index") RequestBody[] index,
+            @Part("folder") RequestBody folder,
+            @Part("isReply") RequestBody isReply,
+            @Part() List<MultipartBody.Part> parts
+    );
+
+    // 获取邮件列表
+    @Headers("X-Innovate-Application:OA")
+    @GET("v1/mail/message")
+    Observable<MailNew> getMailList(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Query("account") String account,
+            @Query("page") int page,
+            @Query("rows") int rows,
+            @Query("folder") String folder,
+            @Query("searchValue") String searchValue
+    );
+
+    // 删除邮件
+    @Headers("X-Innovate-Application:OA")
+    @POST("v1/mail/dropMessage")
+    @FormUrlEncoded
+    Observable<MailMessage> appendMailToFolder(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Field("account") String account,
+            @Field("msgID") int[] msgID,
+            @Field("folder") String folder
+    );
+
+    // 获取邮件正文
+    @Headers("X-Innovate-Application:OA")
+    @GET("v1/mail/getMessage")
+    Observable<MessageContent> getMessage(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Query("account") String account,
+            @Query("msgID") int msgID,
+            @Query("folder") String folder
+    );
+
+
+    // 获取附件
+    @Headers("X-Innovate-Application:OA")
+    @GET("v1/mail/getAttachments")
+    Observable<String> getAttachments(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Query("account") String account,
+            @Query("msgID") int msgID,
+            @Query("folder") String folder,
+            @Query("index") int index
+    );
+
+    // 存草稿箱
+    @Headers("X-Innovate-Application:OA")
+    @POST("v1/mail/saveToDrafts")
+    @Multipart
+    Observable<MailMessage> saveToDrafts(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Part("account") RequestBody account,
+            @Part("address") RequestBody address,
+            @Part("cc") RequestBody cc,
+            @Part("subject") RequestBody subject,
+            @Part("context") RequestBody context,
+            @Part("ref") RequestBody ref,
+            @Part("folder") RequestBody folder,
+            @Part("index") RequestBody[] index,
+            @Part() List<MultipartBody.Part> parts
     );
 }

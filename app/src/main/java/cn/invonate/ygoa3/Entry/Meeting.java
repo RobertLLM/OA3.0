@@ -227,7 +227,7 @@ public class Meeting {
             this.navigatepageNums = navigatepageNums;
         }
 
-        public static class MeetBean implements Serializable{
+        public static class MeetBean implements Serializable {
             /**
              * addressId : b66114ef-3d05-46a8-8d05-664e02a2056d
              * attendNum : 0
@@ -267,6 +267,7 @@ public class Meeting {
             private int totalNum;
             private String meetingGoingStatus;// 0未进行，1已结束。2进行中
             private String addressName;
+            private String roomName;
 
             public String getAddressId() {
                 return addressId;
@@ -418,6 +419,14 @@ public class Meeting {
 
             public void setAddressName(String addressName) {
                 this.addressName = addressName;
+            }
+
+            public String getRoomName() {
+                return roomName;
+            }
+
+            public void setRoomName(String roomName) {
+                this.roomName = roomName;
             }
         }
     }

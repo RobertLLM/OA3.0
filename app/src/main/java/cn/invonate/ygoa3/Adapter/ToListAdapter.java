@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.invonate.ygoa3.Entry.Mail;
+import cn.invonate.ygoa3.Entry.MailNew;
 import cn.invonate.ygoa3.R;
 
 /**
@@ -20,22 +21,29 @@ import cn.invonate.ygoa3.R;
 
 public class ToListAdapter extends BaseAdapter {
 
-    private List<Mail.Address> data;
+    private List<MailNew.ResultBean.MailsBean.ReceiveBean> receiver;
+    private List<MailNew.ResultBean.MailsBean.CcBean> cc;
     private Context context;
 
-    public ToListAdapter(List<Mail.Address> data, Context context) {
-        this.data = data;
+    public ToListAdapter(ArrayList<MailNew.ResultBean.MailsBean.ReceiveBean> receiver, List<MailNew.ResultBean.MailsBean.CcBean> cc, Context context) {
+        this.receiver = receiver;
+        this.cc = cc;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return data.size();
+        if (receiver != null) {
+            return receiver.size();
+        } else {
+            return cc.size();
+        }
+
     }
 
     @Override
     public Object getItem(int position) {
-        return data.get(position);
+        return "";
     }
 
     @Override
@@ -53,12 +61,22 @@ public class ToListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.name.setText(data.get(position).getPersonal());
-        String address = data.get(position).getAddress();
-        if (address.contains("<") && address.contains(">")) {
-            holder.address.setText(address.substring(address.indexOf("<") + 1, address.indexOf(">")));
+        if (receiver != null) {
+            holder.name.setText(receiver.get(position).getUserName());
+            String address = receiver.get(position).getAddress();
+            if (address.contains("<") && address.contains(">")) {
+                holder.address.setText(address.substring(address.indexOf("<") + 1, address.indexOf(">")));
+            } else {
+                holder.address.setText(address);
+            }
         } else {
-            holder.address.setText(address);
+            holder.name.setText(cc.get(position).getUserName());
+            String address = cc.get(position).getAddress();
+            if (address.contains("<") && address.contains(">")) {
+                holder.address.setText(address.substring(address.indexOf("<") + 1, address.indexOf(">")));
+            } else {
+                holder.address.setText(address);
+            }
         }
         return convertView;
     }

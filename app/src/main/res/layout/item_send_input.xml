@@ -15,6 +15,6 @@
         android:dropDownWidth="match_parent"
         android:completionThreshold="1"
         android:textColor="@color/black"
-        android:textSize="38px" />
+        android:textSize="35px" />
 
 </LinearLayout>

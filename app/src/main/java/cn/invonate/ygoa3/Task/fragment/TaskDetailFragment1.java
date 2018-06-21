@@ -302,6 +302,7 @@ public class TaskDetailFragment1 extends Fragment implements LazyFragmentPagerAd
                                 case "fujian"://
                                 case "wjpsfujian"://
                                 case "attachment"://
+                                case "completedUrl":
                                     if (is_img(data.get(position).getName())) {
                                         ArrayList<String> pic = new ArrayList<>();
                                         pic.add(HttpUtil.URL_FILE + data.get(position).getUrl());

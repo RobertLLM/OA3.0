@@ -45,7 +45,7 @@ import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
 import cn.invonate.ygoa3.httpUtil.HttpUtil2;
 import cn.invonate.ygoa3.main.work.application.MyApplicationActivity;
-import cn.invonate.ygoa3.main.work.mail.MailActivity;
+import cn.invonate.ygoa3.main.work.mail_new.MailActivity;
 import rx.Subscriber;
 
 /**
@@ -260,6 +260,13 @@ public class WorkFragment extends Fragment {
                 } else {
                     refresh.onRefreshComplete();
                 }
+//                if (data.getSuccess() == 0) {
+//                    int meet_sum = data.getData();
+//                    getMession(task_sum, meet_sum);
+//                } else {
+//                    refresh.onRefreshComplete();
+//                }
+
             }
         };
         HttpUtil2.getInstance(getActivity(), false).getMeetingCount(subscriber,app.getUser().getRsbm_pk());

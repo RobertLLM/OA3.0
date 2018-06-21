@@ -22,8 +22,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class HttpUtil2 {
-    public static final String BASE_URL = "http://oaapi.yong-gang.cn:8080/innovate-api/";
-//    public static final String BASE_URL = "http://192.168.1.27:8080/innovate-api/";
+//    public static final String BASE_URL = "http://oaapi.yong-gang.cn:8080/innovate-api/";
+    public static final String BASE_URL = "http://192.168.1.27:8080/innovate-api/";
 //    public static final String BASE_URL = "http://10.181.5.77:8080/innovate-api/";
 
     private HttpService httpService;
@@ -31,7 +31,6 @@ public class HttpUtil2 {
     private static HttpUtil2 INSTANCE;
 
     private HttpUtil2(Context context, boolean isSaveCookie) {
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(getOkHttpClient(context, isSaveCookie))

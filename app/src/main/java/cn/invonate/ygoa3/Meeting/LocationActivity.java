@@ -127,6 +127,13 @@ public class LocationActivity extends BaseActivity {
                     Toast.makeText(app, "请选择一个会议地点", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Room.ResultBean.ListBean room = list_room.get(adapter.getIndex());
+                if (room.getSelectList() == null || room.getSelectList().isEmpty()) {
+                    if (room.getIndexList().contains(0) || room.getIndexList().contains(1) || room.getIndexList().contains(2) || room.getIndexList().contains(3)) {
+                        Toast.makeText(app, "该会议室8点至9点已被占用", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 Intent intent = getIntent();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("room", list_room.get(adapter.getIndex()));

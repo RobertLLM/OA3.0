@@ -259,7 +259,7 @@ public class MeetDetailActivity extends BaseActivity {
                     time.setText(TimeUtil.timeFormatNoYear(data.getResult().getStartTime()) + " - " + TimeUtil.timeFormatJustMMHH(data.getResult().getEndTime()));
                     person.setText(data.getResult().getCreatorName());
                     create.setText(TimeUtil.timeFormatNoYear(data.getResult().getCreateTime()));
-                    locate.setText(data.getResult().getAddressName());
+                    locate.setText(data.getResult().getAddressName() + data.getResult().getRoomName());
                     dynamic.setText(data.getResult().getDynamic() + "条动态");
                     sum.setText(data.getResult().getAttendNum() + "/" + data.getResult().getTotalNum() + "人确认参加");
                     if ("1".equals(data.getResult().getMeetingStatus())) {//取消

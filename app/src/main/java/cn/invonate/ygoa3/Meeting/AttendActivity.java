@@ -136,7 +136,7 @@ public class AttendActivity extends AppCompatActivity {
      * 修改参会人
      */
     private void attend_join() {
-        String url = "/innovate-api/v1/oa/meetingJoin/addJoins/" + data.getId();
+        String url = "v1/oa/meetingJoin/addJoins/" + data.getId();
         SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<MeetMessage>() {
             @Override
             public void onNext(MeetMessage data) {

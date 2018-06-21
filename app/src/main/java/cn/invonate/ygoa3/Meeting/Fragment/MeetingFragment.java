@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -49,6 +50,9 @@ public class MeetingFragment extends Fragment {
     SwipeMenuListView listMeet;
     @BindView(R.id.refresh)
     SmartRefreshLayout refresh;
+    @BindView(R.id.pic_empty)
+    ImageView empty;
+
     Unbinder unbinder;
     private int index;
     private YGApplication app;
@@ -100,7 +104,18 @@ public class MeetingFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
+        switch (index) {
+            case 0:
+                empty.setImageResource(R.mipmap.empty1);
+                break;
+            case 1:
+                empty.setImageResource(R.mipmap.empty2);
+                break;
+            case 2:
+                empty.setImageResource(R.mipmap.empty3);
+                break;
+        }
+        listMeet.setEmptyView(empty);
         return view;
     }
 

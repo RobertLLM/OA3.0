@@ -364,7 +364,6 @@ public class MailDetailActivity extends BaseActivity {
                     stepActivity(bundle, BytePicActivity.class);
                 } else {
                     String name = files.get(position).getName();
-//                    File file = MyUtils.getCacheFile(name, MailDetailActivity.this);
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), name);
                     if (file.exists()) {
                         file.delete();

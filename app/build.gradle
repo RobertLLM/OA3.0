@@ -6,8 +6,8 @@ android {
         applicationId "cn.invonate.ygoa3"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 21
-        versionName "1.4.7"
+        versionCode 24
+        versionName "1.5.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         // Enabling multidex support.

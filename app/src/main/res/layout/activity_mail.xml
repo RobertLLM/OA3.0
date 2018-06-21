@@ -52,7 +52,8 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="50px"
             android:layout_toStartOf="@+id/mail_add"
-            android:src="@mipmap/mail_search" />
+            android:src="@mipmap/mail_search"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -64,7 +65,8 @@
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -105,56 +107,55 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <LinearLayout
-                android:id="@+id/layout_edit"
-                android:layout_width="match_parent"
-                android:layout_height="120px"
-                android:visibility="gone">
 
-                <RelativeLayout
-                    android:id="@+id/layout_all"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#555555">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:text="全选"
-                        android:textColor="@color/white"
-                        android:textSize="50px" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/layout_none"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#ea3323">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:text="全不选"
-                        android:textColor="@color/white"
-                        android:textSize="50px" />
-
-                </RelativeLayout>
-
-            </LinearLayout>
 
         </LinearLayout>
 
-
-
-
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_edit"
+        android:layout_width="match_parent"
+        android:layout_height="120px"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/layout_all"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#555555">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="全选"
+                android:textColor="@color/white"
+                android:textSize="50px" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_none"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#ea3323">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="全不选"
+                android:textColor="@color/white"
+                android:textSize="50px" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
 

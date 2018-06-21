@@ -240,7 +240,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Contacts.Select.SelectDepartmentActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity
             android:name=".Contacts.Select.SelectDepartment2Activity"
             android:screenOrientation="portrait"
@@ -313,6 +314,26 @@
         <activity android:name=".Meeting.LocationActivity"></activity>
         <activity android:name=".Meeting.AddAttendActivity" />
         <activity android:name=".Meeting.ShowCodeActivity"></activity>
+
+        <activity
+            android:name=".main.work.mail_new.MailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.work.mail_new.SendMailActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".main.work.mail_new.MailDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".main.work.mail_new.ContactsListActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".main.LocalPicActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

@@ -71,6 +71,13 @@ public class AddMeetingActivity extends BaseActivity {
         room.setEnd_s(0);
         startTime.setText(new SimpleDateFormat("HH:mm").format(new Date(0, 0, 0, room.getStart_h(), room.getStart_m(), room.getStart_s())));
         endTime.setText(new SimpleDateFormat("HH:mm").format(new Date(0, 0, 0, room.getEnd_h(), room.getEnd_m(), room.getEnd_s())));
+        MeetingDetail.ResultBean.AttendListBean bean = new MeetingDetail.ResultBean.AttendListBean();
+        bean.setUserCode(app.getUser().getUser_code());
+        bean.setUserId(app.getUser().getRsbm_pk());
+        bean.setUserName(app.getUser().getUser_name());
+        list_attend.add(bean);
+
+        personIn.setText(String.format("%s等%d人", list_attend.get(0).getUserName(), list_attend.size()));
     }
 
     @OnClick({R.id.pic_back, R.id.layout_time, R.id.pic_search, R.id.layout_address, R.id.layout_in, R.id.layout_note})
@@ -161,13 +168,6 @@ public class AddMeetingActivity extends BaseActivity {
      * 跳转至选择参会人
      */
     private void stepToAttend() {
-        if (list_attend.isEmpty()) {
-            MeetingDetail.ResultBean.AttendListBean bean = new MeetingDetail.ResultBean.AttendListBean();
-            bean.setUserCode(app.getUser().getUser_code());
-            bean.setUserId(app.getUser().getRsbm_pk());
-            bean.setUserName(app.getUser().getUser_name());
-            list_attend.add(bean);
-        }
         Intent intent = new Intent(this, AddAttendActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("list", list_attend);
@@ -200,7 +200,7 @@ public class AddMeetingActivity extends BaseActivity {
             Toast.makeText(app, "请输入会议标题", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (room == null) {
+        if (room.getRoomId() == null) {
             Toast.makeText(app, "请选择会议地点", Toast.LENGTH_SHORT).show();
             return;
         }

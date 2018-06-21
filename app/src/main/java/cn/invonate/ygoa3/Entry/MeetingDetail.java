@@ -83,6 +83,7 @@ public class MeetingDetail {
         private String title;
         private int totalNum;
         private ArrayList<AttendListBean> attendList;
+        private String roomName;
 
         public String getAddressId() {
             return addressId;
@@ -244,6 +245,14 @@ public class MeetingDetail {
             this.attendList = attendList;
         }
 
+        public String getRoomName() {
+            return roomName;
+        }
+
+        public void setRoomName(String roomName) {
+            this.roomName = roomName;
+        }
+
         public static class AttendListBean implements Serializable{
             /**
              * userCode : 034488
@@ -280,9 +289,4 @@ public class MeetingDetail {
             }
         }
     }
-
-//    @Override
-//    public String toString() {
-//        return JSON.toJSONString(this);
-//    }
 }
