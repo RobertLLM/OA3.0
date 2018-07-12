@@ -15,14 +15,12 @@ public class ShowCodeActivity extends BaseActivity {
     @BindView(R.id.code)
     ImageView code;
 
-    private String id;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_code);
         ButterKnife.bind(this);
-        id = getIntent().getExtras().getString("id");
+        String id = getIntent().getExtras().getString("id");
         code.setImageBitmap(ZXingUtils.createQRImage("v1/oa/meetingDynamic/sign/" + id, 500, 500));
     }
 

@@ -465,6 +465,7 @@ public class SendMailActivity extends BaseActivity {
                 for (String path : photos) {
                     File file = new File(path);
                     MailNew.ResultBean.MailsBean.AttachmentsBean bean = new MailNew.ResultBean.MailsBean.AttachmentsBean(file.getName(), (file.length() / 1024), 0, path);
+                    photoPaths.add(bean);
                 }
             }
             adapter.notifyDataSetChanged();

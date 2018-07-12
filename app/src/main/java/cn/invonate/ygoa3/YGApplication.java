@@ -20,13 +20,8 @@ import cn.invonate.ygoa3.Entry.User;
 import cn.invonate.ygoa3.Util.KLog;
 import cn.jpush.android.api.JPushInterface;
 
-/**
- * Created by liyangyang on 2017/10/20.
- */
-
-public class YGApplication extends Application {
+public class YGApplication extends Application{
     private User user;
-    private static Context context;
 
     static {
         //设置全局的Header构建器
@@ -51,7 +46,6 @@ public class YGApplication extends Application {
     public void onCreate() {
         super.onCreate();
         KLog.init(true);
-        context = this;
         initTbs();
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
@@ -64,10 +58,6 @@ public class YGApplication extends Application {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public static Context getContext() {
-        return context;
     }
 
     private void initTbs() {
@@ -94,5 +84,4 @@ public class YGApplication extends Application {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
-
 }

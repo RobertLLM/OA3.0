@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 26
@@ -45,6 +46,7 @@ repositories {
     maven {
         url "https://jitpack.io"
     }
+    mavenCentral()
 }
 
 
@@ -53,47 +55,67 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
-    compile 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile files('libs/activation.jar')
-    compile files('libs/additionnal.jar')
-    compile files('libs/mail.jar')
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'me.iwf.photopicker:PhotoPicker:0.9.5@aar'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.6'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'org.ligboy.retrofit2:converter-fastjson-android:2.0.2'
-    compile 'com.jakewharton:butterknife:8.4.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // JAVA 邮件支持
+    implementation files('libs/activation.jar')
+    implementation files('libs/additionnal.jar')
+    implementation files('libs/mail.jar')
+    // 图片加载
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    // 图片选择器
+    implementation 'me.iwf.photopicker:PhotoPicker:0.9.5@aar'
+    // 网络请求
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.1.2'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'io.reactivex:rxjava:1.1.6'
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    implementation 'org.ligboy.retrofit2:converter-fastjson-android:2.0.2'
+    // 视图绑定
+    implementation 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    // 适配
     implementation project(':autolayout')
+    // IOS风格dialog
     implementation project(':ios_dialog')
+    // 下拉刷新
     implementation project(':pullToReflash_library')
+    // 视频播放器
     implementation project(':jcvideoplayer-lib')
-    implementation 'com.nineoldandroids:library:2.4.0'
-    compile 'org.igniterealtime.smack:smack-android-extensions:4.2.2'
-    compile 'org.igniterealtime.smack:smack-android:4.2.2'
+    // 即时通讯smark
+    implementation 'org.igniterealtime.smack:smack-android-extensions:4.2.2'
+    implementation 'org.igniterealtime.smack:smack-android:4.2.2'
     // Optional for XMPPTCPConnection
-    compile 'org.igniterealtime.smack:smack-tcp:4.2.2'
+    implementation 'org.igniterealtime.smack:smack-tcp:4.2.2'
     // Optional for XMPP-IM (RFC 6121) support (Roster, Threaded Chats, …)
-    compile 'org.igniterealtime.smack:smack-im:4.2.2'
-    compile 'cn.carbs.android:SegmentControlView:1.0.0'
-    compile project(path: ':lazyviewpagerlibrary')
-    compile 'com.github.luckyandyzhang:MentionEditText:1.0.0'
-    compile project(path: ':SlidingMenulibrary')
-    compile project(path: ':SwipMenuListViewlibrary')
-    compile files('libs/tbs_sdk_thirdapp_v3.2.0.1104_43200_sharewithdownload_withfilereader_withoutGame_obfs_20170609_115346.jar')
+    implementation 'org.igniterealtime.smack:smack-im:4.2.2'
+    // tablayout拓展
+    implementation 'cn.carbs.android:SegmentControlView:1.0.0'
+    // 懒加载ViewPager
+    implementation project(path: ':lazyviewpagerlibrary')
+    implementation 'com.github.luckyandyzhang:MentionEditText:1.0.0'
+    // 侧边栏
+    implementation project(path: ':SlidingMenulibrary')
+    // 左划删除
+    implementation project(path: ':SwipMenuListViewlibrary')
+    // 腾讯X5内核
+    implementation files('libs/tbs_sdk_thirdapp_v3.2.0.1104_43200_sharewithdownload_withfilereader_withoutGame_obfs_20170609_115346.jar')
+    // 文件选择器
     implementation project(':filepicker')
+    // 极光推送
     implementation files('libs/jcore-android-1.1.9.jar')
     implementation files('libs/jpush-android-3.1.1.jar')
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
-    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'
-    compile 'com.drawthink:expandable-recyclerview:0.0.3'
+    // 下拉刷新样式
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'
+    implementation 'com.drawthink:expandable-recyclerview:0.0.3'
     implementation 'com.prolificinteractive:material-calendarview:1.4.0'
-
+    // 滚轮选择器
     implementation 'com.contrarywind:Android-PickerView:4.1.4'
+    // 二维码
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
+
 }

@@ -50,7 +50,7 @@ public class SettingActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         GlideUtil.getInstance().clearImageAllCache(getApplicationContext());
-                        SpUtil.removeAll();
+                        SpUtil.removeAll(SettingActivity.this);
                     }
                 }).show();
                 break;

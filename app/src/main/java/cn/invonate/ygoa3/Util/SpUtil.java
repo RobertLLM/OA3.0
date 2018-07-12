@@ -3,8 +3,6 @@ package cn.invonate.ygoa3.Util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import cn.invonate.ygoa3.YGApplication;
-
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -15,15 +13,16 @@ public class SpUtil {
     private static final String FIRST = "first";
     private static final String USER_SHARED = "user_shared";
     private static final String APP_NAME = "oa";
+
     /**
      * 读取用户名
      *
      * @param context
      * @return
      */
-    public static String getName(Context context){
+    public static String getName(Context context) {
         SharedPreferences sp = context.getSharedPreferences(USER_SHARED, MODE_PRIVATE);
-        return sp.getString("userName","");
+        return sp.getString("userName", "");
     }
 
     /**
@@ -32,9 +31,9 @@ public class SpUtil {
      * @param context
      * @return
      */
-    public static String getPass(Context context){
+    public static String getPass(Context context) {
         SharedPreferences sp = context.getSharedPreferences(USER_SHARED, MODE_PRIVATE);
-        return sp.getString("password","");
+        return sp.getString("password", "");
     }
 
     /**
@@ -43,10 +42,10 @@ public class SpUtil {
      * @param context
      * @param name
      */
-    public static void setName(Context context,String name){
+    public static void setName(Context context, String name) {
         SharedPreferences sp = context.getSharedPreferences(USER_SHARED, MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("userName",name);
+        editor.putString("userName", name);
         editor.apply();
     }
 
@@ -56,10 +55,10 @@ public class SpUtil {
      * @param context
      * @param pass
      */
-    public static void setPass(Context context,String pass){
+    public static void setPass(Context context, String pass) {
         SharedPreferences sp = context.getSharedPreferences(USER_SHARED, MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("password",pass);
+        editor.putString("password", pass);
         editor.apply();
     }
 
@@ -80,7 +79,7 @@ public class SpUtil {
      * @param context
      * @param is
      */
-    public static void setFirst(Context context,boolean is){
+    public static void setFirst(Context context, boolean is) {
         SharedPreferences sp = context.getSharedPreferences(FIRST, MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("first", is);
@@ -88,25 +87,24 @@ public class SpUtil {
     }
 
 
-    public static String readString(String key) {
-        return getSharedPreferences().getString(key, "");
+    public static String readString(Context context, String key) {
+        return getSharedPreferences(context).getString(key, "");
     }
 
-    public static void writeString(String key, String value) {
-        getSharedPreferences().edit().putString(key, value).apply();
+    public static void writeString(Context context, String key, String value) {
+        getSharedPreferences(context).edit().putString(key, value).apply();
     }
 
-    public static void remove(String key) {
-        getSharedPreferences().edit().remove(key).apply();
+    public static void remove(Context context, String key) {
+        getSharedPreferences(context).edit().remove(key).apply();
     }
 
-    public static void removeAll() {
-        getSharedPreferences().edit().clear().apply();
+    public static void removeAll(Context context) {
+        getSharedPreferences(context).edit().clear().apply();
     }
 
-    public static SharedPreferences getSharedPreferences() {
-        return YGApplication.getContext()
-                .getSharedPreferences(APP_NAME, Context.MODE_PRIVATE);
+    private static SharedPreferences getSharedPreferences(Context context) {
+        return context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE);
     }
 
 }

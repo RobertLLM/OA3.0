@@ -7,14 +7,12 @@ import android.view.WindowManager;
 
 import java.io.File;
 
-import cn.invonate.ygoa3.YGApplication;
-
 
 public class MyUtils {
 
     public static final String APP_NAME = "oa.apk";//名字
 
-    public static final String PACKAGE_NAME = YGApplication.getContext().getPackageName();
+    public static final String PACKAGE_NAME = "cn.invonate";
 
     /**
      * 获得存储文件

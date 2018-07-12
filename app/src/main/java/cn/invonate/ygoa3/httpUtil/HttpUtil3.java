@@ -19,7 +19,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class HttpUtil3 {
-    public static final String BASE_URL = "http://192.168.1.28:8080/innovate-api/";
+    public static final String BASE_URL = "http://oayj.yong-gang.cn:8080/innovate-api/";
 //    public static final String BASE_URL = "http://192.168.1.27:8080/innovate-api/";
 //    public static final String BASE_URL = "http://10.181.5.59:8080/innvote-api/";
 

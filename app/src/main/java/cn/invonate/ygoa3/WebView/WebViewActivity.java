@@ -30,8 +30,6 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -244,29 +242,6 @@ public class WebViewActivity extends BaseActivity {
             }
         }
         return true;
-    }
-
-    /**
-     * 将url参数转换成map
-     *
-     * @param param aa=11&bb=22&cc=33
-     * @return
-     */
-    public static Map<String, String> getUrlParams(String param) {
-        Map<String, String> map = new HashMap<>(0);
-        if (param == null || param.equals("")) {
-            return map;
-        }
-        String[] params = param.split("&");
-        for (String param1 : params) {
-            String[] p = param1.split("=");
-            if (p.length == 2) {
-                map.put(p[0], p[1]);
-                Log.i("url_map", p[0] + "=" + p[1]);
-            }
-        }
-
-        return map;
     }
 
     private class MyWebViewDownLoadListener implements DownloadListener {
