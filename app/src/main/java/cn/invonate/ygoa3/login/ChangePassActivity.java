@@ -71,8 +71,8 @@ public class ChangePassActivity extends BaseActivity {
                 Log.i("changePass", data.toString());
                 Toast.makeText(app, data.getCause(), Toast.LENGTH_SHORT).show();
                 if (data.getSuccess()==0){
-                    SpUtil.setName(ChangePassActivity.this, "");
-                    SpUtil.setPass(ChangePassActivity.this, "");
+                    SpUtil.INSTANCE.setName(ChangePassActivity.this, "");
+                    SpUtil.INSTANCE.setPass(ChangePassActivity.this, "");
                     Intent intent = new Intent();
                     intent.setAction("finish");
                     sendBroadcast(intent);
@@ -82,7 +82,7 @@ public class ChangePassActivity extends BaseActivity {
                 }
             }
         };
-        HttpUtil.getInstance(this, false).changePass(new ProgressSubscriber(onNextListener, this, "修改中"), MD5.GetMD5Code(pass_old), MD5.GetMD5Code(pass_new), app.getUser().getUser_code());
+        HttpUtil.getInstance(this, false).changePass(new ProgressSubscriber(onNextListener, this, "修改中"), MD5.Companion.GetMD5Code(pass_old), MD5.Companion.GetMD5Code(pass_new), app.getUser().getUser_code());
     }
 
 }

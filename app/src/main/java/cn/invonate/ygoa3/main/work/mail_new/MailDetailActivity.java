@@ -101,21 +101,22 @@ public class MailDetailActivity extends BaseActivity {
         Log.d("lyy", "densityDpi = " + mDensity);
         if (mDensity == 240) {
             webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
-            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+            webSettings.setTextSize(WebSettings.TextSize.NORMAL);
         } else if (mDensity == 160) {
             webSettings.setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+            webSettings.setTextSize(WebSettings.TextSize.SMALLER);
         } else if (mDensity == 120) {
             webSettings.setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
-            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+            webSettings.setTextSize(WebSettings.TextSize.SMALLER);
         } else if (mDensity == DisplayMetrics.DENSITY_XHIGH) {
             webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
-            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+            webSettings.setTextSize(WebSettings.TextSize.NORMAL);
         } else if (mDensity == DisplayMetrics.DENSITY_TV) {
             webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
-            webSettings.setTextSize(WebSettings.TextSize.LARGER);
+            webSettings.setTextSize(WebSettings.TextSize.NORMAL);
         } else {
             webSettings.setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+            webSettings.setTextSize(WebSettings.TextSize.NORMAL);
         }
         /**
          * 用WebView显示图片，可使用这个参数 设置网页布局类型： 1、LayoutAlgorithm.NARROW_COLUMNS ： 适应内容大小 2、LayoutAlgorithm.SINGLE_COLUMN:适应屏幕，内容将自动缩放
@@ -199,7 +200,7 @@ public class MailDetailActivity extends BaseActivity {
 
                             @Override
                             public void onClick(View v) {
-                                int[] ids = new int[]{MailHolder.mailsBeans.get(position).getId()};
+                                int[] ids = new int[]{MailHolder.INSTANCE.getMailsBeans().get(position).getId()};
                                 deleteMail(ids);
                             }
                         }).setNegativeButton("取消", null).show();
@@ -249,8 +250,8 @@ public class MailDetailActivity extends BaseActivity {
                 break;
             case R.id.txt_info:
                 Bundle bundle = new Bundle();
-                ArrayList<MailNew.ResultBean.MailsBean.ReceiveBean> receiver = MailHolder.mailsBeans.get(position).getReceive();
-                ArrayList<MailNew.ResultBean.MailsBean.CcBean> copy = MailHolder.mailsBeans.get(position).getCc();
+                ArrayList<MailNew.ResultBean.MailsBean.ReceiveBean> receiver = MailHolder.INSTANCE.getMailsBeans().get(position).getReceive();
+                ArrayList<MailNew.ResultBean.MailsBean.CcBean> copy = MailHolder.INSTANCE.getMailsBeans().get(position).getCc();
                 bundle.putSerializable("receiver", receiver);
                 bundle.putSerializable("copy", copy);
                 stepActivity(bundle, ContactsListActivity.class);
@@ -265,7 +266,7 @@ public class MailDetailActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putInt("mode", mode);
         bundle.putInt("mail", position);
-        bundle.putSerializable("files", MailHolder.mailsBeans.get(position).getAttachments());
+        bundle.putSerializable("files", MailHolder.INSTANCE.getMailsBeans().get(position).getAttachments());
         bundle.putString("folder", folder);
         stepActivity(bundle, SendMailActivity.class);
     }
@@ -278,7 +279,7 @@ public class MailDetailActivity extends BaseActivity {
     private void change_mail(final int index) {
         initWebView(webContent);
         webContent.setWebViewClient(new YgWebViewClient());
-        final MailNew.ResultBean.MailsBean mail = MailHolder.mailsBeans.get(index);
+        final MailNew.ResultBean.MailsBean mail = MailHolder.INSTANCE.getMailsBeans().get(index);
         scContent.scrollTo(0, 0);
         txtSubject.setText("主题：" + (mail.getSubject().equals("") ? "<无主题>" : mail.getSubject()));
         txtFrom.setText("发件人：" + mail.getSender().getUserName());
@@ -286,7 +287,7 @@ public class MailDetailActivity extends BaseActivity {
         webContent.setVisibility(View.VISIBLE);
         webContent.loadDataWithBaseURL(null, mail.getTextContent(), "text/html", "utf-8", null);
         webContent.setWebChromeClient(new WebChromeClient());
-        FileNewAdapter adapter = new FileNewAdapter(MailHolder.mailsBeans.get(position).getAttachments(), MailDetailActivity.this);
+        FileNewAdapter adapter = new FileNewAdapter(MailHolder.INSTANCE.getMailsBeans().get(position).getAttachments(), MailDetailActivity.this);
         adapter.setOnItemClickListener(new FileNewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -319,7 +320,7 @@ public class MailDetailActivity extends BaseActivity {
             public void onNext(MessageContent data) {
                 Log.i("getMessage", data.toString());
                 if (data.getResult() != null) {
-                    MailHolder.mailsBeans.get(position).setTextContent(data.getResult().getMail().getTextContent());
+                    MailHolder.INSTANCE.getMailsBeans().get(position).setTextContent(data.getResult().getMail().getTextContent());
                     webContent.loadDataWithBaseURL(null, data.getResult().getMail().getTextContent(), "text/html", "utf-8", null);
                 }
             }
@@ -338,7 +339,7 @@ public class MailDetailActivity extends BaseActivity {
             mailPre.setClickable(true);
             mailPre.setAlpha(1f);
         }
-        if (position == MailHolder.mailsBeans.size() - 1) {
+        if (position == MailHolder.INSTANCE.getMailsBeans().size() - 1) {
             mailNext.setClickable(false);
             mailNext.setAlpha(0.5f);
         } else {
@@ -358,7 +359,7 @@ public class MailDetailActivity extends BaseActivity {
             public void onNext(MailMessage data) {
                 Log.i("appendMailToFolder", data.toString());
                 if (data.getCode().equals("0000")) {
-                    MailHolder.mailsBeans.remove(position);
+                    MailHolder.INSTANCE.getMailsBeans().remove(position);
                     Toast.makeText(app, "删除成功", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
@@ -391,7 +392,7 @@ public class MailDetailActivity extends BaseActivity {
             @Override
             public void onNext(String data) {
                 Log.i("getAttachments", data);
-                String name = MailHolder.mailsBeans.get(mail_position).getAttachments().get(file_index).getFileName();
+                String name = MailHolder.INSTANCE.getMailsBeans().get(mail_position).getAttachments().get(file_index).getFileName();
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), name);
                 if (file.exists()) {
                     file.delete();
@@ -428,7 +429,7 @@ public class MailDetailActivity extends BaseActivity {
                 }
             }
         };
-        HttpUtil3.getInstance(this, false).getAttachments(subscriber, app.getUser().getRsbm_pk(), app.getUser().getRsbm_pk(), MailHolder.mailsBeans.get(mail_position).getId(), folder, MailHolder.mailsBeans.get(mail_position).getAttachments().get(file_index).getIndex());
+        HttpUtil3.getInstance(this, false).getAttachments(subscriber, app.getUser().getRsbm_pk(), app.getUser().getRsbm_pk(), MailHolder.INSTANCE.getMailsBeans().get(mail_position).getId(), folder, MailHolder.INSTANCE.getMailsBeans().get(mail_position).getAttachments().get(file_index).getIndex());
     }
 
     /**

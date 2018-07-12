@@ -102,9 +102,9 @@ public class RoomAdapter extends BaseAdapter {
         if (data.get(position).getTimeList() != null && !data.get(position).getTimeList().isEmpty()) {
             StringBuffer checked_time = new StringBuffer();
             for (Room.ResultBean.ListBean.TimeListBean bean : data.get(position).getTimeList()) {
-                checked_time.append(TimeUtil.timeFormatJustMMHH(bean.getStartTime()));
+                checked_time.append(TimeUtil.INSTANCE.timeFormatJustMMHH(bean.getStartTime()));
                 checked_time.append("-");
-                checked_time.append(TimeUtil.timeFormatJustMMHH(bean.getEndTime()));
+                checked_time.append(TimeUtil.INSTANCE.timeFormatJustMMHH(bean.getEndTime()));
                 checked_time.append("，");
             }
             holder.checked_time.setVisibility(View.VISIBLE);

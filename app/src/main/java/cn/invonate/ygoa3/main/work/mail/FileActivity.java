@@ -27,7 +27,7 @@ public class FileActivity extends BaseActivity {
         ButterKnife.bind(this);
         int i = getIntent().getExtras().getInt("i");
         int j = getIntent().getExtras().getInt("j");
-        base64_file = MailHolder.mail_model.get(i).getAttachmentsInputStreams().get(j);
+        base64_file = MailHolder.INSTANCE.getMail_model().get(i).getAttachmentsInputStreams().get(j);
         String url = Base64.encodeToString(base64_file, Base64.DEFAULT);
         Log.i("url", url);
 

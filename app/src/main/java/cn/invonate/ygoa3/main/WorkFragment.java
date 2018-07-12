@@ -339,8 +339,8 @@ public class WorkFragment extends Fragment {
                     // 准备连接服务器的会话信息
                     Properties props = new Properties();
                     props.setProperty("mail.store.protocol", "imap");
-                    props.setProperty("mail.imap.host", Domain.MAIL_URL);
-                    props.setProperty("mail.imap.port", Domain.MAIL_PORT);
+                    props.setProperty("mail.imap.host", Domain.INSTANCE.getMAIL_URL());
+                    props.setProperty("mail.imap.port", Domain.INSTANCE.getMAIL_PORT());
 
                     // 创建Session实例对象
                     Session session = Session.getInstance(props);

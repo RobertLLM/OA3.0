@@ -197,9 +197,9 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-        MailHolder.mail_model = null;
-        MailHolder.folder = null;
-        MailHolder.mails = null;
+        MailHolder.INSTANCE.setMail_model(null);
+        MailHolder.INSTANCE.setFolder(null);
+        MailHolder.INSTANCE.setMails(null);
         super.onDestroy();
     }
 
@@ -250,8 +250,8 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                     // 准备连接服务器的会话信息
                     Properties props = new Properties();
                     props.setProperty("mail.store.protocol", "imap");
-                    props.setProperty("mail.imap.host", Domain.MAIL_URL);
-                    props.setProperty("mail.imap.port", Domain.MAIL_PORT);
+                    props.setProperty("mail.imap.host", Domain.INSTANCE.getMAIL_URL());
+                    props.setProperty("mail.imap.port", Domain.INSTANCE.getMAIL_PORT());
 
                     // 创建Session实例对象
                     Session session = Session.getInstance(props);
@@ -265,7 +265,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                     // 获得收件箱
                     Folder folder = store.getFolder(folderName);
 
-                    MailHolder.folder = folder;//缓存邮件箱
+                    MailHolder.INSTANCE.setFolder(folder);//缓存邮件箱
 
                     // 以读写模式打开收件箱
                     folder.open(Folder.READ_ONLY);
@@ -286,13 +286,13 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                             data.add((MimeMessage) message);
                         }
                         if (page == 0) {
-                            list_mails = POP3ReceiveMailTest.parseMessage(data);
-                            MailHolder.mails = data;
-                            MailHolder.mail_model = list_mails;
+                            list_mails = POP3ReceiveMailTest.Companion.parseMessage(data);
+                            MailHolder.INSTANCE.setMails(data);
+                            MailHolder.INSTANCE.setMail_model(list_mails);
                         } else {
-                            list_mails.addAll(POP3ReceiveMailTest.parseMessage(data));
-                            MailHolder.mails.addAll(data);
-                            MailHolder.mail_model = list_mails;
+                            list_mails.addAll(POP3ReceiveMailTest.Companion.parseMessage(data));
+                            MailHolder.INSTANCE.getMails().addAll(data);
+                            MailHolder.INSTANCE.setMail_model(list_mails);
                         }
                         System.out.println(list_mails.toString());
                         // 打印不同状态的邮件数量
@@ -305,8 +305,8 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                         handler.sendMessage(msg);
                     } else {
                         list_mails.clear();
-                        if (MailHolder.mails != null) {
-                            MailHolder.mails.clear();
+                        if (MailHolder.INSTANCE.getMails() != null) {
+                            MailHolder.INSTANCE.getMails().clear();
                         }
                         handler.sendEmptyMessage(MESSAGE_MAIL_NULL);
                     }
@@ -398,8 +398,8 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                     // 准备连接服务器的会话信息
                     Properties props = new Properties();
                     props.setProperty("mail.store.protocol", "imap");
-                    props.setProperty("mail.imap.host", Domain.MAIL_URL);
-                    props.setProperty("mail.imap.port", Domain.MAIL_PORT);
+                    props.setProperty("mail.imap.host", Domain.INSTANCE.getMAIL_URL());
+                    props.setProperty("mail.imap.port", Domain.INSTANCE.getMAIL_PORT());
 
                     // 创建Session实例对象
                     Session session = Session.getInstance(props);
@@ -410,7 +410,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
 
                     if (mode != 3) {
                         Folder folder = store.getFolder("Trash");
-                        MailHolder.folder.open(Folder.READ_WRITE);
+                        MailHolder.INSTANCE.getFolder().open(Folder.READ_WRITE);
                         folder.open(Folder.READ_WRITE); //打开垃圾箱
 
                         for (int i = 0; i < msg.size(); i++) {
@@ -418,12 +418,12 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                             folder.appendMessages(msgs);
                         }
                         folder.close(true);
-                        MailHolder.folder.close(true);
+                        MailHolder.INSTANCE.getFolder().close(true);
                     }
                     for (Message m : msg) {
-                        MailHolder.folder.open(Folder.READ_WRITE);
+                        MailHolder.INSTANCE.getFolder().open(Folder.READ_WRITE);
                         m.setFlag(FLAGS.Flag.DELETED, true);
-                        MailHolder.folder.close(true);
+                        MailHolder.INSTANCE.getFolder().close(true);
                     }
                     handler.sendEmptyMessage(4);
                 } catch (MessagingException e) {
@@ -451,7 +451,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                 List<Message> list_mail = new ArrayList<>();
                 for (int i = 0; i < list_mails.size(); i++) {
                     if (list_mails.get(i).isIs_selected()) {
-                        list_mail.add(MailHolder.mails.get(i));
+                        list_mail.add(MailHolder.INSTANCE.getMails().get(i));
                     }
                 }
                 save_to_trash(list_mail);

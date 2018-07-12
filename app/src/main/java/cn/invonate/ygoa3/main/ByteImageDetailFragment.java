@@ -59,7 +59,7 @@ public class ByteImageDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Mail mail = MailHolder.mail_model.get(index);
+        Mail mail = MailHolder.INSTANCE.getMail_model().get(index);
         byte[] data = mail.getAttachmentsInputStreams().get(position);
         mImageView.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
         progressBar.setVisibility(View.GONE);

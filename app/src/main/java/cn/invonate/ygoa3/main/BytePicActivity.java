@@ -54,7 +54,7 @@ public class BytePicActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return MailHolder.mail_model.get(index).getAttachmentsInputStreams().size();
+            return MailHolder.INSTANCE.getMail_model().get(index).getAttachmentsInputStreams().size();
         }
 
     }

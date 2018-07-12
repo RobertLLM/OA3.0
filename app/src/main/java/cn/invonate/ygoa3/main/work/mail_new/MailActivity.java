@@ -110,7 +110,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-        MailHolder.mailsBeans = null;
+        MailHolder.INSTANCE.setMailsBeans(null);
         super.onDestroy();
     }
 
@@ -130,7 +130,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                 pop.showAsDropDown(view, AutoUtils.getPercentWidthSize(-90), 0, Gravity.CENTER);
                 break;
             case R.id.layout_all:
-                for (MailNew.ResultBean.MailsBean mail : MailHolder.mailsBeans) {
+                for (MailNew.ResultBean.MailsBean mail : MailHolder.INSTANCE.getMailsBeans()) {
                     mail.setSelect(true);
                 }
                 etMail.setText("删除");
@@ -138,7 +138,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.layout_none:
-                for (MailNew.ResultBean.MailsBean mail : MailHolder.mailsBeans) {
+                for (MailNew.ResultBean.MailsBean mail : MailHolder.INSTANCE.getMailsBeans()) {
                     mail.setSelect(false);
                 }
                 etMail.setText("取消编辑");
@@ -170,18 +170,18 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
 
             @Override
             public void onNext(MailNew data) {
-                KLog.i("getNewMails", data);
+                KLog.INSTANCE.i("getNewMails", data);
                 if ("0000".equals(data.getCode())) {
                     if (page == 1 && update) {
-                        MailHolder.mailsBeans = data.getResult().getMails();
-                        adapter = new MailNewAdapter(MailHolder.mailsBeans, MailActivity.this, folderName);
+                        MailHolder.INSTANCE.setMailsBeans(data.getResult().getMails());
+                        adapter = new MailNewAdapter(MailHolder.INSTANCE.getMailsBeans(), MailActivity.this, folderName);
                         listMail.setAdapter(adapter);
                         etMail.setOnClickListener(MailActivity.this);
                         listMail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 if (adapter.isSelect_mode()) {
-                                    MailHolder.mailsBeans.get(position).setSelect(!MailHolder.mailsBeans.get(position).isSelect());
+                                    MailHolder.INSTANCE.getMailsBeans().get(position).setSelect(!MailHolder.INSTANCE.getMailsBeans().get(position).isSelect());
                                     adapter.notifyDataSetChanged();
                                     if (checkSelect()) {
                                         etMail.setText("删除");
@@ -201,10 +201,10 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
                                 }
                             }
                         });
-                        if (MailHolder.mailsBeans.isEmpty())
+                        if (MailHolder.INSTANCE.getMailsBeans().isEmpty())
                             Toast.makeText(MailActivity.this, "暂无邮件", Toast.LENGTH_SHORT).show();
                     } else {
-                        MailHolder.mailsBeans.addAll(data.getResult().getMails());
+                        MailHolder.INSTANCE.getMailsBeans().addAll(data.getResult().getMails());
                         adapter.notifyDataSetChanged();
                     }
                 } else {
@@ -271,7 +271,7 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
      * @return
      */
     private boolean checkSelect() {
-        for (MailNew.ResultBean.MailsBean mail : MailHolder.mailsBeans) {
+        for (MailNew.ResultBean.MailsBean mail : MailHolder.INSTANCE.getMailsBeans()) {
             if (mail.isSelect()) {
                 return true;
             }
@@ -285,16 +285,16 @@ public class MailActivity extends BaseActivity implements View.OnClickListener {
             if (!checkSelect()) {// 取消编辑
                 adapter.setSelect_mode(false);
                 layoutEdit.setVisibility(View.GONE);
-                for (MailNew.ResultBean.MailsBean mail : MailHolder.mailsBeans) {
+                for (MailNew.ResultBean.MailsBean mail : MailHolder.INSTANCE.getMailsBeans()) {
                     mail.setSelect(false);
                 }
                 etMail.setText("编辑");
                 etMail.setTextColor(Color.parseColor("#000000"));
             } else { // 删除邮件
                 List<MailNew.ResultBean.MailsBean> list_mail = new ArrayList<>();
-                for (int i = 0; i < MailHolder.mailsBeans.size(); i++) {
-                    if (MailHolder.mailsBeans.get(i).isSelect()) {
-                        list_mail.add(MailHolder.mailsBeans.get(i));
+                for (int i = 0; i < MailHolder.INSTANCE.getMailsBeans().size(); i++) {
+                    if (MailHolder.INSTANCE.getMailsBeans().get(i).isSelect()) {
+                        list_mail.add(MailHolder.INSTANCE.getMailsBeans().get(i));
                     }
                 }
                 int[] ids = new int[list_mail.size()];

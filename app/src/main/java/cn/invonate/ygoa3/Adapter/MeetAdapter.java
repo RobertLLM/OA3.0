@@ -63,9 +63,9 @@ public class MeetAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.title.setText(data.get(position).getTitle());
-        holder.time.setText(TimeUtil.timeFormatNoYear(data.get(position).getStartTime()) + " - " + TimeUtil.timeFormatJustMMHH(data.get(position).getEndTime()));
+        holder.time.setText(TimeUtil.INSTANCE.timeFormatNoYear(data.get(position).getStartTime()) + " - " + TimeUtil.INSTANCE.timeFormatJustMMHH(data.get(position).getEndTime()));
         holder.person.setText(data.get(position).getCreatorName());
-        holder.create.setText(TimeUtil.timeFormatNoYear(data.get(position).getCreateTime()));
+        holder.create.setText(TimeUtil.INSTANCE.timeFormatNoYear(data.get(position).getCreateTime()));
         holder.locate.setText(data.get(position).getAddressName() + data.get(position).getRoomName());
         holder.dynamic.setText(data.get(position).getDynamic() + "条动态");
         holder.sum.setText(data.get(position).getAttendNum() + "/" + data.get(position).getTotalNum() + "人参加");

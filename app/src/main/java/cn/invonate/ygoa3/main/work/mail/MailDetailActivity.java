@@ -232,7 +232,7 @@ public class MailDetailActivity extends BaseActivity {
 
                             @Override
                             public void onClick(View v) {
-                                delete_single_mail(MailHolder.mails.get(position));
+                                delete_single_mail(MailHolder.INSTANCE.getMails().get(position));
                             }
                         }).setNegativeButton("取消", null).show();
                 break;
@@ -281,8 +281,8 @@ public class MailDetailActivity extends BaseActivity {
                 break;
             case R.id.txt_info:
                 Bundle bundle = new Bundle();
-                ArrayList<Mail.Address> receiver = MailHolder.mail_model.get(position).getReceiver();
-                ArrayList<Mail.Address> copy = MailHolder.mail_model.get(position).getCopy();
+                ArrayList<Mail.Address> receiver = MailHolder.INSTANCE.getMail_model().get(position).getReceiver();
+                ArrayList<Mail.Address> copy = MailHolder.INSTANCE.getMail_model().get(position).getCopy();
                 bundle.putSerializable("receiver", receiver);
                 bundle.putSerializable("copy", copy);
                 stepActivity(bundle, ContactsListActivity.class);
@@ -301,13 +301,13 @@ public class MailDetailActivity extends BaseActivity {
     }
 
     private void setContent(final int index) {
-        if (MailHolder.mail_model.get(index).getContent() == null) {
+        if (MailHolder.INSTANCE.getMail_model().get(index).getContent() == null) {
             contentHandler.sendEmptyMessage(SHOW_DIALOG);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        Folder folder = MailHolder.folder;
+                        Folder folder = MailHolder.INSTANCE.getFolder();
                         // 以读写模式打开收件箱
                         if (!folder.getStore().isConnected()) {
                             folder.getStore().connect();
@@ -316,7 +316,7 @@ public class MailDetailActivity extends BaseActivity {
                             folder.close(true);
                         }
                         folder.open(Folder.READ_WRITE);
-                        POP3ReceiveMailTest.setContent(MailHolder.mails.get(index), MailHolder.mail_model.get(index));
+                        POP3ReceiveMailTest.Companion.setContent(MailHolder.INSTANCE.getMails().get(index), MailHolder.INSTANCE.getMail_model().get(index));
                         contentHandler.sendEmptyMessage(DISMISS_DIALOG);
                     } catch (Exception e) {
                         dialog.dismiss();
@@ -337,7 +337,7 @@ public class MailDetailActivity extends BaseActivity {
     private void change_mail(final int index) {
         initWebView(webContent);
         webContent.setWebViewClient(new YgWebViewClient());
-        Mail mail = MailHolder.mail_model.get(index);
+        Mail mail = MailHolder.INSTANCE.getMail_model().get(index);
         final ArrayList<FileEntry> files = new ArrayList<>();
         scContent.scrollTo(0, 0);
         txtSubject.setText("主题：" + mail.getSubject());
@@ -346,13 +346,13 @@ public class MailDetailActivity extends BaseActivity {
         webContent.setVisibility(View.VISIBLE);
         webContent.loadDataWithBaseURL(null, mail.getContent(), "text/html", "utf-8", null);
         webContent.setWebChromeClient(new WebChromeClient());
-        get_single_mail(MailHolder.mails.get(position));
+        get_single_mail(MailHolder.INSTANCE.getMails().get(position));
         for (int i = 0; i < mail.getAttachments().size(); i++) {
             FileEntry entry = IOToFile(mail.getAttachments().get(i), mail.getAttachmentsInputStreams().get(i), mail.getFile_size().get(i));
             Log.i("附件内容", entry.toString());
             files.add(entry);
         }
-        MailHolder.mail_model.get(index).setFiles(files);
+        MailHolder.INSTANCE.getMail_model().get(index).setFiles(files);
         final FileAdapter adapter = new FileAdapter(files, this);
         adapter.setOnItemClickListener(new FileAdapter.OnItemClickListener() {
             @Override
@@ -406,7 +406,7 @@ public class MailDetailActivity extends BaseActivity {
             public void run() {
                 boolean result = false;
                 try {
-                    Folder folder = MailHolder.folder;
+                    Folder folder = MailHolder.INSTANCE.getFolder();
                     // 以读写模式打开收件箱
                     if (folder.isOpen()) {
                         folder.close(true);
@@ -436,7 +436,7 @@ public class MailDetailActivity extends BaseActivity {
             public void run() {
                 boolean result = false;
                 try {
-                    Folder folder = MailHolder.folder;
+                    Folder folder = MailHolder.INSTANCE.getFolder();
                     // 以读写模式打开收件箱
                     if (folder.isOpen()) {
                         folder.close(true);
@@ -470,8 +470,8 @@ public class MailDetailActivity extends BaseActivity {
         // 准备连接服务器的会话信息
         Properties props = new Properties();
         props.setProperty("mail.store.protocol", "imap");
-        props.setProperty("mail.imap.host", Domain.MAIL_URL);
-        props.setProperty("mail.imap.port", Domain.MAIL_PORT);
+        props.setProperty("mail.imap.host", Domain.INSTANCE.getMAIL_URL());
+        props.setProperty("mail.imap.port", Domain.INSTANCE.getMAIL_PORT());
 
         // 创建Session实例对象
         Session session = Session.getInstance(props);
@@ -503,7 +503,7 @@ public class MailDetailActivity extends BaseActivity {
             mailPre.setClickable(true);
             mailPre.setAlpha(1f);
         }
-        if (position == MailHolder.mail_model.size() - 1) {
+        if (position == MailHolder.INSTANCE.getMail_model().size() - 1) {
             mailNext.setClickable(false);
             mailNext.setAlpha(0.5f);
         } else {

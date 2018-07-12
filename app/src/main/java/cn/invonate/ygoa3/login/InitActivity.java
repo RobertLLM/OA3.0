@@ -27,8 +27,8 @@ public class InitActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
         app = (YGApplication) getApplication();
-        userName = SpUtil.getName(this);
-        password = SpUtil.getPass(this);
+        userName = SpUtil.INSTANCE.getName(this);
+        password = SpUtil.INSTANCE.getPass(this);
         login();
     }
 
@@ -44,8 +44,8 @@ public class InitActivity extends BaseActivity {
                         //登陆成功
                         app.setUser(data);
                         //记住密码
-                        SpUtil.setName(InitActivity.this, userName);
-                        SpUtil.setPass(InitActivity.this, password);
+                        SpUtil.INSTANCE.setName(InitActivity.this, userName);
+                        SpUtil.INSTANCE.setPass(InitActivity.this, password);
                         goActivity(MainActivity.class);
                     } else {
                         Toast.makeText(app, data.getMsg(), Toast.LENGTH_SHORT).show();
@@ -62,7 +62,7 @@ public class InitActivity extends BaseActivity {
             };
 
             HttpUtil.getInstance(this, true).login(new ProgressSubscriber2(onNextListener, this, "登录中"), userName,
-                    MD5.GetMD5Code(password)
+                    MD5.Companion.GetMD5Code(password)
             );
         }
     }

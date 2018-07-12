@@ -352,7 +352,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void install() {
-        File file = new File(Environment.getExternalStorageDirectory() + "/" + "/" + MyUtils.PACKAGE_NAME + "/" + MyUtils.APP_NAME);
+        File file = new File(Environment.getExternalStorageDirectory() + "/" + "/" + MyUtils.INSTANCE.getPACKAGE_NAME() + "/" + MyUtils.INSTANCE.getAPP_NAME());
         if (file == null || !file.exists()) {
             return;
         }

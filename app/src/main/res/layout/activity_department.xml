@@ -28,7 +28,6 @@
             android:layout_gravity="center"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:paddingEnd="120px"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="50px" />

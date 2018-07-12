@@ -21,7 +21,7 @@ public class ShowCodeActivity extends BaseActivity {
         setContentView(R.layout.activity_show_code);
         ButterKnife.bind(this);
         String id = getIntent().getExtras().getString("id");
-        code.setImageBitmap(ZXingUtils.createQRImage("v1/oa/meetingDynamic/sign/" + id, 500, 500));
+        code.setImageBitmap(ZXingUtils.INSTANCE.createQRImage("v1/oa/meetingDynamic/sign/" + id, 500, 500));
     }
 
     @OnClick(R.id.pic_back)

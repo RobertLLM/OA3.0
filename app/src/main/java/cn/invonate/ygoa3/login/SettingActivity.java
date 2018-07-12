@@ -38,7 +38,7 @@ public class SettingActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.layout_clean:
-                String size = GlideUtil.getInstance().getCacheSize(getApplicationContext());
+                String size = GlideUtil.Companion.getInstance().getCacheSize(getApplicationContext());
                 AlertDialog clear = new AlertDialog(this).builder();
                 clear.setTitle("清除" + size + "缓存?")
                         .setNegativeButton("取消", new View.OnClickListener() {
@@ -49,8 +49,8 @@ public class SettingActivity extends BaseActivity {
                         }).setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        GlideUtil.getInstance().clearImageAllCache(getApplicationContext());
-                        SpUtil.removeAll(SettingActivity.this);
+                        GlideUtil.Companion.getInstance().clearImageAllCache(getApplicationContext());
+                        SpUtil.INSTANCE.removeAll(SettingActivity.this);
                     }
                 }).show();
                 break;
@@ -71,8 +71,8 @@ public class SettingActivity extends BaseActivity {
                         }).setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SpUtil.setName(SettingActivity.this, "");
-                        SpUtil.setPass(SettingActivity.this, "");
+                        SpUtil.INSTANCE.setName(SettingActivity.this, "");
+                        SpUtil.INSTANCE.setPass(SettingActivity.this, "");
                         Intent intent = new Intent();
                         intent.setAction("finish");
                         sendBroadcast(intent);

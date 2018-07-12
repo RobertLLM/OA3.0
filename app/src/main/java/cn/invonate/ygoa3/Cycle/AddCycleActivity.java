@@ -172,7 +172,7 @@ public class AddCycleActivity extends BaseActivity {
             images = new ArrayList<>();
             for (int i = 0; i < photoPaths.size(); i++) {
                 try {
-                    images.add(ImageUtils.bitmapToString(photoPaths.get(i)));
+                    images.add(ImageUtils.INSTANCE.bitmapToString(photoPaths.get(i)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

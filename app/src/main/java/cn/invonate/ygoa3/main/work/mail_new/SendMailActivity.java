@@ -121,7 +121,7 @@ public class SendMailActivity extends BaseActivity {
             int mode = getIntent().getExtras().getInt("mode");
             int index = bundle.getInt("mail");
             folder = bundle.getString("folder");
-            mail = MailHolder.mailsBeans.get(index);
+            mail = MailHolder.INSTANCE.getMailsBeans().get(index);
             switch (mode) {
                 case 0:
                     edit();

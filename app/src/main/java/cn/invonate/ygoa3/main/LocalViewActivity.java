@@ -107,13 +107,13 @@ public class LocalViewActivity extends BaseActivity implements TbsReaderView.Rea
     private boolean openFile(String path) {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putString(WpsModel.OPEN_MODE, WpsModel.OpenMode.NORMAL); // 打开模式
-        bundle.putBoolean(WpsModel.SEND_CLOSE_BROAD, true); // 关闭时是否发送广播
-        bundle.putString(WpsModel.THIRD_PACKAGE, getPackageName()); // 第三方应用的包名，用于对改应用合法性的验证
-        bundle.putBoolean(WpsModel.CLEAR_TRACE, true);// 清除打开记录
+        bundle.putString(WpsModel.Companion.getOPEN_MODE(), WpsModel.OpenMode.INSTANCE.getNORMAL()); // 打开模式
+        bundle.putBoolean(WpsModel.Companion.getSEND_CLOSE_BROAD(), true); // 关闭时是否发送广播
+        bundle.putString(WpsModel.Companion.getTHIRD_PACKAGE(), getPackageName()); // 第三方应用的包名，用于对改应用合法性的验证
+        bundle.putBoolean(WpsModel.Companion.getCLEAR_TRACE(), true);// 清除打开记录
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(android.content.Intent.ACTION_VIEW);
-        intent.setClassName(WpsModel.PackageName.NORMAL, WpsModel.ClassName.NORMAL);
+        intent.setClassName(WpsModel.PackageName.INSTANCE.getNORMAL(), WpsModel.ClassName.INSTANCE.getNORMAL());
 
         File file = new File(path);
         if (file == null || !file.exists()) {

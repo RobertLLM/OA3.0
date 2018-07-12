@@ -38,8 +38,8 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         app = (YGApplication) getApplication();
-        editName.setText(SpUtil.getName(this));
-        editPass.setText(SpUtil.getPass(this));
+        editName.setText(SpUtil.INSTANCE.getName(this));
+        editPass.setText(SpUtil.INSTANCE.getPass(this));
     }
 
     @OnClick({R.id.btn_login, R.id.txt_forget_pass})
@@ -79,8 +79,8 @@ public class LoginActivity extends BaseActivity {
                     app.setUser(data);
                     if (checkPass.isChecked()) {
                         //记住密码
-                        SpUtil.setName(LoginActivity.this, userName);
-                        SpUtil.setPass(LoginActivity.this, password);
+                        SpUtil.INSTANCE.setName(LoginActivity.this, userName);
+                        SpUtil.INSTANCE.setPass(LoginActivity.this, password);
                     }
                     goActivity(MainActivity.class);
                 } else {
@@ -89,7 +89,7 @@ public class LoginActivity extends BaseActivity {
             }
         };
         HttpUtil.getInstance(this,true).login(new ProgressSubscriber(onNextListener, this, "登录中"), userName,
-                MD5.GetMD5Code(password)
+                MD5.Companion.GetMD5Code(password)
                 //password
         );
     }

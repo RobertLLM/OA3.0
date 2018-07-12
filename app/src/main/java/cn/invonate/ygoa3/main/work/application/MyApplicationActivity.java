@@ -93,7 +93,7 @@ public class MyApplicationActivity extends BaseActivity {
                             }).setPositiveButton("确定", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    SpUtil.writeString(MyApplicationActivity.this, "commonApp", JSON.toJSONString(commonApplication));
+                                    SpUtil.INSTANCE.writeString(MyApplicationActivity.this, "commonApp", JSON.toJSONString(commonApplication));
                                     finish();
                                 }
                             });
@@ -112,7 +112,7 @@ public class MyApplicationActivity extends BaseActivity {
                 } else {
                     isShow = false;
                     editHasFocus = false;
-                    SpUtil.writeString(MyApplicationActivity.this, "commonApp", JSON.toJSONString(commonApplication));
+                    SpUtil.INSTANCE.writeString(MyApplicationActivity.this, "commonApp", JSON.toJSONString(commonApplication));
                     edit.setText("编辑");
                     allAdapter.notifyDataSetChanged();
                     commonAdapter.notifyDataSetChanged();
@@ -125,7 +125,7 @@ public class MyApplicationActivity extends BaseActivity {
 
     //初始化图片数据
     private void initUrlPic() {
-        if (TextUtils.isEmpty(SpUtil.readString(MyApplicationActivity.this, "function_name_id"))) {
+        if (TextUtils.isEmpty(SpUtil.INSTANCE.readString(MyApplicationActivity.this, "function_name_id"))) {
             List<MyApplicationList.PicToName> picToNames = new ArrayList<>();
             //人事招聘
             picToNames.add(new MyApplicationList.PicToName("年度计划", R.mipmap.app_ndjh));
@@ -159,10 +159,10 @@ public class MyApplicationActivity extends BaseActivity {
             picToNames.add(new MyApplicationList.PicToName("汇款", R.mipmap.app_hksp));
             picToNames.add(new MyApplicationList.PicToName("借款", R.mipmap.app_jk));
             picToNames.add(new MyApplicationList.PicToName("退款", R.mipmap.app_tk));
-            SpUtil.writeString(MyApplicationActivity.this, "function_name_id", JSON.toJSONString(picToNames));
+            SpUtil.INSTANCE.writeString(MyApplicationActivity.this, "function_name_id", JSON.toJSONString(picToNames));
         }
-        if (!TextUtils.isEmpty(SpUtil.readString(MyApplicationActivity.this, "commonApp"))) {
-            commonApplication = JSONArray.parseObject(SpUtil.readString(MyApplicationActivity.this, "commonApp"), new TypeReference<List<MyApplicationList>>() {
+        if (!TextUtils.isEmpty(SpUtil.INSTANCE.readString(MyApplicationActivity.this, "commonApp"))) {
+            commonApplication = JSONArray.parseObject(SpUtil.INSTANCE.readString(MyApplicationActivity.this, "commonApp"), new TypeReference<List<MyApplicationList>>() {
             });
             for (MyApplicationList myApplicationList : commonApplication) {
                 myApplicationList.setPic_id(searchPicture(myApplicationList.getFunction_name()));
@@ -196,7 +196,7 @@ public class MyApplicationActivity extends BaseActivity {
                 allApplication.add(dateBean);
             }
         }
-        KLog.json(JSON.toJSONString(allApplication));
+        KLog.INSTANCE.json(JSON.toJSONString(allApplication));
 
         //添加头部及偏移位置
 
@@ -222,7 +222,7 @@ public class MyApplicationActivity extends BaseActivity {
         for (int i = 0; i < head.size(); i++) {
             tab.addTab(tab.newTab().setText(head.get(i).getFunction_name()));
             tab.getTabAt(i).setTag(head.get(i));
-            KLog.json(JSON.toJSONString(head.get(i)));
+            KLog.INSTANCE.json(JSON.toJSONString(head.get(i)));
         }
 
         tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -296,9 +296,9 @@ public class MyApplicationActivity extends BaseActivity {
     }
 
     private int searchPicture(String function_name) {
-        if (!TextUtils.isEmpty(SpUtil.readString(MyApplicationActivity.this, "function_name_id"))) {
+        if (!TextUtils.isEmpty(SpUtil.INSTANCE.readString(MyApplicationActivity.this, "function_name_id"))) {
             List<MyApplicationList.PicToName> picToNames = new ArrayList<>();
-            picToNames = JSONArray.parseObject(SpUtil.readString(MyApplicationActivity.this, "function_name_id"), new TypeReference<List<MyApplicationList.PicToName>>() {
+            picToNames = JSONArray.parseObject(SpUtil.INSTANCE.readString(MyApplicationActivity.this, "function_name_id"), new TypeReference<List<MyApplicationList.PicToName>>() {
             });
             for (MyApplicationList.PicToName picToName : picToNames) {
                 if (picToName.getFunction_name().equals(function_name)) {
@@ -541,7 +541,7 @@ public class MyApplicationActivity extends BaseActivity {
                     if (editHasFocus) {
                         return;
                     }
-                    KLog.i(myApplicationLists.get(position).getFunction_name() + "  我被点击了");
+                    KLog.INSTANCE.i(myApplicationLists.get(position).getFunction_name() + "  我被点击了");
                     Intent intent = new Intent(MyApplicationActivity.this, WebViewActivity.class);
                     intent.putExtra("name", myApplicationLists.get(position).getFunction_name());
                     intent.putExtra("url", HttpUtil.BASE_URL + myApplicationLists.get(position).getPhone_url());
@@ -584,7 +584,7 @@ public class MyApplicationActivity extends BaseActivity {
                     }).setPositiveButton("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            SpUtil.writeString(MyApplicationActivity.this, "commonApp", JSON.toJSONString(commonApplication));
+                            SpUtil.INSTANCE.writeString(MyApplicationActivity.this, "commonApp", JSON.toJSONString(commonApplication));
                             finish();
                         }
                     });

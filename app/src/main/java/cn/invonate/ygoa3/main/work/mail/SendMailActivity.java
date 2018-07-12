@@ -108,7 +108,7 @@ public class SendMailActivity extends BaseActivity {
         if (bundle != null) {
             int mode = getIntent().getExtras().getInt("mode");
             int index = bundle.getInt("mail");
-            mail = MailHolder.mail_model.get(index);
+            mail = MailHolder.INSTANCE.getMail_model().get(index);
             switch (mode) {
                 case 0:
                     edit(mail);

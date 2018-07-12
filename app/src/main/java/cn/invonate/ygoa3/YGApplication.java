@@ -45,7 +45,7 @@ public class YGApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        KLog.init(true);
+        KLog.INSTANCE.init(true);
         initTbs();
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
