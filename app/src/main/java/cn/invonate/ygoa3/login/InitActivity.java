@@ -63,7 +63,6 @@ public class InitActivity extends BaseActivity {
 
             HttpUtil.getInstance(this, true).login(new ProgressSubscriber2(onNextListener, this, "登录中"), userName,
                     MD5.GetMD5Code(password)
-                    //password
             );
         }
     }

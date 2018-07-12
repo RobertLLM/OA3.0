@@ -33,7 +33,6 @@ import cn.invonate.ygoa3.Entry.MeetCount;
 import cn.invonate.ygoa3.Entry.Mission;
 import cn.invonate.ygoa3.Entry.Sum;
 import cn.invonate.ygoa3.Entry.TaskCopy;
-import cn.invonate.ygoa3.Meeting.MeetingActivity;
 import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.Task.TaskApprovedActivity;
 import cn.invonate.ygoa3.Task.TaskCopyActivity;
@@ -170,7 +169,6 @@ public class WorkFragment extends Fragment {
             case R.id.layout_allow:
                 intent = new Intent(getActivity(), MyApplicationActivity.class);
                 break;
-
             case R.id.layout_news:
                 intent = new Intent(getActivity(), WebViewActivity.class);
                 intent.putExtra("name", "新闻动态");
@@ -184,10 +182,11 @@ public class WorkFragment extends Fragment {
                         + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=7");
                 break;
             case R.id.layout_meting:
-                intent = new Intent(getActivity(), MeetingActivity.class);
-//                intent.putExtra("name", "会议管理");
-//                intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
-//                        + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=5");
+//                intent = new Intent(getActivity(), MeetingActivity.class);
+                intent = new Intent(getActivity(), WebViewActivity.class);
+                intent.putExtra("name", "会议管理");
+                intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
+                        + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=5");
                 break;
             case R.id.layout_meal:
                 intent = new Intent(getActivity(), WebViewActivity.class);
@@ -269,7 +268,7 @@ public class WorkFragment extends Fragment {
 
             }
         };
-        HttpUtil2.getInstance(getActivity(), false).getMeetingCount(subscriber,app.getUser().getRsbm_pk());
+        HttpUtil2.getInstance(getActivity(), false).getMeetingCount(subscriber, app.getUser().getRsbm_pk());
     }
 
     /**

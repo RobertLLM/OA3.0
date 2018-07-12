@@ -131,6 +131,7 @@ public class TaskDetailFragment2 extends Fragment {
                         case "fujian"://
                         case "wjpsfujian"://
                         case "attachment"://
+                        case "completedUrl":
                             if (is_img(data.get(position).getLabel())) {
                                 ArrayList<String> pic = new ArrayList<>();
                                 pic.add(HttpUtil.URL_FILE + data.get(position).getUrl());

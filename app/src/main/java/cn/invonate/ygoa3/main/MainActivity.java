@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity {
      *
      */
     private void startPermissionsActivity() {
-        PermissionsActivity.startActivityForResult(this, REQUEST_CODE, PERMISSIONS);
+        PermissionsActivity.Companion.startActivityForResult(this, REQUEST_CODE, PERMISSIONS);
     }
 
     @Override
