@@ -12,7 +12,6 @@
       <module fileurl="file://$PROJECT_DIR$/jcvideoplayer-lib/jcvideoplayer-lib.iml" filepath="$PROJECT_DIR$/jcvideoplayer-lib/jcvideoplayer-lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/lazyviewpagerlibrary/lazyviewpagerlibrary.iml" filepath="$PROJECT_DIR$/lazyviewpagerlibrary/lazyviewpagerlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/pullToReflash_library/pullToReflash_library.iml" filepath="$PROJECT_DIR$/pullToReflash_library/pullToReflash_library.iml" />
-      <module fileurl="file://$PROJECT_DIR$/test/test.iml" filepath="$PROJECT_DIR$/test/test.iml" />
     </modules>
   </component>
 </project>
