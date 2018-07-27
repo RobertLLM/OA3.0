@@ -197,6 +197,57 @@
         android:background="#E1E1E1" />
 
     <LinearLayout
+        android:id="@+id/layout_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10px">
+
+        <ImageView
+            android:id="@+id/file_img"
+            android:layout_width="160px"
+            android:layout_height="160px" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20px"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="45px" />
+
+            <TextView
+                android:id="@+id/file_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
+                android:textColor="#000000"
+                android:textSize="45px" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:padding="25px"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/file_next" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="30px"
+        android:background="#E1E1E1" />
+
+    <LinearLayout
         android:id="@+id/layout_in"
         android:layout_width="match_parent"
         android:layout_height="100px"
@@ -255,7 +306,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="记录人："
+            android:text="主持人："
             android:textColor="@color/black"
             android:textSize="40px" />
 
@@ -264,15 +315,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="right"
+            android:layout_marginEnd="30px"
             android:textColor="@color/black"
             android:textSize="40px" />
-
-
-        <ImageView
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:padding="25px"
-            android:src="@mipmap/file_next" />
 
 
     </LinearLayout>

@@ -11,6 +11,7 @@ import cn.invonate.ygoa3.Entry.DeletePerson;
 import cn.invonate.ygoa3.Entry.EditMeeting;
 import cn.invonate.ygoa3.Entry.MeetingDetail;
 import cn.invonate.ygoa3.Entry.Reason;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -22,8 +23,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class HttpUtil2 {
-//    public static final String BASE_URL = "http://oaapi.yong-gang.cn:8080/innovate-api/";
-    public static final String BASE_URL = "http://192.168.1.27:8080/innovate-api/";
+    //    public static final String BASE_URL = "http://oaapi.yong-gang.cn:8080/innovate-api/";
+//    public static final String BASE_URL = "http://192.168.1.27:8080/innovate-api/";
+    public static final String BASE_URL = "http://192.168.2.21:8080/innovate-api/";
 //    public static final String BASE_URL = "http://10.181.5.77:8080/innovate-api/";
 
     private HttpService httpService;
@@ -53,10 +55,13 @@ public class HttpUtil2 {
         loggingInterceptor.setLevel(level);
         //定制OkHttp
 
-        int DEFAULT_TIMEOUT = 5;
+        int DEFAULT_TIMEOUT = 15;
 
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder()
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);//设置超时时间;
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);//设置超时时间;
+
         if (isSaveCookie) {
             httpClientBuilder.interceptors().add(new ReceivedCookiesInterceptor(context));
         }
@@ -294,6 +299,18 @@ public class HttpUtil2 {
      */
     public void getMeetingCount(Subscriber subscriber, String pk) {
         Observable observable = httpService.getMeetingCount(pk);
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 上传附件
+     *
+     * @param subscriber
+     * @param pk
+     * @param parts
+     */
+    public void saveFile(Subscriber subscriber, String pk, List<MultipartBody.Part> parts) {
+        Observable observable = httpService.saveFile(pk, parts);
         toSubscribe(observable, subscriber);
     }
 }

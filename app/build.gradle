@@ -7,8 +7,8 @@ android {
         applicationId "cn.invonate.ygoa3"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 24
-        versionName "1.5.0"
+        versionCode 26
+        versionName "1.5.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         // Enabling multidex support.
@@ -59,6 +59,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    implementation "org.jetbrains.anko:anko-design:$anko_version"
 
     // JAVA 邮件支持
     implementation files('libs/activation.jar')
@@ -138,4 +140,9 @@ dependencies {
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
     // 文件选择器
     implementation project(':filepicker')
+
+    // MPAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.0'
 }
+
+apply plugin: 'kotlin-android-extensions'

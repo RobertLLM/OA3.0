@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context="cn.invonate.ygoa3.WebView.WebViewActivity">
+    tools:context=".boss.EmpActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,33 +29,29 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:singleLine="true"
+            android:text="成员列表"
             android:textColor="@color/black"
             android:textSize="50px" />
 
-
-        <ImageView
-            android:id="@+id/pic_close"
-            android:layout_width="120px"
-            android:layout_height="120px"
-            android:layout_alignParentEnd="true"
-            android:padding="30px"
-            android:src="@mipmap/web_close" />
-
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/container"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="1px"
+        android:background="#E1E1E1" />
 
-        <com.tencent.smtt.sdk.WebView
-            android:id="@+id/webView"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srlEnableLoadMore="false">
+
+        <ListView
+            android:id="@+id/list_emp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
 
-        </com.tencent.smtt.sdk.WebView>
 
-    </FrameLayout>
-
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </LinearLayout>

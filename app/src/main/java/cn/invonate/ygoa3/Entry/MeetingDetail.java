@@ -2,6 +2,7 @@ package cn.invonate.ygoa3.Entry;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MeetingDetail {
 
@@ -39,7 +40,7 @@ public class MeetingDetail {
         this.result = result;
     }
 
-    public static class ResultBean implements Serializable{
+    public static class ResultBean implements Serializable {
         /**
          * addressId : ca9db0af-532e-460b-a269-a84ed2394a78
          * addressName : 集团公司新办公楼
@@ -84,6 +85,15 @@ public class MeetingDetail {
         private int totalNum;
         private ArrayList<AttendListBean> attendList;
         private String roomName;
+        private List<MeetFile> fileList;
+
+        public List<MeetFile> getFileList() {
+            return fileList;
+        }
+
+        public void setFileList(List<MeetFile> fileList) {
+            this.fileList = fileList;
+        }
 
         public String getAddressId() {
             return addressId;
@@ -253,7 +263,7 @@ public class MeetingDetail {
             this.roomName = roomName;
         }
 
-        public static class AttendListBean implements Serializable{
+        public static class AttendListBean implements Serializable {
             /**
              * userCode : 034488
              * userId : 4CE0C753-9239-4B49-AABF-BFD3E50F46C5
@@ -286,6 +296,45 @@ public class MeetingDetail {
 
             public void setUserName(String userName) {
                 this.userName = userName;
+            }
+        }
+
+        public static class MeetFile implements Serializable {
+            private String fileId;
+            private String fileName;
+            private String fileURL;
+            private long size;
+
+            public String getFileId() {
+                return fileId;
+            }
+
+            public void setFileId(String fileId) {
+                this.fileId = fileId;
+            }
+
+            public String getFileName() {
+                return fileName;
+            }
+
+            public void setFileName(String fileName) {
+                this.fileName = fileName;
+            }
+
+            public String getFileURL() {
+                return fileURL;
+            }
+
+            public void setFileURL(String fileURL) {
+                this.fileURL = fileURL;
+            }
+
+            public long getSize() {
+                return size;
+            }
+
+            public void setSize(long size) {
+                this.size = size;
             }
         }
     }

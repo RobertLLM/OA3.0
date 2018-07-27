@@ -7,14 +7,19 @@ import java.util.Map;
 import cn.invonate.ygoa3.Entry.AddMeeting;
 import cn.invonate.ygoa3.Entry.Amount;
 import cn.invonate.ygoa3.Entry.Approved;
+import cn.invonate.ygoa3.Entry.BossDepart;
 import cn.invonate.ygoa3.Entry.ChangePass;
 import cn.invonate.ygoa3.Entry.Comment;
 import cn.invonate.ygoa3.Entry.Contacts;
 import cn.invonate.ygoa3.Entry.CyContacts;
 import cn.invonate.ygoa3.Entry.CycleMessage;
 import cn.invonate.ygoa3.Entry.DeletePerson;
+import cn.invonate.ygoa3.Entry.DepartInfo;
 import cn.invonate.ygoa3.Entry.Department;
 import cn.invonate.ygoa3.Entry.EditMeeting;
+import cn.invonate.ygoa3.Entry.EmpInfo;
+import cn.invonate.ygoa3.Entry.Employee;
+import cn.invonate.ygoa3.Entry.FileResult;
 import cn.invonate.ygoa3.Entry.Friend;
 import cn.invonate.ygoa3.Entry.Fund;
 import cn.invonate.ygoa3.Entry.Group;
@@ -521,6 +526,15 @@ public interface HttpService {
             @Header("X-Innovate-Rsbm") String pk
     );
 
+    // 会议上传附件
+    @Headers("X-Innovate-Application:OA")
+    @POST("v1/oa/meeting/getFile")
+    @Multipart
+    Observable<FileResult> saveFile(
+            @Header("X-Innovate-Rsbm") String pk,
+            @Part() List<MultipartBody.Part> parts
+    );
+
     // 获取未处理邮件数
     @Headers("X-Innovate-Application:OA")
     @GET("v1/oa/meeting/getUnConfirm")
@@ -607,4 +621,29 @@ public interface HttpService {
             @Part("index") RequestBody[] index,
             @Part() List<MultipartBody.Part> parts
     );
+
+    // 获取集团通讯录部门
+    @GET("getDepList.ashx")
+    Observable<BossDepart> getDepart(
+            @Query("depFatherPK") String pk
+    );
+
+    // 获取部门信息
+    @GET("getDepInfo.ashx")
+    Observable<DepartInfo> getDepartInfo(
+            @Query("depPK") String pk
+    );
+
+    // 获取部门成员列表
+    @GET("getEmpList.ashx")
+    Observable<Employee> getEmpList(
+            @Query("depPK") String pk
+    );
+
+    // 获取人员信息
+    @GET("getEmpInfo.ashx")
+    Observable<EmpInfo> getEmpInfo(
+            @Query("empNo") String code
+    );
+
 }

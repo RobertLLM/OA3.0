@@ -2,7 +2,6 @@ package cn.invonate.ygoa3
 
 import android.content.Intent
 import android.os.Bundle
-
 import com.zhy.autolayout.AutoLayoutActivity
 
 

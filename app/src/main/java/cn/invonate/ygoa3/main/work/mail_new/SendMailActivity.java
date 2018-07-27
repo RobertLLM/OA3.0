@@ -1,6 +1,5 @@
 package cn.invonate.ygoa3.main.work.mail_new;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -79,11 +78,7 @@ public class SendMailActivity extends BaseActivity {
 
     private PhotoNewAdapter adapter;
 
-    ProgressDialog dialog;
-
     private MailNew.ResultBean.MailsBean mail;
-
-    private int index = -1;
 
     private YGApplication app;
 
@@ -461,10 +456,9 @@ public class SendMailActivity extends BaseActivity {
             photoPaths.clear();
             if (photos != null) {
                 Log.i("photos", photos.toString());
-//                photoPaths.addAll(photos);
                 for (String path : photos) {
                     File file = new File(path);
-                    MailNew.ResultBean.MailsBean.AttachmentsBean bean = new MailNew.ResultBean.MailsBean.AttachmentsBean(file.getName(), (file.length() / 1024), 0, path);
+                    MailNew.ResultBean.MailsBean.AttachmentsBean bean = new MailNew.ResultBean.MailsBean.AttachmentsBean(file.getName(), (file.length() / 1024), 1, path);
                     photoPaths.add(bean);
                 }
             }
@@ -502,7 +496,7 @@ public class SendMailActivity extends BaseActivity {
             if (!files.isEmpty()) {
                 String path = files.get(0).getAbsolutePath();
                 File file = new File(path);
-                MailNew.ResultBean.MailsBean.AttachmentsBean bean = new MailNew.ResultBean.MailsBean.AttachmentsBean(file.getName(), file.length() / 1024, 1, path);
+                MailNew.ResultBean.MailsBean.AttachmentsBean bean = new MailNew.ResultBean.MailsBean.AttachmentsBean(file.getName(), file.length() / 1024, 2, path);
                 photoPaths.add(bean);
             } else {
                 Toast.makeText(app, "未找到该文件", Toast.LENGTH_SHORT).show();
@@ -868,6 +862,4 @@ public class SendMailActivity extends BaseActivity {
         }
         return parts;
     }
-
-
 }

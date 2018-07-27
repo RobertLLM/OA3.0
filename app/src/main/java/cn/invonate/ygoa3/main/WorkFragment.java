@@ -33,6 +33,7 @@ import cn.invonate.ygoa3.Entry.MeetCount;
 import cn.invonate.ygoa3.Entry.Mission;
 import cn.invonate.ygoa3.Entry.Sum;
 import cn.invonate.ygoa3.Entry.TaskCopy;
+import cn.invonate.ygoa3.Meeting.MeetingActivity;
 import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.Task.TaskApprovedActivity;
 import cn.invonate.ygoa3.Task.TaskCopyActivity;
@@ -41,6 +42,7 @@ import cn.invonate.ygoa3.Task.TaskStartActivity;
 import cn.invonate.ygoa3.Util.Domain;
 import cn.invonate.ygoa3.WebView.WebViewActivity;
 import cn.invonate.ygoa3.YGApplication;
+import cn.invonate.ygoa3.boss.ConnectActivity;
 import cn.invonate.ygoa3.httpUtil.HttpUtil;
 import cn.invonate.ygoa3.httpUtil.HttpUtil2;
 import cn.invonate.ygoa3.main.work.application.MyApplicationActivity;
@@ -141,7 +143,7 @@ public class WorkFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.layout_process, R.id.layout_process_added, R.id.layout_process_down, R.id.layout_process_copy, R.id.layout_mail, R.id.layout_work, R.id.layout_allow, R.id.layout_news, R.id.layout_notice, R.id.layout_meting, R.id.layout_meal, R.id.layout_warning})
+    @OnClick({R.id.layout_process, R.id.layout_process_added, R.id.layout_process_down, R.id.layout_process_copy, R.id.layout_mail, R.id.layout_work, R.id.layout_allow, R.id.layout_news, R.id.layout_notice, R.id.layout_meting, R.id.layout_meal, R.id.layout_warning, R.id.layout_connect})
     public void onViewClicked(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -182,11 +184,11 @@ public class WorkFragment extends Fragment {
                         + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=7");
                 break;
             case R.id.layout_meting:
-//                intent = new Intent(getActivity(), MeetingActivity.class);
-                intent = new Intent(getActivity(), WebViewActivity.class);
-                intent.putExtra("name", "会议管理");
-                intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
-                        + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=5");
+                intent = new Intent(getActivity(), MeetingActivity.class);
+//                intent = new Intent(getActivity(), WebViewActivity.class);
+//                intent.putExtra("name", "会议管理");
+//                intent.putExtra("url", HttpUtil.BASE_URL + "/ygoa/LoginForMobile?user_code="
+//                        + app.getUser().getUser_code() + "&sessionId=" + app.getUser().getSessionId() + "&type=5");
                 break;
             case R.id.layout_meal:
                 intent = new Intent(getActivity(), WebViewActivity.class);
@@ -197,6 +199,9 @@ public class WorkFragment extends Fragment {
                 intent = new Intent(getActivity(), WebViewActivity.class);
                 intent.putExtra("name", "安全预警");
                 intent.putExtra("url", "http://ahb.yong-gang.com/Members/login?pid=" + app.getUser().getUser_code() + "&pk=" + app.getUser().getRsbm_pk());
+                break;
+            case R.id.layout_connect:
+                intent = new Intent(getActivity(), ConnectActivity.class);
                 break;
         }
         if (intent != null) {

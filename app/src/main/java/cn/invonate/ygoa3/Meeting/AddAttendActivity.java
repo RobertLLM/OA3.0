@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -23,13 +22,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.invonate.ygoa3.Adapter.AttendAdapter;
+import cn.invonate.ygoa3.BaseActivity;
 import cn.invonate.ygoa3.Contacts.Select.SelectDepartmentActivity;
 import cn.invonate.ygoa3.Entry.Contacts;
 import cn.invonate.ygoa3.Entry.MeetingDetail;
 import cn.invonate.ygoa3.R;
 import cn.invonate.ygoa3.YGApplication;
 
-public class AddAttendActivity extends AppCompatActivity {
+public class AddAttendActivity extends BaseActivity {
 
     @BindView(R.id.list_person)
     SwipeMenuListView listPerson;

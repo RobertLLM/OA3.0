@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    tools:context=".boss.DepartInfoActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="120px"
+        android:background="#F9F9F9"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/pic_back"
+            android:layout_width="120px"
+            android:layout_height="120px"
+            android:padding="30px"
+            android:src="@mipmap/pic_back" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="配置统计分析"
+            android:textColor="@color/black"
+            android:textSize="50px" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#E1E1E1" />
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srlEnableLoadMore="false">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pc_sex"
+                    android:layout_width="match_parent"
+                    android:layout_height="800px" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="#E1E1E1" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bc_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="800px"
+                    android:layout_margin="30px"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="#E1E1E1" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bc_edu"
+                    android:layout_width="match_parent"
+                    android:layout_height="800px"
+                    android:layout_margin="30px"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="#E1E1E1" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bc_rage"
+                    android:layout_width="match_parent"
+                    android:layout_height="800px"
+                    android:layout_margin="30px"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="#E1E1E1" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bc_shares"
+                    android:layout_width="match_parent"
+                    android:layout_height="800px"
+                    android:layout_margin="30px"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="#E1E1E1" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bc_wage"
+                    android:layout_width="match_parent"
+                    android:layout_height="800px"
+                    android:layout_margin="30px"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="#E1E1E1" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bc_gage"
+                    android:layout_width="match_parent"
+                    android:layout_height="800px"
+                    android:layout_margin="30px"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="#E1E1E1" />
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+</LinearLayout>

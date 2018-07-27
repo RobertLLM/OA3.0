@@ -3,6 +3,7 @@ package cn.invonate.ygoa3.Meeting;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,15 +13,23 @@ import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.Glide;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.yonggang.liyangyang.ios_dialog.widget.AlertDialog;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +50,8 @@ import cn.invonate.ygoa3.YGApplication;
 import cn.invonate.ygoa3.httpUtil.HttpUtil2;
 import cn.invonate.ygoa3.httpUtil.ProgressSubscriber;
 import cn.invonate.ygoa3.httpUtil.SubscriberOnNextListener;
+import cn.invonate.ygoa3.main.BasePicActivity;
+import cn.invonate.ygoa3.main.LocalViewActivity;
 
 public class MeetDetailActivity extends BaseActivity {
 
@@ -85,6 +96,15 @@ public class MeetDetailActivity extends BaseActivity {
     TextView txtChange;
     @BindView(R.id.layout_attend)
     LinearLayout layoutAttend;
+
+    @BindView(R.id.file_img)
+    ImageView fileImg;
+    @BindView(R.id.file_name)
+    TextView fileName;
+    @BindView(R.id.file_size)
+    TextView fileSize;
+    @BindView(R.id.layout_file)
+    LinearLayout layoutFile;
 
     private List<String> tabIndicators;
     private List<Fragment> tabFragments;
@@ -186,11 +206,10 @@ public class MeetDetailActivity extends BaseActivity {
                 if (detail != null)
                     stepToAttend();
                 break;
-            case R.id.layout_note:
-                if (detail != null)
-                    stepToReport();
-
-                break;
+//            case R.id.layout_note:
+//                if (detail != null)
+//                    stepToReport();
+//                break;
             case R.id.layout_sign:
                 if (app.getUser().getUser_code().equals(bean.getCreatorCode())) {
                     Intent intent = new Intent(this, ShowCodeActivity.class);
@@ -251,8 +270,8 @@ public class MeetDetailActivity extends BaseActivity {
         String url = "v1/oa/meeting/selectMeetingById/" + bean.getId();
         SubscriberOnNextListener onNextListener = new SubscriberOnNextListener<MeetingDetail>() {
             @Override
-            public void onNext(MeetingDetail data) {
-                Log.i("getMeetingDetail", data.toString());
+            public void onNext(final MeetingDetail data) {
+                Log.i("getMeetingDetail", JSON.toJSONString(data));
                 detail = data;
                 if ("0000".equals(data.getCode())) {
                     title.setText(data.getResult().getTitle());
@@ -262,6 +281,105 @@ public class MeetDetailActivity extends BaseActivity {
                     locate.setText(data.getResult().getAddressName() + data.getResult().getRoomName());
                     dynamic.setText(data.getResult().getDynamic() + "条动态");
                     sum.setText(data.getResult().getAttendNum() + "/" + data.getResult().getTotalNum() + "人确认参加");
+                    // 显示附件
+                    if (data.getResult().getFileList().isEmpty()) {
+                        layoutFile.setVisibility(View.GONE);
+                    } else {
+                        layoutFile.setVisibility(View.VISIBLE);
+                        final String name = data.getResult().getFileList().get(0).getFileName();
+                        long size = data.getResult().getFileList().get(0).getSize();
+                        fileName.setText(name);
+                        fileSize.setText(NumberFormat.getIntegerInstance().format(size) + " KB");
+                        final String type = name.substring(name.lastIndexOf(".") + 1, name.length());
+                        switch (type) {
+                            case "doc":
+                                Glide.with(MeetDetailActivity.this).load(R.mipmap.doc).centerCrop().into(fileImg);
+                                break;
+                            case "xls":
+                                Glide.with(MeetDetailActivity.this).load(R.mipmap.xls).centerCrop().into(fileImg);
+                                break;
+                            case "ppt":
+                                Glide.with(MeetDetailActivity.this).load(R.mipmap.ppt).centerCrop().into(fileImg);
+                                break;
+                            case "pdf":
+                                Glide.with(MeetDetailActivity.this).load(R.mipmap.pdf).centerCrop().into(fileImg);
+                                break;
+                            case "txt":
+                                Glide.with(MeetDetailActivity.this).load(R.mipmap.txt).centerCrop().into(fileImg);
+                                break;
+                            case "zip":
+                                Glide.with(MeetDetailActivity.this).load(R.mipmap.zip).centerCrop().into(fileImg);
+                                break;
+                            case "jpg":
+                            case "png":
+                            case "jpeg":
+                                Glide.with(MeetDetailActivity.this).load(data.getResult().getFileList().get(0).getFileURL()).centerCrop().into(fileImg);
+                                break;
+                            default:
+                                Glide.with(MeetDetailActivity.this).load(R.mipmap.files).centerCrop().into(fileImg);
+                                break;
+                        }
+
+                        layoutFile.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // 查看附件
+                                switch (type) {
+                                    case "jpg":
+                                    case "png":
+                                    case "jpeg":
+                                        ArrayList<String> list_imgs = new ArrayList<>();
+                                        list_imgs.add(data.getResult().getFileList().get(0).getFileURL());
+                                        Intent intent = new Intent(MeetDetailActivity.this, BasePicActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt("index", 0);
+                                        bundle.putStringArrayList("imgs", list_imgs);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                        break;
+                                    default:
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                URL url;
+                                                HttpURLConnection con;
+                                                try {
+                                                    url = new URL(data.getResult().getFileList().get(0).getFileURL());
+                                                    con = (HttpURLConnection) url.openConnection();
+                                                    con.setRequestMethod("GET");
+                                                    con.setReadTimeout(5000);
+                                                    con.setDoInput(true);
+                                                    //InputStream in = con.getInputStream();
+                                                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), name);
+                                                    if (file.exists()){
+                                                        file.delete();
+                                                    }
+                                                    FileOutputStream fos = new FileOutputStream(file);
+                                                    InputStream in = con.getInputStream();
+                                                    byte ch[] = new byte[2 * 1024];
+                                                    int len;
+                                                    if (fos != null) {
+                                                        while ((len = in.read(ch)) != -1) {
+                                                            fos.write(ch, 0, len);
+                                                        }
+                                                        in.close();
+                                                        fos.close();
+                                                    }
+                                                    Intent intent = new Intent(MeetDetailActivity.this, LocalViewActivity.class);
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putString("path", name);
+                                                    intent.putExtras(bundle);
+                                                    startActivity(intent);
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }).start();
+                                        break;
+                                }
+                            }
+                        });
+                    }
                     if ("1".equals(data.getResult().getMeetingStatus())) {//取消
                         status.setText("取消");
                         status.setBackgroundResource(R.drawable.back_meet_grey);

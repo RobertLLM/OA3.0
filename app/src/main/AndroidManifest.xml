@@ -305,35 +305,37 @@
             android:name=".Meeting.MeetingActivity"
             android:label="@string/title_activity_meeting"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Meeting.AddMeetingActivity"></activity>
+        <activity android:name=".Meeting.AddMeetingActivity" />
         <activity
             android:name=".Meeting.MeetDetailActivity"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity android:name=".Meeting.AttendActivity" />
         <activity android:name=".Meeting.ReportManActivity" />
-        <activity android:name=".Meeting.LocationActivity"></activity>
+        <activity android:name=".Meeting.LocationActivity" />
         <activity android:name=".Meeting.AddAttendActivity" />
-        <activity android:name=".Meeting.ShowCodeActivity"></activity>
-
+        <activity android:name=".Meeting.ShowCodeActivity" />
         <activity
             android:name=".main.work.mail_new.MailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".main.work.mail_new.SendMailActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".main.work.mail_new.MailDetailActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".main.work.mail_new.ContactsListActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".main.LocalPicActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".boss.ConnectActivity">
 
+        </activity>
+        <activity android:name=".boss.DepartInfoActivity" />
+        <activity android:name=".boss.EmpActivity" />
+        <activity android:name=".boss.EmpInfoActivity" />
+        <activity android:name=".boss.SearchActivity"></activity>
     </application>
 
 </manifest>

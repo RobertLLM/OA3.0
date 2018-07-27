@@ -12,6 +12,7 @@ public class AddMeeting {
     private String recordPersonName;
     private String recordPersonCode;
     private List<MeetingDetail.ResultBean.AttendListBean> joinList;
+    private List<String> fileIds;
 
     public String getMeetingContent() {
         return meetingContent;
@@ -83,5 +84,13 @@ public class AddMeeting {
 
     public void setJoinList(List<MeetingDetail.ResultBean.AttendListBean> joinList) {
         this.joinList = joinList;
+    }
+
+    public List<String> getFileIds() {
+        return fileIds;
+    }
+
+    public void setFileIds(List<String> fileIds) {
+        this.fileIds = fileIds;
     }
 }
