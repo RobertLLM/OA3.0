@@ -43,7 +43,7 @@ class EmpInfoActivity : AppCompatActivity() {
                         job.text = data.result[0].empJob
                         wage.text = data.result[0].wageLevel
                         shares.text = data.result[0].stockLevel
-                        age.text = data.result[0].empAge
+                        age.text = data.result[0].workingAge
                         edu.text = data.result[0].education
                         lesson.text = data.result[0].specialty
                         phone.setOnClickListener {
